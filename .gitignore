@@ -1,0 +1,78 @@
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.zip
+*.tar.gz
+*.rar
+
+# virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
+hs_err_pid*
+replay_pid*
+
+# Java
+*.class
+*.jar
+*.war
+*.ear
+*.db
+*.hprof
+*.javadoc
+*.project
+*.classpath
+.idea/
+target/
+out/
+build/
+
+# Maven
+.mvn/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+
+# IntelliJ IDEA
+*.iml
+*.ipr
+*.iws
+.idea/
+out/
+*.class
+*.jar
+*.war
+*.ear
+*.db
+*.log
+*.hprof
+
+# React
+node_modules/
+build/
+dist/
+.cache/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+package.json
+
+# Next.js
+.next/
+out/
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+package-lock.json
+package.json
+
+# OS generated files
+.DS_Store
+Thumbs.db
