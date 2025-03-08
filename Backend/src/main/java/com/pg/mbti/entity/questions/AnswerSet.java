@@ -12,7 +12,9 @@ import lombok.NoArgsConstructor;
 @Getter
 public class AnswerSet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(
             name = "question_id",

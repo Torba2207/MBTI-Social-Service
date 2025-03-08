@@ -12,7 +12,10 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public class Answer {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     @ManyToOne
     @JoinColumn(
             name = "answer_set_id",
@@ -20,5 +23,8 @@ public class Answer {
             nullable = false
     )
     private AnswerSet answerSet;
-    @Column(name = "mbti") @Enumerated(EnumType.STRING) private MBTIType mbtiType;
+
+    @Column(name = "mbti")
+    @Enumerated(EnumType.STRING)
+    private MBTIType mbtiType;
 }

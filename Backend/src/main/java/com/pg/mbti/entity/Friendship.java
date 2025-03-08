@@ -16,7 +16,9 @@ import java.util.UUID;
 @Getter
 public class Friendship {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
+
     @ManyToOne
     @JoinColumn(
             name = "sender_id",
@@ -24,11 +26,14 @@ public class Friendship {
             nullable = false
     )
     private User senderId;
+
     @ManyToOne
     @JoinColumn(
             name = "receiver_id",
             referencedColumnName = "id",
             nullable = false
     ) private User receiverId;
-    @Column(name = "start_date") private Date startDate;
+
+    @Column(name = "start_date")
+    private Date startDate;
 }

@@ -1,11 +1,13 @@
 package com.pg.mbti.entity.user;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pg.mbti.entity.MBTIType;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnTransformer;
 
 import java.util.UUID;
 
@@ -17,6 +19,7 @@ import java.util.UUID;
 public class User {
     @Setter(AccessLevel.NONE)
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
     @Column(name = "name")
@@ -28,7 +31,7 @@ public class User {
     @Column(name = "nickname")
     private String nickname;
 
-    @Getter(AccessLevel.NONE)
+    @JsonIgnore
     @Column(name = "password_hash")
     private String password;
 
@@ -41,12 +44,13 @@ public class User {
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "mbti")
+    @Column(name = "mbti", columnDefinition = "mbti_type")
+    @ColumnTransformer(write = "?::mbti_type")
     @Enumerated(EnumType.STRING)
-    @Setter(AccessLevel.NONE)
     private MBTIType mbtiType;
 
-    @Column(name = "role")
+    @Column(name = "role", columnDefinition = "user_role")
+    @ColumnTransformer(write = "?::user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -54,7 +58,8 @@ public class User {
     private Integer age;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender")
+    @Column(name = "gender", columnDefinition = "user_gender")
+    @ColumnTransformer(write = "?::user_gender")
     private Gender gender;
 
     @Column(name = "profile_photo")
