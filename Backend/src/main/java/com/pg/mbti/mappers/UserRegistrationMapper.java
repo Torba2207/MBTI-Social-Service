@@ -1,7 +1,7 @@
 package com.pg.mbti.mappers;
 
-import com.pg.mbti.entity.registration.RegistrationRequestDto;
-import com.pg.mbti.entity.registration.RegistrationResponseDto;
+import com.pg.mbti.dto.RegistrationRequestDto;
+import com.pg.mbti.dto.RegistrationResponseDto;
 import com.pg.mbti.entity.user.User;
 import org.springframework.stereotype.Component;
 

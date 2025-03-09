@@ -1,6 +1,6 @@
 package com.pg.mbti.mappers;
 
-import com.pg.mbti.entity.profile.UserProfileDto;
+import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.entity.user.User;
 import org.springframework.stereotype.Component;
 
