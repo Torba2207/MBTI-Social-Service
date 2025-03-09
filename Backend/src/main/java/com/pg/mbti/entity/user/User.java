@@ -81,8 +81,4 @@ public class User {
         this.role = Role.ANONYMOUS;
         this.profilePicture = "default.jpg";
     }
-
-    public boolean checkPassword(String password) {
-        return this.password.equals(password);
-    }
 }
