@@ -1,6 +1,6 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.entity.profile.UserProfileDto;
+import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.mappers.UserMapper;
 import com.pg.mbti.services.UsersService;
 import lombok.RequiredArgsConstructor;

@@ -1,7 +1,7 @@
 package com.pg.mbti.services;
 
-import com.pg.mbti.entity.login.LoginRequestDto;
-import com.pg.mbti.entity.login.LoginResponseDto;
+import com.pg.mbti.dto.LoginRequestDto;
+import com.pg.mbti.dto.LoginResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,11 +18,11 @@ public class LoginService {
             final LoginRequestDto request) {
 
         final var authToken = UsernamePasswordAuthenticationToken
-                .unauthenticated(request.username(), request.password());
+                .unauthenticated(request.nickname(), request.password());
 
         authenticationManager.authenticate(authToken);
 
-        final var token = jwtService.generateToken(request.username());
+        final var token = jwtService.generateToken(request.nickname());
         return new LoginResponseDto(token);
     }
 }

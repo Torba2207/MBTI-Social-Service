@@ -1,7 +1,7 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.entity.registration.RegistrationRequestDto;
-import com.pg.mbti.entity.registration.RegistrationResponseDto;
+import com.pg.mbti.dto.RegistrationRequestDto;
+import com.pg.mbti.dto.RegistrationResponseDto;
 import com.pg.mbti.mappers.UserRegistrationMapper;
 import com.pg.mbti.services.UserRegistrationService;
 import jakarta.validation.Valid;

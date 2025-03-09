@@ -1,7 +1,7 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.entity.login.LoginRequestDto;
-import com.pg.mbti.entity.login.LoginResponseDto;
+import com.pg.mbti.dto.LoginRequestDto;
+import com.pg.mbti.dto.LoginResponseDto;
 import com.pg.mbti.services.LoginService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
