@@ -1,6 +1,6 @@
 package com.pg.mbti.entity.questions;
 
-import com.pg.mbti.entity.MBTIType;
+import com.pg.mbti.enums.MBTIType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

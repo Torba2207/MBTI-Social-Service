@@ -1,6 +1,5 @@
 package com.pg.mbti.entity;
 
-import com.pg.mbti.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
