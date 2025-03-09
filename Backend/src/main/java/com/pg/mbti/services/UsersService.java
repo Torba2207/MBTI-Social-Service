@@ -22,7 +22,7 @@ public class UsersService {
         return usersRepository.findAll();
     }
 
-    public User getUserByUsername(final String username) {
+    public User getUserByNickname(final String username) {
         return usersRepository.findByNickname(username)
                 .orElseThrow(() -> new ResponseStatusException(GONE,
                         "The user account has been deleted or inactivated"));
