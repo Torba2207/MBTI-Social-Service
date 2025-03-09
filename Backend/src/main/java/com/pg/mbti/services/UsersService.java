@@ -1,6 +1,6 @@
 package com.pg.mbti.services;
 
-import com.pg.mbti.entity.user.User;
+import com.pg.mbti.entity.User;
 import com.pg.mbti.repositories.UsersRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

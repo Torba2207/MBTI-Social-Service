@@ -1,6 +1,6 @@
 package com.pg.mbti.services;
 
-import com.pg.mbti.entity.user.User;
+import com.pg.mbti.entity.User;
 import com.pg.mbti.repositories.UsersRepository;
 import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;

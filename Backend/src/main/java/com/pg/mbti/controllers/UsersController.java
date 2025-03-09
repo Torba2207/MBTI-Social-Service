@@ -1,6 +1,6 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.entity.user.User;
+import com.pg.mbti.entity.User;
 import com.pg.mbti.services.UsersService;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
