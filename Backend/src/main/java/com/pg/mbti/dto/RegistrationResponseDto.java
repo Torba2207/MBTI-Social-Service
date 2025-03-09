@@ -1,4 +1,4 @@
-package com.pg.mbti.entity.registration;
+package com.pg.mbti.dto;
 
 public record RegistrationResponseDto(
         String username,

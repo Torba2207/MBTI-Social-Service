@@ -1,4 +1,4 @@
-package com.pg.mbti.entity.registration;
+package com.pg.mbti.dto;
 
 import com.pg.mbti.entity.MBTIType;
 import com.pg.mbti.entity.user.Gender;

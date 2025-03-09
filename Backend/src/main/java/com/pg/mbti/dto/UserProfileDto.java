@@ -1,4 +1,4 @@
-package com.pg.mbti.entity.profile;
+package com.pg.mbti.dto;
 
 public record UserProfileDto(
         String email,

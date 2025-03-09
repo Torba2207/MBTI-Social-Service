@@ -1,7 +1,7 @@
-package com.pg.mbti.entity.login;
+package com.pg.mbti.dto;
 
 public record LoginRequestDto(
-        String username,
+        String nickname,
         String password
 ) {
 }

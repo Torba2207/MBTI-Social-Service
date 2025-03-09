@@ -1,4 +1,4 @@
-package com.pg.mbti.entity.login;
+package com.pg.mbti.dto;
 
 public record LoginResponseDto(String token) {
 }
