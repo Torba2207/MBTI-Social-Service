@@ -1,4 +1,4 @@
-package com.pg.mbti.entity.user;
+package com.pg.mbti.enums;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
