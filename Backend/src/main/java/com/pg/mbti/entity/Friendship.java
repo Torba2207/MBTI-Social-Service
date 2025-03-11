@@ -33,6 +33,9 @@ public class Friendship {
             nullable = false
     ) private User receiverId;
 
+    @Column(name = "is_pending")
+    private boolean isPending;
+
     @Column(name = "start_date")
     private Date startDate;
 }
