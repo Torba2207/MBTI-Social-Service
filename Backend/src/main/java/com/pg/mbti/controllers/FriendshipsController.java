@@ -34,7 +34,7 @@ public class FriendshipsController {
                 authentication.getName())
                 .stream()
                 .map(friendship -> friendshipsMapper.toFriendshipDto(friendship))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
         return ResponseEntity.ok(friendships);
     }
 
@@ -44,7 +44,7 @@ public class FriendshipsController {
                         authentication.getName())
                 .stream()
                 .map(friendship -> friendshipsMapper.toFriendshipDto(friendship))
-                .collect(Collectors.toList());;
+                .collect(Collectors.toList());
         return ResponseEntity.ok(friendships);
     }
 
