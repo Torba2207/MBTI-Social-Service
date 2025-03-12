@@ -5,6 +5,7 @@ import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.services.EnumsService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,17 +19,17 @@ public class EnumController {
     EnumsService enumsService;
 
     @GetMapping("/roles")
-    public List<Role> getAllUserRoles() {
-        return enumsService.getAllUserRoles();
+    public ResponseEntity<List<Role>> getAllUserRoles() {
+        return ResponseEntity.ok(enumsService.getAllUserRoles());
     }
 
     @GetMapping("/genders")
-    public List<Gender> getAllUserGenders() {
-        return enumsService.getAllUserGenders();
+    public ResponseEntity<List<Gender>> getAllUserGenders() {
+        return ResponseEntity.ok(enumsService.getAllUserGenders());
     }
 
     @GetMapping("/mbti")
-    public List<MBTIType> getAllMBTITypes() {
-        return enumsService.getAllMBTITypes();
+    public ResponseEntity<List<MBTIType>> getAllMBTITypes() {
+        return ResponseEntity.ok(enumsService.getAllMBTITypes());
     }
 }

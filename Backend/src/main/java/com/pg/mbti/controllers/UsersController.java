@@ -3,6 +3,7 @@ package com.pg.mbti.controllers;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.services.UsersService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,12 @@ public class UsersController {
     UsersService usersService;
 
     @GetMapping("/users")
-    public List<User> getUsers() {
-        return usersService.getUsers();
+    public ResponseEntity<List<User>> getUsers() {
+        return ResponseEntity.ok(usersService.getUsers());
     }
 
     @GetMapping("/users/{nickname}")
-    public User getUserByNickname(@PathVariable final String nickname) {
-        return usersService.getUserByNickname(nickname);
+    public ResponseEntity<User> getUserByNickname(@PathVariable final String nickname) {
+        return ResponseEntity.ok(usersService.getUserByNickname(nickname));
     }
 }
