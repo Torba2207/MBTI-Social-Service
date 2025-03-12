@@ -1,0 +1,32 @@
+version: "3.8"
+
+services:
+  database:
+    image: postgres:latest
+    container_name: mbti_postgres_container
+    restart: always
+    environment:
+      - POSTGRES_DB=MBTI_DATABASE
+      - POSTGRES_USER=mbtiadmin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+
+  redis:
+    image: redis:alpine
+    container_name: mbti_redis_container
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    networks:
+      - redis-network
+
+networks:
+  redis-network:
+    driver: bridge
