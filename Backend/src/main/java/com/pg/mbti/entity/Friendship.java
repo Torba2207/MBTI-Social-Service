@@ -1,10 +1,10 @@
 package com.pg.mbti.entity;
 
-import com.pg.mbti.entity.user.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Date;
 import java.util.UUID;
@@ -14,6 +14,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Setter
 public class Friendship {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,6 +34,15 @@ public class Friendship {
             referencedColumnName = "id",
             nullable = false
     ) private User receiverId;
+
+    public Friendship(User senderId, User receiverId) {
+        this.senderId = senderId;
+        this.receiverId = receiverId;
+        this.isPending = true;
+    }
+
+    @Column(name = "is_pending")
+    private boolean isPending;
 
     @Column(name = "start_date")
     private Date startDate;

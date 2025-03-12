@@ -1,7 +1,7 @@
 package com.pg.mbti.dto;
 
-import com.pg.mbti.entity.MBTIType;
-import com.pg.mbti.entity.user.Gender;
+import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.enums.Gender;
 
 public record RegistrationRequestDto(
         String name,

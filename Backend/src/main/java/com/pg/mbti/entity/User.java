@@ -1,7 +1,9 @@
-package com.pg.mbti.entity.user;
+package com.pg.mbti.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.pg.mbti.entity.MBTIType;
+import com.pg.mbti.enums.Gender;
+import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.enums.Role;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -23,7 +23,7 @@ public class UserProfileController {
             final Authentication authentication) {
 
         final var user =
-                usersService.getUserByUsername(authentication.getName());
+                usersService.getUserByNickname(authentication.getName());
 
         return ResponseEntity.ok(userMapper.toUserProfileDto(user));
     }
