@@ -26,20 +26,19 @@ public class FriendshipsController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/me")
+    @GetMapping("/me/pending")
     public ResponseEntity<List<FriendshipDto>> getFriendshipsByNickname(
-            final Authentication authentication,
-            @RequestParam final boolean isPending
+            final Authentication authentication
     ) {
-        final var friendships = friendshipService.getFriendshipsByNicknameAndIsPending(
-                authentication.getName(), isPending)
+        final var friendships = friendshipService.getMyPendingFriendships(
+                authentication.getName())
                 .stream()
                 .map(friendship -> friendshipsMapper.toFriendshipDto(friendship))
                 .collect(Collectors.toList());;
         return ResponseEntity.ok(friendships);
     }
 
-    @GetMapping("/me")
+    @GetMapping("/me/accepted")
     public ResponseEntity<List<FriendshipDto>> getFriendshipsByNickname(final Authentication authentication) {
         final var friendships = friendshipService.getFriendshipsByNickname(
                         authentication.getName())
@@ -54,17 +53,27 @@ public class FriendshipsController {
             final Authentication authentication,
             @PathVariable final String receiver
     ) {
-        friendshipService.updateFriendship(
+        friendshipService.createFriendship(
                 authentication.getName(), receiver);
         return ResponseEntity.ok(200);
     }
 
-    @PutMapping("/me/{receiver}")
+    @GetMapping("/me/{receiver}/accept")
     public ResponseEntity<Integer> updateFriendship(
             final Authentication authentication,
             @PathVariable final String receiver
     ) {
-        friendshipService.updateFriendship(
+        friendshipService.acceptFriendship(
+                authentication.getName(), receiver);
+        return ResponseEntity.ok(200);
+    }
+
+    @DeleteMapping("/me/{receiver}")
+    public ResponseEntity<Integer> deleteFriendship(
+            final Authentication authentication,
+            @PathVariable final String receiver
+    ) {
+        friendshipService.deleteFriendship(
                 authentication.getName(), receiver);
         return ResponseEntity.ok(200);
     }
