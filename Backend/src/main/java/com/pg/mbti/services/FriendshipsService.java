@@ -30,7 +30,7 @@ public class FriendshipsService {
     private User findUserByNickname(String Nickname) {
         return usersRepository
                 .findByNickname(Nickname)
-                .orElseThrow -> throw Exception("No user found with this nickname");
+                .orElseThrow(() -> new RuntimeException("User not found"));
     }
 
     public void createFriendship(String currentNickname, String newFriendNickname) {
