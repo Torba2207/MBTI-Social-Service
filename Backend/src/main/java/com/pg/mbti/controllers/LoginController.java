@@ -3,12 +3,12 @@ package com.pg.mbti.controllers;
 import com.pg.mbti.dto.LoginRequestDto;
 import com.pg.mbti.dto.LoginResponseDto;
 import com.pg.mbti.services.LoginService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -19,9 +19,19 @@ public class LoginController {
 
     @PostMapping("/login")
     public ResponseEntity<LoginResponseDto> authenticate(
-            @RequestBody final LoginRequestDto LoginRequestDto
+            @RequestBody final LoginRequestDto LoginRequestDto,
+            HttpServletRequest request,
+            HttpServletResponse response,
+            HttpSession session
     ) {
+        session.setAttribute("nickname", LoginRequestDto.nickname());
         return ResponseEntity.ok(
-                LoginService.authenticate(LoginRequestDto));
+                LoginService.authenticate(LoginRequestDto, request, response));
+    }
+
+    @GetMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok().build();
     }
 }
