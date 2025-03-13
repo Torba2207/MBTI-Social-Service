@@ -46,13 +46,13 @@ public class User {
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "mbti", columnDefinition = "mbti_type")
-    @ColumnTransformer(write = "?::mbti_type")
+    @Column(name = "mbti", columnDefinition = "mbti.mbti_type")
+    @ColumnTransformer(write = "?::mbti.mbti_type")
     @Enumerated(EnumType.STRING)
     private MBTIType mbtiType;
 
-    @Column(name = "role", columnDefinition = "user_role")
-    @ColumnTransformer(write = "?::user_role")
+    @Column(name = "role", columnDefinition = "mbti.user_role")
+    @ColumnTransformer(write = "?::mbti.user_role")
     @Enumerated(EnumType.STRING)
     private Role role;
 
@@ -60,8 +60,8 @@ public class User {
     private Integer age;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", columnDefinition = "user_gender")
-    @ColumnTransformer(write = "?::user_gender")
+    @Column(name = "gender", columnDefinition = "mbti.user_gender")
+    @ColumnTransformer(write = "?::mbti.user_gender")
     private Gender gender;
 
     @Column(name = "profile_photo")
