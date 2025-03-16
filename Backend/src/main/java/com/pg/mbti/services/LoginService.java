@@ -23,8 +23,6 @@ public class LoginService {
     private final SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
     private final SecurityContextHolderStrategy securityContextHolderStrategy = SecurityContextHolder.getContextHolderStrategy();
 
-
-
     public LoginResponseDto authenticate(
             LoginRequestDto loginRequest,
             HttpServletRequest request,

@@ -3,7 +3,7 @@ package com.pg.mbti.controllers;
 import com.pg.mbti.dto.RegistrationRequestDto;
 import com.pg.mbti.dto.RegistrationResponseDto;
 import com.pg.mbti.mappers.UserRegistrationMapper;
-import com.pg.mbti.services.UserRegistrationService;
+import com.pg.mbti.services.RegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final UserRegistrationService userRegistrationService;
+    private final RegistrationService userRegistrationService;
 
     private final UserRegistrationMapper userRegistrationMapper;
 
