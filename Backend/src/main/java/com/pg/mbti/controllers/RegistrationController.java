@@ -1,35 +1,33 @@
 package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.RegistrationRequestDto;
-import com.pg.mbti.dto.RegistrationResponseDto;
 import com.pg.mbti.mappers.UserRegistrationMapper;
 import com.pg.mbti.services.RegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
 public class RegistrationController {
 
-    private final RegistrationService userRegistrationService;
+    private final RegistrationService registrationService;
 
     private final UserRegistrationMapper userRegistrationMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<RegistrationResponseDto> registerUser(
+    public ResponseEntity<String> registerUser(
             @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
 
-        final var registeredUser = userRegistrationService
-                .registerUser(userRegistrationMapper.toEntity(registrationDTO));
+        registrationService.registerUser(userRegistrationMapper.toEntity(registrationDTO));
 
-        return ResponseEntity.ok(
-                userRegistrationMapper.toRegistrationResponseDto(registeredUser)
-        );
+        return ResponseEntity.ok("User registered successfully.");
+    }
+
+    @GetMapping("/confirm-email")
+    public void confirmEmail(@RequestParam String token) {
+        registrationService.confirmEmail(token);
     }
 }

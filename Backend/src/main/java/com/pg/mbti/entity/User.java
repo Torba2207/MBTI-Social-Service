@@ -5,12 +5,8 @@ import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Role;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
-
 import java.util.UUID;
 
 @Entity
