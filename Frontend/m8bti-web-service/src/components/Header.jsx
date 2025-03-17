@@ -3,7 +3,8 @@ import { MBTIColors } from "./MBTIColors";
 
 export function Header({mbti}){
     return(
-        <header className={`flex w-full h-1/5 bg-[${MBTIColors({colorDest:"Secondary",mbti})}]`}>
+        <header className={"flex w-full h-1/5"}
+            style={{ backgroundColor: MBTIColors({ colorDest: "Secondary", mbti }) }}>
             {/**Logo Div */}
             <div className=" flex w-2/10 h-1/2 flex items-center text-center ml-[5%]">
                 <h2>
