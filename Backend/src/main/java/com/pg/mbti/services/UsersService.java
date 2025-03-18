@@ -27,4 +27,8 @@ public class UsersService {
                 .orElseThrow(() -> new ResponseStatusException(GONE,
                         "The user account has been deleted or inactivated"));
     }
+
+    public void updateUser(User user) {
+        usersRepository.save(user);
+    }
 }
