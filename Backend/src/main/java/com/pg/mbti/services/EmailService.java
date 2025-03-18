@@ -14,8 +14,7 @@ public class EmailService {
 
     public void sendMail(EmailContextDto emailContext) {
         SimpleMailMessage message = new SimpleMailMessage();
-        // TODO replace with accurate email
-        message.setFrom("");
+        message.setFrom("mbtiservice2@gmail.com");
         message.setTo(emailContext.recipient());
         message.setSubject(emailContext.subject());
         message.setText(emailContext.message());
