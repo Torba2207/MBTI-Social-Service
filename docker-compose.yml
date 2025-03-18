@@ -26,7 +26,23 @@ services:
       retries: 5
     networks:
       - redis-network
+      
+  minio:
+    image: quay.io/minio/minio:latest
+    container_name: mbti_minio_container
+    ports:
+      - "9000:9000"  # MinIO API Port
+      - "9001:9001"  # MinIO Console Port
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio_data:/data
+    command: server /data --console-address ":9001"
 
 networks:
   redis-network:
     driver: bridge
+
+volumes:
+  minio_data:
