@@ -4,11 +4,8 @@ import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.mappers.UserMapper;
 import com.pg.mbti.services.PhotoService;
 import com.pg.mbti.services.UsersService;
-import org.springframework.http.HttpHeaders;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -40,20 +37,8 @@ public class UserProfileController {
 
     @GetMapping("/photo")
     public ResponseEntity<Resource> getProfilePhoto(Authentication authentication) {
-        try {
-            final var user = usersService.getUserByNickname(authentication.getName());
-            String fileName = user.getProfilePicture();
-            if (fileName == null) {
-                return ResponseEntity.notFound().build();
-            }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                    .body(photoService.getPhoto(fileName));
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
-        }
+        final var user = usersService.getUserByNickname(authentication.getName());
+        String fileName = user.getProfilePicture();
+        return photoService.getProfilePhotoResponse(fileName);
     }
 }

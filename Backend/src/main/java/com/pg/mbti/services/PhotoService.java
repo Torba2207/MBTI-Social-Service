@@ -4,6 +4,10 @@ import io.minio.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -56,6 +60,22 @@ public class PhotoService {
             return new InputStreamResource(stream);
         } catch (Exception e) {
             throw new RuntimeException("Error retrieving file: " + e.getMessage());
+        }
+    }
+
+    public ResponseEntity<Resource> getProfilePhotoResponse(String fileName) {
+        try {
+            if (fileName == null || fileName.equalsIgnoreCase("default.jpg")) {
+                return ResponseEntity.notFound().build();
+            }
+
+            return ResponseEntity.ok()
+                    .contentType(MediaType.IMAGE_JPEG)
+                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
+                    .body(getPhoto(fileName));
+
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
 }
