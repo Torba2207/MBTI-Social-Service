@@ -13,7 +13,9 @@ import java.util.UUID;
 @Table(name = "users")
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
+@Builder
 public class User {
     @Setter(AccessLevel.NONE)
     @Id
@@ -62,21 +64,4 @@ public class User {
 
     @Column(name = "profile_photo")
     private String profilePicture;
-
-    public User(String name, String surname, String nickname,
-                String password, String email, Double latitude,
-                Double longitude, MBTIType mbtiType, Integer age, Gender gender) {
-        this.name = name;
-        this.surname = surname;
-        this.nickname = nickname;
-        this.password = password;
-        this.email = email;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.mbtiType = mbtiType;
-        this.age = age;
-        this.gender = gender;
-        this.role = Role.ANONYMOUS;
-        this.profilePicture = "default.jpg";
-    }
 }
