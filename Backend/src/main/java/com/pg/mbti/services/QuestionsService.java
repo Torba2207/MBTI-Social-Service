@@ -6,13 +6,18 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Service
 public class QuestionsService {
+
     QuestionsRepository questionsRepository;
     public List<Question> getAllQuestions() {
         return questionsRepository.findAll();
     }
 
+    public Question getQuestionById(UUID id) {
+        return questionsRepository.findById(id).orElse(null);
+    }
 }
