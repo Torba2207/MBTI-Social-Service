@@ -64,8 +64,8 @@ dist/
 npm-debug.log
 yarn-error.log
 yarn-debug.log
-package-lock.json
-package.json
+#package-lock.json
+#package.json
 
 # Next.js
 .next/
@@ -74,8 +74,8 @@ node_modules/
 npm-debug.log
 yarn-error.log
 yarn-debug.log
-package-lock.json
-package.json
+#package-lock.json
+#package.json
 
 # OS generated files
 .DS_Store
