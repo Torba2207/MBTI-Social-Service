@@ -8,11 +8,13 @@ import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.exceptions.UserAlreadyExistsException;
 import com.pg.mbti.repositories.UsersRepository;
+import com.pg.mbti.services.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.pg.mbti.services.email.EmailValidator;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -31,6 +33,8 @@ public class RegistrationService {
 
     @Transactional
     public void registerUser(User request) {
+        EmailValidator.validateEmailFormat(request.getEmail());
+
         if (userRepository.existsByNickname(request.getNickname()) ||
                 userRepository.existsByEmail(request.getEmail())) {
             throw new UserAlreadyExistsException("Nickname or Email already exists");

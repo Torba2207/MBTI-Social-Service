@@ -1,4 +1,4 @@
-package com.pg.mbti.services;
+package com.pg.mbti.services.email;
 
 import com.pg.mbti.dto.EmailContextDto;
 import com.pg.mbti.exceptions.EmailSendingFailedException;

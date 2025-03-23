@@ -23,4 +23,6 @@ public interface UsersRepository extends JpaRepository<User, UUID> {
             "SET u.password = ?2 " +
             "WHERE u.email = ?1")
     void updatePasswordByEmail(String email, String encode);
+
+    Optional<User> findByEmail(String email);
 }

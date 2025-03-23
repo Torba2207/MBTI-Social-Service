@@ -8,6 +8,7 @@ import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.repositories.UsersRepository;
+import com.pg.mbti.services.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;

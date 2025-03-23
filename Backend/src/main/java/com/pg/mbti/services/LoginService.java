@@ -5,9 +5,11 @@ import com.pg.mbti.dto.LoginResponseDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.exceptions.EmailNotConfirmedException;
+import com.pg.mbti.exceptions.InvalidEmailException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.repositories.UsersRepository;
+import com.pg.mbti.services.email.EmailValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +36,22 @@ public class LoginService {
             LoginRequestDto loginRequest,
             HttpServletRequest request,
             HttpServletResponse response) {
-        User user = usersRepository.findByNickname(loginRequest.nickname())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        String usernameOrEmail = loginRequest.usernameOrEmail();
+        User user;
+
+        if (usernameOrEmail.contains("@")) {
+            try {
+                EmailValidator.validateEmailFormat(usernameOrEmail);
+            } catch (InvalidEmailException e) {
+                throw new ResourceNotFoundException("User not found");
+            }
+
+            user = usersRepository.findByEmail(usernameOrEmail)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        } else {
+            user = usersRepository.findByNickname(usernameOrEmail)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        }
 
         if (user.getRole() == Role.ANONYMOUS) {
             throw new EmailNotConfirmedException("Email not confirmed");
@@ -43,7 +59,7 @@ public class LoginService {
 
         try {
             UsernamePasswordAuthenticationToken authToken = UsernamePasswordAuthenticationToken.unauthenticated(
-                    loginRequest.nickname(), loginRequest.password());
+                    user.getNickname(), loginRequest.password());
             Authentication authentication = authenticationManager.authenticate(authToken);
             SecurityContext context = securityContextHolderStrategy.createEmptyContext();
             context.setAuthentication(authentication);
