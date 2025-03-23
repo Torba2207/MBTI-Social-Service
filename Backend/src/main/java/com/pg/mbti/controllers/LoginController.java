@@ -24,7 +24,7 @@ public class LoginController {
             HttpServletResponse response,
             HttpSession session
     ) {
-        session.setAttribute("nickname", LoginRequestDto.nickname());
+        session.setAttribute("nickname", LoginRequestDto.usernameOrEmail());
         return ResponseEntity.ok(
                 LoginService.authenticate(LoginRequestDto, request, response));
     }
