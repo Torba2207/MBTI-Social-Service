@@ -14,4 +14,5 @@ public record RegistrationRequestDto(
         MBTIType mbti,
         Integer age,
         Gender gender
-    ) { }
+) {
+}
