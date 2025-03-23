@@ -1,6 +1,7 @@
 package com.pg.mbti.services;
 
 import com.pg.mbti.dto.EmailContextDto;
+import com.pg.mbti.exceptions.EmailSendingFailedException;
 import lombok.AllArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -13,12 +14,16 @@ public class EmailService {
     private final JavaMailSender emailSender;
 
     public void sendMail(EmailContextDto emailContext) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setFrom("mbtiservice2@gmail.com");
-        message.setTo(emailContext.recipient());
-        message.setSubject(emailContext.subject());
-        message.setText(emailContext.message());
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setFrom("mbtiservice2@gmail.com");
+            message.setTo(emailContext.recipient());
+            message.setSubject(emailContext.subject());
+            message.setText(emailContext.message());
 
-        emailSender.send(message);
+            emailSender.send(message);
+        } catch (Exception e) {
+            throw new EmailSendingFailedException("Failed to send email: " + e.getMessage());
+        }
     }
 }

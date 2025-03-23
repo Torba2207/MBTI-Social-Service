@@ -1,5 +1,7 @@
 package com.pg.mbti.services;
 
+import com.pg.mbti.exceptions.FileNotFoundException;
+import com.pg.mbti.exceptions.FileUploadException;
 import io.minio.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -28,13 +30,11 @@ public class PhotoService {
         try {
             String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
 
-            // Ensure bucket exists
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!found) {
                 minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
 
-            // Upload file
             minioClient.putObject(
                     PutObjectArgs.builder()
                             .bucket(bucketName)
@@ -45,7 +45,7 @@ public class PhotoService {
             );
             return fileName;
         } catch (Exception e) {
-            throw new RuntimeException("Error uploading file: " + e.getMessage());
+            throw new FileUploadException("Error uploading file: " + e.getMessage());
         }
     }
 
@@ -59,7 +59,7 @@ public class PhotoService {
             );
             return new InputStreamResource(stream);
         } catch (Exception e) {
-            throw new RuntimeException("Error retrieving file: " + e.getMessage());
+            throw new FileNotFoundException("Error retrieving file: " + e.getMessage());
         }
     }
 
@@ -74,8 +74,10 @@ public class PhotoService {
                     .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
                     .body(getPhoto(fileName));
 
+        } catch (FileNotFoundException e) {
+            throw e;
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            throw new FileUploadException("Error retrieving profile photo: " + e.getMessage());
         }
     }
 }

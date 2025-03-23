@@ -4,6 +4,9 @@ import com.pg.mbti.dto.LoginRequestDto;
 import com.pg.mbti.dto.LoginResponseDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Role;
+import com.pg.mbti.exceptions.EmailNotConfirmedException;
+import com.pg.mbti.exceptions.ResourceNotFoundException;
+import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.repositories.UsersRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -32,18 +35,23 @@ public class LoginService {
             HttpServletRequest request,
             HttpServletResponse response) {
         User user = usersRepository.findByNickname(loginRequest.nickname())
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
 
         if (user.getRole() == Role.ANONYMOUS) {
-            throw new IllegalArgumentException("Email not confirmed");
+            throw new EmailNotConfirmedException("Email not confirmed");
         }
-        UsernamePasswordAuthenticationToken authToken = UsernamePasswordAuthenticationToken.unauthenticated(
-                loginRequest.nickname(), loginRequest.password());
-        Authentication authentication = authenticationManager.authenticate(authToken);
-        SecurityContext context = securityContextHolderStrategy.createEmptyContext();
-        context.setAuthentication(authentication);
-        securityContextHolderStrategy.setContext(context);
-        securityContextRepository.saveContext(context, request, response);
+
+        try {
+            UsernamePasswordAuthenticationToken authToken = UsernamePasswordAuthenticationToken.unauthenticated(
+                    loginRequest.nickname(), loginRequest.password());
+            Authentication authentication = authenticationManager.authenticate(authToken);
+            SecurityContext context = securityContextHolderStrategy.createEmptyContext();
+            context.setAuthentication(authentication);
+            securityContextHolderStrategy.setContext(context);
+            securityContextRepository.saveContext(context, request, response);
+        } catch (Exception e) {
+            throw new InvalidPasswordException("Invalid password");
+        }
 
         return new LoginResponseDto("Login successful, session created.");
     }
