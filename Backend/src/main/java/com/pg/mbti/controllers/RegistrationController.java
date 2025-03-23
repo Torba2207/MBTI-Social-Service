@@ -20,9 +20,7 @@ public class RegistrationController {
 
     @PostMapping("/register")
     public ResponseEntity<RegistrationResponseDto> registerUser(
-            @Valid
-            @RequestBody
-            final RegistrationRequestDto registrationDTO) {
+            @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
         User user = registrationMapper.toEntity(registrationDTO);
         registrationService.registerUser(user);
         return ResponseEntity.ok(registrationMapper.toRegistrationResponseDto(user));
