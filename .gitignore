@@ -1,9 +1,8 @@
 # Log file
 *.log
 
-# Keys
-*.pub
-*.key
+# Environment variables
+.env
 
 # BlueJ files
 *.ctxt
