@@ -8,7 +8,7 @@ export function Header({mbti}){
             style={{ backgroundColor: MBTIColors({ colorDest: "Secondary", mbti }) }}>
             {/**Logo Div */}
             <div className=" flex w-15/100 h-2/2 flex items-center text-center ml-[5%]">
-                <Logo className="w-69 h-28" />
+                <Logo className="auto" />
             </div>
             {/**Full Name Div */}
             <div className="flex h-1/2 w-7/10 items-end">
