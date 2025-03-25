@@ -24,4 +24,7 @@ public class AnswerSet {
             referencedColumnName = "id"
     )
     private Question question;
+
+    @Column(name = "is_yes", nullable = false)
+    private boolean isYes;
 }

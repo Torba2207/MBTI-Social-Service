@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -18,15 +19,11 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private UUID id;
 
-    @ManyToOne
-    @JoinColumn(
-            name = "answer_set_id",
-            referencedColumnName = "id",
-            nullable = false
-    )
-    private AnswerSet answerSet;
-
     @Column(name = "mbti")
     @Enumerated(EnumType.STRING)
     private MBTIType mbtiType;
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @Column(name = "answers", nullable = false)
+    private List<AnswerSet> answers;
 }
