@@ -1,7 +1,6 @@
 package com.pg.mbti.configurations;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.pg.mbti.services.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
