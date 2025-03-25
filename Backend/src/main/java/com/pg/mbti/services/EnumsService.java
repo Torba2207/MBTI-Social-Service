@@ -2,6 +2,7 @@ package com.pg.mbti.services;
 
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +21,9 @@ public class EnumsService {
 
     public List<MBTIType> getAllMBTITypes() {
         return List.of(MBTIType.values());
+    }
+
+    public List<Pronouns> getAllPronouns() {
+        return List.of(Pronouns.values());
     }
 }

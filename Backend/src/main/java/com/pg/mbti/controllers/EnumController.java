@@ -2,6 +2,7 @@ package com.pg.mbti.controllers;
 
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Gender;
+import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.services.EnumsService;
 import lombok.AllArgsConstructor;
@@ -31,5 +32,10 @@ public class EnumController {
     @GetMapping("/mbti")
     public ResponseEntity<List<MBTIType>> getAllMBTITypes() {
         return ResponseEntity.ok(enumsService.getAllMBTITypes());
+    }
+
+    @GetMapping("/pronouns")
+    public ResponseEntity<List<Pronouns>> getAllPronouns() {
+        return ResponseEntity.ok(enumsService.getAllPronouns());
     }
 }
