@@ -1,13 +1,16 @@
 package com.pg.mbti.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnTransformer;
-import java.util.UUID;
+
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -20,22 +23,23 @@ public class User {
     @Setter(AccessLevel.NONE)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false, updatable = false, unique = true)
     private UUID id;
 
-    @Column(name = "name")
+    @Column(name = "name", nullable = false)
     private String name;
 
-    @Column(name = "surname")
+    @Column(name = "surname", nullable = false)
     private String surname;
 
-    @Column(name = "nickname")
+    @Column(name = "nickname", nullable = false, unique = true)
     private String nickname;
 
     @JsonIgnore
-    @Column(name = "password_hash")
+    @Column(name = "password_hash", nullable = false)
     private String password;
 
-    @Column(name = "email")
+    @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "latitude")
@@ -44,24 +48,42 @@ public class User {
     @Column(name = "longitude")
     private Double longitude;
 
-    @Column(name = "mbti", columnDefinition = "mbti.mbti_type")
-    @ColumnTransformer(write = "?::mbti.mbti_type")
+    @Column(name = "mbti", nullable = false)
     @Enumerated(EnumType.STRING)
     private MBTIType mbtiType;
 
-    @Column(name = "role", columnDefinition = "mbti.user_role")
-    @ColumnTransformer(write = "?::mbti.user_role")
+    @Column(name = "role", nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
 
-    @Column(name = "age")
-    private Integer age;
+    @Column(name = "birthday", nullable = false)
+    @JsonFormat(pattern="dd-MM-yyyy")
+    private Date birthday;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "gender", columnDefinition = "mbti.user_gender")
-    @ColumnTransformer(write = "?::mbti.user_gender")
+    @Column(name = "gender", nullable = false)
     private Gender gender;
+
+    @Column(name = "description")
+    private String description;
+
+    @ElementCollection
+    @CollectionTable(name = "user_links", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "link")
+    private List<String> links;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "pronouns", nullable = false)
+    private Pronouns pronouns;
 
     @Column(name = "profile_photo")
     private String profilePicture;
+
+    @ManyToMany
+    @JoinTable(
+            name = "user_tags",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
+    )
+    private Set<Tag> tags = new HashSet<>();
 }
