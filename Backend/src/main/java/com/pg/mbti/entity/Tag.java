@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 @Table(name = "tags")
@@ -15,9 +16,9 @@ import java.util.Set;
 @Builder
 public class Tag {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id", nullable = false, updatable = false, unique = true)
-    private Long id;
+    private UUID id;
 
     @Column(name = "name", nullable = false)
     private String name;
