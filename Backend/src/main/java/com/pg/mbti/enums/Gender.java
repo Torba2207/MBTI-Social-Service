@@ -11,5 +11,4 @@ public enum  Gender {
     PEDIK("Pedik");
 
     private final String name;
-
 }
