@@ -23,6 +23,6 @@ public class Answer {
     @Enumerated(EnumType.STRING)
     private MBTIType mbtiType;
 
-    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<AnswerSet> answers;
 }

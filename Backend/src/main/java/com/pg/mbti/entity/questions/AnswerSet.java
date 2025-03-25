@@ -27,4 +27,8 @@ public class AnswerSet {
 
     @Column(name = "is_yes", nullable = false)
     private boolean isYes;
+
+    @ManyToOne
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Answer answer;
 }
