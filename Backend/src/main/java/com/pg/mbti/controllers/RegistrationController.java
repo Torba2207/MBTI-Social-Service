@@ -1,7 +1,9 @@
 package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.RegistrationRequestDto;
-import com.pg.mbti.mappers.UserRegistrationMapper;
+import com.pg.mbti.dto.RegistrationResponseDto;
+import com.pg.mbti.entity.User;
+import com.pg.mbti.mappers.RegistrationMapper;
 import com.pg.mbti.services.RegistrationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,20 +16,19 @@ import org.springframework.web.bind.annotation.*;
 public class RegistrationController {
 
     private final RegistrationService registrationService;
-
-    private final UserRegistrationMapper userRegistrationMapper;
+    private final RegistrationMapper registrationMapper;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(
+    public ResponseEntity<RegistrationResponseDto> registerUser(
             @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
-
-        registrationService.registerUser(userRegistrationMapper.toEntity(registrationDTO));
-
-        return ResponseEntity.ok("User registered successfully.");
+        User user = registrationMapper.toEntity(registrationDTO);
+        registrationService.registerUser(user);
+        return ResponseEntity.ok(registrationMapper.toRegistrationResponseDto(user));
     }
 
     @GetMapping("/confirm-email")
-    public void confirmEmail(@RequestParam String token) {
+    public ResponseEntity<String> confirmEmail(@RequestParam String token) {
         registrationService.confirmEmail(token);
+        return ResponseEntity.ok("Email confirmed successfully");
     }
 }

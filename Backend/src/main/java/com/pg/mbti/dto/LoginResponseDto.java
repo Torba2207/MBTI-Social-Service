@@ -1,4 +1,6 @@
 package com.pg.mbti.dto;
 
-public record LoginResponseDto(String response) {
+public record LoginResponseDto(
+        String response
+) {
 }

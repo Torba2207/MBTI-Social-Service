@@ -14,7 +14,7 @@ import java.util.UUID;
 @Getter
 public class AnswerSet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
@@ -24,4 +24,11 @@ public class AnswerSet {
             referencedColumnName = "id"
     )
     private Question question;
+
+    @Column(name = "is_yes", nullable = false)
+    private boolean isYes;
+
+    @ManyToOne
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Answer answer;
 }

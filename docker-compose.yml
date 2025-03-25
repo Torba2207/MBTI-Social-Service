@@ -1,38 +1,71 @@
 version: "3.8"
 
 services:
+  mbti_backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - SERVER_PORT=8080
+      - SERVER_ADDRESS=0.0.0.0
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://database:5432/MBTI_DATABASE
+      - SPRING_DATASOURCE_USERNAME=mbtiadmin
+      - SPRING_DATASOURCE_PASSWORD=admin
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_JPA_SHOW_SQL=true
+      - MAIL_USERNAME=mbtiservice2
+      - MAIL_PASSWORD=byrubfwdszzxraxr
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - SPRING_NAME=Midax
+      - SPRING_PASSWORD=qwerty12345
+      - CLIENT_URL=localhost
+      - CLIENT_PORT=3000
+      - MINIO_URL=http://minio:9000
+      - MINIO_ACCESS_KEY=minioadmin
+      - MINIO_SECRET_KEY=minioadmin
+    depends_on:
+      database:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      minio:
+        condition: service_started
+
   database:
     image: postgres:latest
-    container_name: mbti_postgres_container
-    restart: always
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/pgdata
     environment:
       - POSTGRES_DB=MBTI_DATABASE
       - POSTGRES_USER=mbtiadmin
       - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data/pgdata
     ports:
       - "5432:5432"
-    volumes:
-      - ./init:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+    command: postgres -c 'max_connections=500'
+    restart: unless-stopped
 
   redis:
     image: redis:alpine
-    container_name: mbti_redis_container
     ports:
       - "6379:6379"
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 30s
-      timeout: 10s
-      retries: 5
-    networks:
-      - redis-network
-      
+    volumes:
+      - redis_data:/data
+
   minio:
     image: quay.io/minio/minio:latest
-    container_name: mbti_minio_container
     ports:
-      - "9000:9000"  # MinIO API Port
-      - "9001:9001"  # MinIO Console Port
+      - "9000:9000"
+      - "9001:9001"
     environment:
       MINIO_ROOT_USER: minioadmin
       MINIO_ROOT_PASSWORD: minioadmin
@@ -40,9 +73,10 @@ services:
       - minio_data:/data
     command: server /data --console-address ":9001"
 
-networks:
-  redis-network:
-    driver: bridge
-
 volumes:
+  postgres_data:
+    name: rating-system-postgres-data
+  redis_data:
+    name: rating-system-redis-data
   minio_data:
+    name: rating-system-minio-data

@@ -1,9 +1,8 @@
 # Log file
 *.log
 
-# Keys
-*.pub
-*.key
+# Environment variables
+.env
 
 # BlueJ files
 *.ctxt
@@ -46,19 +45,9 @@ pom.xml.next
 *.iml
 *.ipr
 *.iws
-.idea/
-out/
-*.class
-*.jar
-*.war
-*.ear
-*.db
-*.log
-*.hprof
 
 # React
 node_modules/
-build/
 dist/
 .cache/
 npm-debug.log

@@ -11,6 +11,4 @@ public enum Role {
     ADMIN("Admin");
 
     private final String name;
-
-
 }
