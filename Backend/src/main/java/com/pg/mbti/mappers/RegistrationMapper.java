@@ -18,8 +18,9 @@ public class RegistrationMapper {
                 .mbtiType(registrationRequestDto.mbti())
                 .name(registrationRequestDto.name())
                 .surname(registrationRequestDto.surname())
-                .age(registrationRequestDto.age())
+                .birthday(registrationRequestDto.birthday())
                 .gender(registrationRequestDto.gender())
+                .pronouns(registrationRequestDto.pronouns())
                 .build();
     }
 

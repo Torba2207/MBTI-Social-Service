@@ -12,11 +12,15 @@ public class UserMapper {
                 user.getNickname(),
                 user.getName(),
                 user.getSurname(),
-                user.getAge(),
+                user.getBirthday(),
                 user.getMbtiType(),
                 user.getLatitude(),
                 user.getLongitude(),
                 user.getGender(),
-                user.getProfilePicture());
+                user.getProfilePicture(),
+                user.getDescription(),
+                user.getPronouns(),
+                user.getLinks(),
+                user.getTags());
     }
 }

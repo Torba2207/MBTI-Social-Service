@@ -45,7 +45,7 @@ public class RegistrationService {
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.ANONYMOUS)
-                .age(request.getAge())
+                .birthday(request.getBirthday())
                 .name(request.getName())
                 .surname(request.getSurname())
                 .latitude(request.getLatitude())
@@ -53,6 +53,7 @@ public class RegistrationService {
                 .profilePicture("default.jpg")
                 .mbtiType(request.getMbtiType())
                 .gender(request.getGender())
+                .pronouns(request.getPronouns())
                 .build();
 
         userRepository.save(user);
