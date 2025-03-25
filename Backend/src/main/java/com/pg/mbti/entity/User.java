@@ -8,7 +8,6 @@ import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnTransformer;
 
 import java.util.*;
 
