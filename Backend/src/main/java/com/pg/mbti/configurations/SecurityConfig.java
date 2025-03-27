@@ -39,7 +39,8 @@ public class SecurityConfig {
                                 "/api/auth/register",
                                 "/api/auth/login",
                                 "/api/auth/confirm-email",
-                                "/api/auth/forgot-password"
+                                "/api/auth/forgot-password",
+                                "/v3/api-docs"
                         ).permitAll()
                         .anyRequest().authenticated()
                 )

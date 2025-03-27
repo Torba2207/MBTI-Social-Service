@@ -2,6 +2,12 @@ package com.pg.mbti.controllers;
 
 import com.pg.mbti.services.PhotoService;
 import com.pg.mbti.services.UsersService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -13,13 +19,26 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/photo")
 @AllArgsConstructor
+@Tag(name = "Profile Photos", description = "Endpoints for retrieving user profile photos")
 public class PhotoController {
 
     private final UsersService usersService;
     private final PhotoService photoService;
 
     @GetMapping("{nickname}")
-    public ResponseEntity<Resource> getProfilePhoto(@PathVariable String nickname) {
+    @Operation(summary = "Get user profile photo",
+            description = "Retrieves the profile photo of a user by their nickname")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile photo retrieved successfully",
+                    content = @Content(mediaType = "image/jpeg")),
+            @ApiResponse(responseCode = "404", description = "User not found or profile photo not available",
+                    content = @Content),
+            @ApiResponse(responseCode = "500", description = "Error retrieving profile photo",
+                    content = @Content)
+    })
+    public ResponseEntity<Resource> getProfilePhoto(
+            @Parameter(description = "Nickname of the user whose profile photo is requested", required = true)
+            @PathVariable String nickname) {
         final var user = usersService.getUserByNickname(nickname);
         String fileName = user.getProfilePicture();
         return photoService.getProfilePhotoResponse(fileName);

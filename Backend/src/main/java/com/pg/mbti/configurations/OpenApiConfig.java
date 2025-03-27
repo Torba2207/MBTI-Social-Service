@@ -13,8 +13,8 @@ public class OpenApiConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("My API")
-                        .version("1.0")
+                        .title("API documentation")
+                        .version("2.0")
                         .description("API documentation for MBTI social network service")
                         .contact(new Contact()
                                 .name("Support Team")
