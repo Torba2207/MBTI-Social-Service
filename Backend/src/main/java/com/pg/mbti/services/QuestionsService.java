@@ -1,6 +1,7 @@
 package com.pg.mbti.services;
 
 import com.pg.mbti.entity.questions.Question;
+import com.pg.mbti.exceptions.QuestionNotFoundException;
 import com.pg.mbti.repositories.QuestionsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,6 @@ public class QuestionsService {
     }
 
     public Question getQuestionById(UUID id) {
-        return questionsRepository.findById(id).orElse(null);
+        return questionsRepository.findById(id).orElseThrow(() -> new QuestionNotFoundException("Question not found"));
     }
 }
