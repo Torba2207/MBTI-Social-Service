@@ -12,11 +12,12 @@ import { MBTIColors } from '@/components/MBTIColors';
 const tfClassName="w-[80%] mx-auto"
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
 const secondaryColors=MBTIColors({colorDest:"Secondary",mbti:5});
-
+const extraColors=MBTIColors({colorDest:"Extra",mbti:5});
 export default function Login(){
     //console.log(bgColors);
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
+    const extColor=useColorCycle(extraColors,3000);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [correctFields, setCorrectFields] = useState(true);
@@ -28,9 +29,9 @@ export default function Login(){
             <Head>
                 <title>M8TI - Sign In</title>
             </Head>
-            <AuthLayout className="pb-[5%]" style={{
+            <AuthLayout mainBGColor={secColor} className="pb-[5%]" style={{
                 borderColor: bgColor,
-                background: secColor,
+                background: extColor,
                 transition: "border-color 1s ease-in-out, background-color 1s ease-in-out"
             }}>
                 <h1 className='text-center text-3xl font-bold pt-[3%]' style={{
