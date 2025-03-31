@@ -3,6 +3,7 @@ package com.pg.mbti.entity.questions;
 import com.pg.mbti.enums.MBTIType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,6 +15,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
