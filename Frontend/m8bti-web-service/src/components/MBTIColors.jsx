@@ -1,6 +1,7 @@
 export function MBTIColors({colorDest, mbti}){
     const colorsPrimary=["#785D87","#33A474","#4298B4","#E4AE3A"]
     const colorsSecondary=["#E7DFEA", "#D6ECE3","#D9EAF0","#F9EED7"]
+    const colorsExtra=["#F4EDF6","#E1EDE8","#E8EEF0","#F9F2E3"]
     
     if(colorDest=="Primary"){
         //console.log("Color",colorsPrimary[mbti])
@@ -15,5 +16,10 @@ export function MBTIColors({colorDest, mbti}){
         if(mbti===5)
             return colorsSecondary
         return colorsSecondary[mbti]
+    }
+    else if(colorDest=="Extra"){
+        if(mbti===5)
+            return colorsExtra
+        return colorsExtra[mbti]
     }
 }
