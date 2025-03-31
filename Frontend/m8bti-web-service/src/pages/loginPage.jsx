@@ -20,8 +20,38 @@ export default function Login(){
     const extColor=useColorCycle(extraColors,3000);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [error, setError] = useState('');
+    const [success, setSuccess] = useState(false);
     const [correctFields, setCorrectFields] = useState(true);
+    const handleLogIn = async (event) => {
+        event.preventDefault();
+        setError('');
 
+        try {
+            const response = await axios.post(
+                'https://localhost:8080/api/auth/login', // Replace with the actual endpoint from the documentation
+                {
+                    email, // Assuming the backend expects 'email'
+                    password
+                },
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                }
+            );
+
+            if (response.status === 200) {
+                // Handle success (e.g., save token, redirect user)
+                setSuccess(true);
+                localStorage.setItem('token', response.data.token); // Replace 'token' with the actual key from the response
+                alert('Logged in successfully!');
+            }
+        } catch (err) {
+            // Handle error
+            setError(err.response?.data?.message || 'An error occurred. Please try again.');
+        }
+    };
 
 
     return(
@@ -38,7 +68,7 @@ export default function Login(){
                     color:bgColor,
                     transition: "color 1s ease-in-out" 
                     }}>Sign In</h1>
-                <form className='mt-[10%]'>
+                <form className='mt-[10%]' onSubmit={handleLogIn}>
                     <div>
                       <TextField
                         className={clsx('pb-[10%]', tfClassName)}
@@ -69,8 +99,20 @@ export default function Login(){
                         required/>
                     </div>
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
-                        <Button color='purple' className='w-[30%] bg-[#FFFFFF]'>Sign in</Button>
-                        <Button color='purple' className='w-[30%]'>Sign up</Button>
+                        <Button type={"submit"} color='none' className='w-[30%]' 
+                            style={{
+                                background:bgColor,
+                                color:secColor,
+                                transition:"background 1s ease-in-out, color 1s ease-in-out"
+                            }}
+                        >Sign in</Button>
+                        <Button color='none' className='w-[30%]'
+                            style={{
+                                background:bgColor,
+                                color:secColor,
+                                transition:"background 1s ease-in-out, color 1s ease-in-out"
+                            }}
+                        >Sign up</Button>
                     </div>
                 </form>
             </AuthLayout>
