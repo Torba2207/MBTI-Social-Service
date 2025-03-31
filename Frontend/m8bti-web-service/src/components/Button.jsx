@@ -12,6 +12,7 @@ const baseStyles = {
 
 const variantStyles = {
   solid: {
+    none:'',
     purple:'bg-[#785D87] text-[#F4EDF6] active:bg-[#482D57]', 
     cyan: 'relative overflow-hidden bg-cyan-500 text-white before:absolute before:inset-0 active:before:bg-transparent hover:before:bg-white/10 active:bg-cyan-600 active:text-white/80 before:transition-colors',
     white:
