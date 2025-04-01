@@ -34,6 +34,18 @@ services:
       minio:
         condition: service_started
 
+  frontend:
+    build:
+      context: ./Frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8081:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://localhost:8080
+    depends_on:
+      - mbti_backend
+
+
   database:
     image: postgres:latest
     volumes:
