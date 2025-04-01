@@ -56,7 +56,7 @@ public class User {
     private Role role;
 
     @Column(name = "birthday", nullable = false)
-    @JsonFormat(pattern="dd-MM-yyyy")
+    @JsonFormat(pattern="yyyy-MM-dd")
     private Date birthday;
 
     @Enumerated(EnumType.STRING)
