@@ -1,6 +1,10 @@
 package com.pg.mbti.controllers;
 
+import com.pg.mbti.dto.UserAnswerDto;
+import com.pg.mbti.entity.questions.Answer;
 import com.pg.mbti.entity.questions.Question;
+import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.services.AnswerService;
 import com.pg.mbti.services.QuestionsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -11,10 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
@@ -24,7 +25,8 @@ import java.util.UUID;
 @RequestMapping("/api/questions")
 @Tag(name = "Questions", description = "Endpoints for retrieving test questions")
 public class QuestionsController {
-    QuestionsService questionsService;
+    private final QuestionsService questionsService;
+    private final AnswerService answerService;
 
     @GetMapping
     @Operation(summary = "Get all questions",
@@ -53,5 +55,24 @@ public class QuestionsController {
             @Parameter(description = "Unique identifier of the question", required = true)
             @PathVariable UUID id) {
         return ResponseEntity.ok(questionsService.getQuestionById(id));
+    }
+
+    @PostMapping("/submit")
+    @Operation(summary = "Send all user answers",
+            description = "Send all user answers to the server with the specified MBTI type")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Answers successfully submitted",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = String.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid request body"),
+            @ApiResponse(responseCode = "404", description = "Question not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<String> submitAnswers(
+            @RequestBody List<UserAnswerDto> answers,
+            @Parameter(description = "MBTI type of the user", required = true)
+            @RequestParam MBTIType mbtiType) {
+        Answer processedAnswer = answerService.processUserAnswers(answers, mbtiType);
+        return ResponseEntity.ok("Answers submitted successfully with ID: " + processedAnswer.getId());
     }
 }

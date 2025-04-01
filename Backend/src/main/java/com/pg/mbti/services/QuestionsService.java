@@ -14,11 +14,13 @@ import java.util.UUID;
 public class QuestionsService {
 
     QuestionsRepository questionsRepository;
+
     public List<Question> getAllQuestions() {
         return questionsRepository.findAll();
     }
 
     public Question getQuestionById(UUID id) {
-        return questionsRepository.findById(id).orElseThrow(() -> new QuestionNotFoundException("Question not found"));
+        return questionsRepository.findById(id)
+                .orElseThrow(() -> new QuestionNotFoundException("Question not found"));
     }
 }
