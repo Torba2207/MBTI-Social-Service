@@ -30,9 +30,9 @@
 * **Run the project:**
 ``` docker-compose up --build -d```
 * **Access the application:**
-* * **Frontend:** ``` http://localhost:8081 ```
-* * **Backend:** ``` http://localhost:8080 ```
-* * **PostgreSQL** and **Redis** will be running in the background within the Docker containers.
+  * **Frontend:** ``` http://localhost:8081 ```
+  * **Backend:** ``` http://localhost:8080 ```
+  * **PostgreSQL** and **Redis** will be running in the background within the Docker containers.
 * **Access the backend documentation:** ``` http://localhost:8080/v3/api-docs ```
 * **Stoping the project:**
 ``` docker-compose down ```
