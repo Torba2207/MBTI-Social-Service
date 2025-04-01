@@ -1,6 +1,7 @@
 package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.UserProfileDto;
+import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.mappers.UserMapper;
 import com.pg.mbti.services.PhotoService;
 import com.pg.mbti.services.UsersService;
@@ -84,5 +85,23 @@ public class UserProfileController {
         final var user = usersService.getUserByNickname(authentication.getName());
         String fileName = user.getProfilePicture();
         return photoService.getProfilePhotoResponse(fileName);
+    }
+
+    @PutMapping
+    @Operation(summary = "Update current user profile",
+            description = "Updates the profile information of the currently authenticated user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Profile successfully updated"),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "404", description = "User not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<String> updateUserProfile(
+            @Parameter(description = "Authentication information of the current user")
+            final Authentication authentication,
+            @RequestBody UserUpdateDto userUpdateDto) {
+        usersService.updateUserProfile(authentication.getName(), userUpdateDto);
+        return ResponseEntity.ok("Profile successfully updated");
     }
 }
