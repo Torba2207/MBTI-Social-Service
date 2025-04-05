@@ -11,7 +11,6 @@ function useColorCycle(colors, interval = 1000) {
     return () => clearInterval(timer);
   }, [colors, interval]);
 
-  console.log(colors[index]);
   return colors[index];
 }
 

@@ -18,7 +18,7 @@ export default function Login(){
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
-    const [email, setEmail] = useState("");
+    const [usernameOrEmail, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState('');
     const [success, setSuccess] = useState(false);
@@ -28,10 +28,11 @@ export default function Login(){
         setError('');
 
         try {
+            
             const response = await axios.post(
-                'https://localhost:8080/api/auth/login', // Replace with the actual endpoint from the documentation
+                'localhost:8080/api/auth/login', // Replace with the actual endpoint from the documentation
                 {
-                    email, // Assuming the backend expects 'email'
+                    usernameOrEmail, // Assuming the backend expects 'email'
                     password
                 },
                 {
@@ -40,9 +41,10 @@ export default function Login(){
                     },
                 }
             );
-
+            
             if (response.status === 200) {
                 // Handle success (e.g., save token, redirect user)
+                
                 setSuccess(true);
                 localStorage.setItem('token', response.data.token); // Replace 'token' with the actual key from the response
                 alert('Logged in successfully!');
@@ -50,6 +52,7 @@ export default function Login(){
         } catch (err) {
             // Handle error
             setError(err.response?.data?.message || 'An error occurred. Please try again.');
+            alert("Error");
         }
     };
 
@@ -76,13 +79,13 @@ export default function Login(){
                         fieldBGColor={secColor}
                         isDynamic={true}
                         label="Email or Profile Name"
-                        id="email"
-                        name="email"
-                        type="email"
+                        id="usernameOrEmail"
+                        name="usernameOrEmail"
+                        type="text"
                         autoComplete="email"
-                        value={email}
+                        value={usernameOrEmail}
                         onChange={(e)=>{setEmail(e.target.value), setCorrectFields(true)}}
-                        required/>
+                        />
                         <TextField
                         className={tfClassName}
                         label="Password"
