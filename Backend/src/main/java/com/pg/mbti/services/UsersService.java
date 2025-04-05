@@ -1,12 +1,16 @@
 package com.pg.mbti.services;
 
+import com.pg.mbti.dto.UserSearchDto;
 import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.entity.Tag;
 import com.pg.mbti.entity.User;
+import com.pg.mbti.enums.Gender;
+import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.repositories.TagsRepository;
 import com.pg.mbti.repositories.UsersRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 @AllArgsConstructor
@@ -71,5 +76,23 @@ public class UsersService {
             user.setTags(tags);
         }
         usersRepository.save(user);
+    }
+
+    public List<User> searchUsers(UserSearchDto searchDto) {
+        String name = searchDto.name();
+        String surname = searchDto.surname();
+        MBTIType mbtiType = searchDto.mbtiType();
+        Gender gender = searchDto.gender();
+        Set<UUID> tagIds = searchDto.tagIds();
+
+        Sort sort = Sort.unsorted();
+        if (searchDto.sortBy() != null && !searchDto.sortBy().isEmpty()) {
+            Sort.Direction direction = searchDto.sortDirection() != null &&
+                    searchDto.sortDirection().equalsIgnoreCase("desc") ?
+                    Sort.Direction.DESC : Sort.Direction.ASC;
+            sort = Sort.by(direction, searchDto.sortBy());
+        }
+
+        return usersRepository.findUsersByFilters(name, surname, mbtiType, gender, tagIds, sort);
     }
 }
