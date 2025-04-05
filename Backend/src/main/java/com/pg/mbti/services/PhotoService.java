@@ -63,7 +63,7 @@ public class PhotoService {
 
     public ResponseEntity<Resource> getProfilePhotoResponse(String fileName) {
         try {
-            if (fileName == null || fileName.equalsIgnoreCase("default.jpg")) {
+            if (fileName == null) {
                 return ResponseEntity.notFound().build();
             }
 
