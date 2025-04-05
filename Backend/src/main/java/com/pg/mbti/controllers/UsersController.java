@@ -1,5 +1,6 @@
 package com.pg.mbti.controllers;
 
+import com.pg.mbti.dto.UserSearchDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,10 +12,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
 @RestController
@@ -52,5 +51,13 @@ public class UsersController {
             @Parameter(description = "Nickname of the user to retrieve", required = true)
             @PathVariable final String nickname) {
         return ResponseEntity.ok(usersService.getUserByNickname(nickname));
+    }
+
+    @PostMapping("/users/search")
+    @Operation(summary = "Search users",
+            description = "Search users by name, surname, MBTI type, gender, and tags with sorting options")
+    @ApiResponse(responseCode = "200", description = "Search results returned successfully")
+    public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchDto searchDto) {
+        return ResponseEntity.ok(usersService.searchUsers(searchDto));
     }
 }
