@@ -4,10 +4,19 @@ import { SelectField, TextField } from '@/components/Fields';
 import { Button } from '@/components/Button';
 import React, { useState } from "react";
 import clsx from 'clsx';
+import useColorCycle from '@/hooks/useColorCycle';
+import { MBTIColors } from '@/components/MBTIColors';
 
 const tfClassName = "w-[80%] mx-auto";
+const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
+const secondaryColors=MBTIColors({colorDest:"Secondary",mbti:5});
+const extraColors=MBTIColors({colorDest:"Extra",mbti:5});
 
 export default function SignUp() {
+    const bgColor=useColorCycle(bgColors,3000);
+    const secColor=useColorCycle(secondaryColors,3000);
+    const extColor=useColorCycle(extraColors,3000);
+
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
 
@@ -74,7 +83,6 @@ const isValidDate = (date) => {
     return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
 };
 
-
     const handleNext = () => {
         if (validateStep()) changeStep(step + 1);
     };
@@ -82,9 +90,6 @@ const isValidDate = (date) => {
     const handleFinish = () => {
         if (validateStep()) alert("Registration complete!");
     };
-
-
-
 
     const totalSteps = 3;
 
@@ -102,25 +107,40 @@ const isValidDate = (date) => {
             <Head>
                 <title>M8TI - Sign Up</title>
             </Head>
-            <AuthLayout className="pb-[5%]">
-                <h1 className='text-center text-3xl font-bold pt-[3%] text-[#785D87]'>Sign Up</h1>
+            <AuthLayout mainBGColor={secColor} className="pb-[5%]" style={{
+                borderColor: bgColor,
+                background: extColor,
+                transition: "border-color 1s ease-in-out, background-color 1s ease-in-out"
+            }}>
+                <h1 className='text-center text-3xl font-bold pt-[3%] text-[#785D87]' style={{
+                    color:bgColor,
+                    transition: "color 1s ease-in-out" }}>
+                    Sign Up</h1>
                 <form className='mt-[10%]'>
                     <div id="controls-carousel" className="relative w-full">
                         <div className={`relative h-56 overflow-hidden rounded-lg md:h-96 transition-opacity duration-300 ease-in-out ${animate ? 'opacity-100' : 'opacity-0'}`}>
-                            
                             {step === 0 && (
                                 <div>
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.name && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Name" id="name" name="name" value={name}
                                         onChange={(e) => setName(e.target.value)} required />
                                         {errors.name && <p className="text-red-500 text-xs">{errors.name}</p>}
                                     
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.surname && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Surname" id="surname" name="surname" value={surname}
                                         onChange={(e) => setSurname(e.target.value)} required />
                                         {errors.surname && <p className="text-red-500 text-xs">{errors.surname}</p>}
 
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.nickname && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Nickname" id="nickname" name="nickname" value={nickname}
                                         onChange={(e) => setNickname(e.target.value)} required />
                                         {errors.nickname && <p className="text-red-500 text-xs">{errors.nickname}</p>}
@@ -130,16 +150,25 @@ const isValidDate = (date) => {
                             {step === 1 && (
                                 <div>
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.email && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Email" id="email" name="email" type="email" value={email}
                                         onChange={(e) => setEmail(e.target.value)} required />
                                         {errors.email && <p className="text-red-500 text-xs">{errors.email}</p>}
 
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.password && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Password" id="password" name="password" type="password" value={password}
                                         onChange={(e) => setPassword(e.target.value)} required />
                                         {errors.password && <p className="text-red-500 text-xs">{errors.password}</p>}
 
                                     <TextField className={clsx('pb-[10%]', tfClassName, errors.location && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Location" id="location" name="location" value={location}
                                         onChange={(e) => setLocation(e.target.value)} required />
                                         {errors.location && <p className="text-red-500 text-xs">{errors.location}</p>}
@@ -150,6 +179,9 @@ const isValidDate = (date) => {
                                 <div>
                                     <SelectField 
                                         className={clsx('pb-[10%]', tfClassName, errors.mbtiType && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="MBTI Type" 
                                         id="mbtiType" 
                                         name="mbtiType" 
@@ -173,6 +205,9 @@ const isValidDate = (date) => {
 
                                     <TextField 
                                     className={clsx('pb-[10%]', tfClassName, errors.birthDate && 'border-red-500')}
+                                    labelColor={bgColor}
+                                    fieldBGColor={secColor}
+                                    isDynamic={true}
                                     label="Date of Birth (DD/MM/YYYY)" 
                                     id="birthDate" 
                                     name="birthDate" 
@@ -186,6 +221,9 @@ const isValidDate = (date) => {
 
                                     <SelectField 
                                         className={clsx('pb-[10%]', tfClassName, errors.gender && 'border-red-500')}
+                                        labelColor={bgColor}
+                                        fieldBGColor={secColor}
+                                        isDynamic={true}
                                         label="Gender" 
                                         id="gender" 
                                         name="gender" 
@@ -203,37 +241,54 @@ const isValidDate = (date) => {
                                     {errors.gender && <p className="text-red-500 text-xs">{errors.gender}</p>}
                                 </div>
                             )}
-
                         </div>
 
                         <div className="flex justify-between mt-6">
                             {step > 0 && (
-                                <button type="button" 
-                                    className="px-4 py-2 bg-gray-500 text-white rounded ml-6"
-                                    onClick={() => changeStep(step - 1)}
+                                <Button
+                                type="button"
+                                isDynamic
+                                dynamicStyle={{
+                                    backgroundColor: secColor,
+                                    color: bgColor,
+                                    transition: 'all 1s ease-in-out'
+                                }}
+                                className="ml-6 px-4 py-2 rounded"
+                                onClick={() => changeStep(step - 1)}
                                 >
-                                    Previous
-                                </button>
+                                Previous
+                                </Button>
                             )}
                             
                             {step < totalSteps - 1 ? (
-                                <button 
-                                    type="button" 
-                                    className={`px-4 py-2 bg-purple-600 text-white rounded ${step === 0 ? 'ml-auto' : 'mr-6'}`}
-                                    onClick={handleNext}
+                                <Button
+                                type="button"
+                                isDynamic
+                                dynamicStyle={{
+                                    backgroundColor: bgColor,
+                                    color: extColor,
+                                    transition: 'all 1s ease-in-out'
+                                }}
+                                className="ml-auto mr-6 px-4 py-2 rounded"
+                                onClick={handleNext}
                                 >
-                                    Next
-                                </button>
+                                Next
+                                </Button>
                             ) : (
-                                <button 
-                                    type="button" 
-                                    className="px-4 py-2 bg-green-600 text-white rounded mr-6"
-                                    onClick={handleFinish}
+                                <Button
+                                type="button"
+                                isDynamic
+                                dynamicStyle={{
+                                    backgroundColor: extColor,
+                                    color: bgColor,
+                                    transition: 'all 1s ease-in-out'
+                                }}
+                                className="mr-6 px-4 py-2 rounded"
+                                onClick={handleFinish}
                                 >
-                                    Finish
-                                </button>
+                                Finish
+                                </Button>
                             )}
-
                         </div>
                     </div>
                 </form>

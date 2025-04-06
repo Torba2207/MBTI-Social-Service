@@ -12,6 +12,7 @@ const baseStyles = {
 
 const variantStyles = {
   solid: {
+    none:'',
     purple:'bg-[#785D87] text-[#F4EDF6] active:bg-[#482D57]', 
     cyan: 'relative overflow-hidden bg-cyan-500 text-white before:absolute before:inset-0 active:before:bg-transparent hover:before:bg-white/10 active:bg-cyan-600 active:text-white/80 before:transition-colors',
     white:
@@ -26,18 +27,45 @@ const variantStyles = {
 
 
 export const Button = forwardRef(function Button(
-  { variant = 'solid', color = 'gray', className, href, ...props },
+  { 
+    variant = 'solid', 
+    color = 'gray', 
+    className, 
+    href, 
+    isDynamic = false,
+    dynamicStyle = {}, // { backgroundColor, color, etc. }
+    ...props 
+  },
   ref
 ) {
-  className = clsx(
-    baseStyles[variant],
-    variantStyles[variant][color],
+  // Base class names
+  const baseClassName = clsx(
+    !isDynamic && baseStyles[variant], // Only apply static styles if not dynamic
+    !isDynamic && variantStyles[variant][color], // Only apply static color if not dynamic
     className
-  )
+  );
+
+  // Merge dynamic styles with any additional styles passed via props
+  const style = isDynamic ? { 
+    ...dynamicStyle,
+    transition: 'all 1s ease-in-out', // Add smooth transition for dynamic changes
+    ...props.style 
+  } : props.style;
 
   return href ? (
-    <Link ref={ref} href={href} className={className} {...props} />
+    <Link 
+      ref={ref} 
+      href={href} 
+      className={baseClassName}
+      style={style}
+      {...props} 
+    />
   ) : (
-    <button ref={ref} className={className} {...props} />
-  )
-})
+    <button 
+      ref={ref} 
+      className={baseClassName}
+      style={style}
+      {...props} 
+    />
+  );
+});

@@ -16,11 +16,19 @@ function Label({ id, children, labelColor="text-[#785D87]" }) {
   )
 }
 
-export function TextField({ id, label, type = 'text', className, ...props }) {
+export function TextField({ id, label, type = 'text', className,inputClassName,fieldBGColor, ...props }) {
   return (
     <div className={className}>
-      {label && <Label id={id} labelColor={props.labeColor}>{label}</Label>}
-      <input id={id} type={type} {...props} className={formClasses} />
+      {label && <Label id={id} labelColor={props.labelColor} isDynamic={props.isDynamic}>{label}</Label>}
+      <input
+        id={id} type={type} {...props}
+        className={clsx(formClasses,!props.isDynamic&&inputClassName)}
+        style={{
+          color: props.labelColor,
+          background:fieldBGColor,
+          transition: "color 1s ease-in-out, background-color 1s ease-in-out"
+        }}
+         />
     </div>
   )
 }
