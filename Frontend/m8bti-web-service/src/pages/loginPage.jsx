@@ -40,13 +40,26 @@ export default function Login(){
                 credentials: "include",
             });
             console.log(response.status);
-            router.push("/profilePage")
+            //router.push("/profilePage")
+            if (response.ok) {
+                // Option 1: reload the whole page (quick + easy)
+                window.location.href = "/profilePage";
+          
+                // Option 2 (better): set loading=true again and refetch user in AuthContext
+              } else {
+                const data = await response.json();
+                setError(data.message || "Login failed.");
+              }
             
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.');
         }
+        
     };
-
+    if(currentUser){
+        router.push("/profilePage")
+        return(<></>)
+    }else
     return(
         <>
             <Head>

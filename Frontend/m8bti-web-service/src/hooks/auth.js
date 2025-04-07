@@ -19,7 +19,8 @@ export const AuthProvider = ({ children }) => {
             if (!response.ok) throw new Error("Failed to fetch user data");
             const data = await response.json();
             setUserData(data);
-            setCurrentUser(data.email);
+            setCurrentUser(data.nickname);
+            console.log(currentUser)
             /*TODO Awaiting update from Backend
             // Fetch user image
             if (data?.profileImage) {
@@ -44,8 +45,29 @@ export const AuthProvider = ({ children }) => {
             setLoading(false);
         }
     };
+    const logout = async () => {
+        try {
+          const res = await fetch("http://localhost:8080/api/auth/logout", {
+            method: "GET",
+            credentials: "include", // needed to send session cookie
+          });
+      
+          if (res.ok) {
+            setUserData(null);
+            setCurrentUser(null);
+            //setImgUrl("");
+            alert("Successfully logged out.");
+          } else {
+            alert("Logout failed.");
+          }
+        } catch (error) {
+          console.error("Logout error:", error);
+          alert("Logout error.");
+        }
+      };
 
     useEffect(() => {
+        setLoading(true);
         fetchUserData();
     }, []);
     if(loading)
@@ -56,7 +78,10 @@ export const AuthProvider = ({ children }) => {
             value={{
                 currentUser,
                 userData,
-                error
+                setLoading,
+                logout,
+                error,
+                loading
             }}
         >
             {children}
