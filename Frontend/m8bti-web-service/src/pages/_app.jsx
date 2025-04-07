@@ -1,7 +1,10 @@
+import { AuthProvider } from '@/hooks/auth';
 import '@/styles/global.css'
 
 export default function App({Component, pageProps}){
     return(
-        <Component{...pageProps}/>
+        <AuthProvider>
+            <Component{...pageProps}/>
+        </AuthProvider>
     );
 }
