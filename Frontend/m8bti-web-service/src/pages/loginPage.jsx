@@ -7,7 +7,8 @@ import React, { useContext, useState} from "react";
 import clsx from 'clsx';
 import useColorCycle from '@/hooks/useColorCycle';
 import { MBTIColors } from '@/components/MBTIColors';
-
+import { useRouter } from "next/router";
+import { AuthContext } from '@/hooks/auth.js'
 
 const tfClassName="w-[80%] mx-auto"
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
@@ -18,44 +19,33 @@ export default function Login(){
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
+    const {currentUser} = useContext(AuthContext)
+    const {userDat} = useContext(AuthContext)
     const [usernameOrEmail, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState('');
-    const [success, setSuccess] = useState(false);
+    //const [success, setSuccess] = useState(false);
     const [correctFields, setCorrectFields] = useState(true);
+
+    let router=useRouter();
+
     const handleLogIn = async (event) => {
         event.preventDefault();
         setError('');
-
         try {
+            const response = await fetch('http://localhost:8080/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ usernameOrEmail, password }),
+                credentials: "include",
+            });
+            console.log(response.status);
+            router.push("/profilePage")
             
-            const response = await axios.post(
-                'localhost:8080/api/auth/login', // Replace with the actual endpoint from the documentation
-                {
-                    usernameOrEmail, // Assuming the backend expects 'email'
-                    password
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
-            
-            if (response.status === 200) {
-                // Handle success (e.g., save token, redirect user)
-                
-                setSuccess(true);
-                localStorage.setItem('token', response.data.token); // Replace 'token' with the actual key from the response
-                alert('Logged in successfully!');
-            }
         } catch (err) {
-            // Handle error
-            setError(err.response?.data?.message || 'An error occurred. Please try again.');
-            alert("Error");
+            setError(err.response?.data?.message || 'Login failed. Please try again.');
         }
     };
-
 
     return(
         <>
@@ -101,6 +91,7 @@ export default function Login(){
                         onChange={(e)=>{setPassword(e.target.value), setCorrectFields(true)}}
                         required/>
                     </div>
+                    {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
                         <Button type={"submit"} color='none' className='w-[30%]' 
                             style={{
