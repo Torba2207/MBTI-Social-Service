@@ -5,10 +5,11 @@ import { AuthContext } from "./auth"
 const AuthRoute = ({ children }) => {
 	const { currentUser } = useContext(AuthContext)
 	const Router = useRouter()
+	console.log(currentUser)
 	if (currentUser) {
 		return <>{children}</>
 	} else {
-		Router.push("/login")
+		Router.push("/loginPage")
 		return <></>
 	}
 }
