@@ -3,9 +3,11 @@ package com.pg.mbti.entity.questions;
 import com.pg.mbti.enums.MBTIType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -13,20 +15,16 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class Answer {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
-
-    @ManyToOne
-    @JoinColumn(
-            name = "answer_set_id",
-            referencedColumnName = "id",
-            nullable = false
-    )
-    private AnswerSet answerSet;
 
     @Column(name = "mbti")
     @Enumerated(EnumType.STRING)
     private MBTIType mbtiType;
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<AnswerSet> answers;
 }

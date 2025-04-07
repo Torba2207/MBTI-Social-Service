@@ -47,6 +47,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(InvalidEmailException.class)
+    public ResponseEntity<String> handleInvalidEmailException(InvalidTokenException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(FileUploadException.class)
     public ResponseEntity<String> handleFileUploadException(FileUploadException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
@@ -64,6 +69,11 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FriendshipNotFoundException.class)
     public ResponseEntity<String> handleFriendshipNotFoundException(FriendshipNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(QuestionNotFoundException.class)
+    public ResponseEntity<String> handleQuestionNotFoundException(QuestionNotFoundException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 

@@ -2,6 +2,7 @@ package com.pg.mbti.entity.questions;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,9 +13,10 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
+@Builder
 public class AnswerSet {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
     @ManyToOne
@@ -24,4 +26,11 @@ public class AnswerSet {
             referencedColumnName = "id"
     )
     private Question question;
+
+    @Column(name = "is_yes", nullable = false)
+    private boolean isYes;
+
+    @ManyToOne
+    @JoinColumn(name = "answer_id", nullable = false)
+    private Answer answer;
 }

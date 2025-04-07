@@ -8,12 +8,15 @@ import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.repositories.UsersRepository;
-import lombok.AllArgsConstructor;
+import com.pg.mbti.services.email.EmailService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.concurrent.TimeUnit;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class PasswordService {
 
     private final SecureTokenService secureTokenService;
@@ -21,15 +24,18 @@ public class PasswordService {
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
 
+    @Value("${app.email.reset-password-url}")
+    private String resetPasswordUrl;
+
     public void handleForgotPassword(String email) {
         if (!userRepository.existsByEmail(email)) {
             throw new ResourceNotFoundException("User not found");
         }
 
         try {
-            String token = secureTokenService.generateToken(email, 1, java.util.concurrent.TimeUnit.DAYS);
-            // TODO: replace with accurate domain
-            String resetLink = "http://yourdomain.com/reset-password?token=" + token;
+            int tokenExpirationTime = 1;
+            String token = secureTokenService.generateToken(email, tokenExpirationTime, TimeUnit.DAYS);
+            String resetLink = resetPasswordUrl + token;
             EmailContextDto emailContext = new EmailContextDto(email,
                     "Reset Password", "Click the link to reset your password: " + resetLink);
             emailService.sendMail(emailContext);

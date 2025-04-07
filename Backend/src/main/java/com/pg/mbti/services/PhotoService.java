@@ -3,11 +3,11 @@ package com.pg.mbti.services;
 import com.pg.mbti.exceptions.FileNotFoundException;
 import com.pg.mbti.exceptions.FileUploadException;
 import io.minio.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -17,14 +17,12 @@ import java.io.InputStream;
 import java.util.UUID;
 
 @Service
+@RequiredArgsConstructor
 public class PhotoService {
     private final MinioClient minioClient;
-    private final String bucketName;
 
-    public PhotoService(MinioClient minioClient, @Value("${minio.bucket}") String bucketName) {
-        this.minioClient = minioClient;
-        this.bucketName = bucketName;
-    }
+    @Value("${minio.bucket}")
+    private String bucketName;
 
     public String uploadPhoto(MultipartFile file) {
         try {
@@ -65,7 +63,7 @@ public class PhotoService {
 
     public ResponseEntity<Resource> getProfilePhotoResponse(String fileName) {
         try {
-            if (fileName == null || fileName.equalsIgnoreCase("default.jpg")) {
+            if (fileName == null) {
                 return ResponseEntity.notFound().build();
             }
 

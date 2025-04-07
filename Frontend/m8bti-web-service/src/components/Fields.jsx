@@ -1,15 +1,20 @@
 import clsx from 'clsx'
 
 const formClasses =
-  'block w-full appearance-none rounded-lg border-3 border-[#785D87] bg-[#EEE7F]'+
+  'block w-full appearance-none rounded-lg border-3 bg-[#FFFFFF]'+
    ' py-[calc(theme(spacing.2)-1px)] px-[calc(theme(spacing.3)-1px)] text-gray-900'+
    ' placeholder:text-gray-400 focus:border-cyan-500 focus:outline-none focus:ring-cyan-500 sm:text-sm'
 
-function Label({ id, children, labelColor="text-[#785D87]" }) {
+function Label({ id, children, labelColor="text-[#785D87]" , isDynamic=false}) {
   return (
     <label
       htmlFor={id}
-      className={clsx('ml-[3%] mb-2 block text-sm font-semibold',labelColor)}
+      className={clsx('ml-[3%] mb-2 block text-sm font-semibold',!isDynamic && labelColor)}
+      
+      style={{
+        color:labelColor,
+        transition: "color 1s ease-in-out"
+      }}
     >
       {children}
     </label>

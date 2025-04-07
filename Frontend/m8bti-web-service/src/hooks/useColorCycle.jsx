@@ -15,3 +15,4 @@ function useColorCycle(colors, interval = 1000) {
 }
 
 export default useColorCycle;
+
