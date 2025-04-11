@@ -77,6 +77,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
     }
 
+    @ExceptionHandler(TagCategoryNotFoundException.class)
+    public ResponseEntity<String> handleTagCategoryNotFoundException(TagCategoryNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(EmailSendingFailedException.class)
     public ResponseEntity<String> handleEmailSendingFailedException(EmailSendingFailedException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
