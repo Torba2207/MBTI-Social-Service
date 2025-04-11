@@ -26,7 +26,12 @@ public class PhotoService {
 
     public String uploadPhoto(MultipartFile file) {
         try {
-            String fileName = UUID.randomUUID() + "_" + file.getOriginalFilename();
+            String fileName = switch(file.getOriginalFilename()) {
+                case null -> throw new FileUploadException("File name is null");
+                case "" -> throw new FileUploadException("File name is empty");
+                case "default.jpg" -> file.getOriginalFilename();
+                default -> UUID.randomUUID() + "_" + file.getOriginalFilename();
+            };
 
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!found) {
