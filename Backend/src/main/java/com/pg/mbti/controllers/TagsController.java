@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,16 +24,16 @@ public class TagsController {
     private final TagsService tagsService;
 
     @GetMapping("/categories")
-    @Operation(summary = "Get all tag's categories",
-            description = "Returns a list of all tag's categories")
+    @Operation(summary = "Get all tag categories",
+            description = "Returns a list of all tag categories")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "List of tag's categories successfully retrieved",
+            @ApiResponse(responseCode = "200", description = "List of tag categories successfully retrieved",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = List.class))),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<List<String>> getAllTagsCategories() {
-        return ResponseEntity.ok(tagsService.getAllTagsCategories());
+    public ResponseEntity<List<String>> getAllTagCategories() {
+        return ResponseEntity.ok(tagsService.getAllTagCategories());
     }
 
     @GetMapping
@@ -46,5 +47,19 @@ public class TagsController {
     })
     public ResponseEntity<List<Tag>> getAllTags() {
         return ResponseEntity.ok(tagsService.getAllTags());
+    }
+
+    @GetMapping("{category}")
+    @Operation(summary = "Get tags by category",
+            description = "Returns a list of tags by category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "List of tags by category successfully retrieved",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = List.class))),
+            @ApiResponse(responseCode = "404", description = "Category not found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<Tag>> getTagsByCategory(@PathVariable String category) {
+        return ResponseEntity.ok(tagsService.getTagsByCategory(category));
     }
 }

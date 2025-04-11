@@ -14,5 +14,8 @@ public interface TagsRepository extends JpaRepository<Tag, UUID> {
     Set<Tag> findAllByIdIn(Set<UUID> tagIds);
 
     @Query("SELECT DISTINCT t.category FROM Tag t")
-    List<String> findAllTagsCategories();
+    List<String> findAllTagCategories();
+
+    @Query("SELECT t FROM Tag t WHERE t.category = :category")
+    List<Tag> findAllByCategory(String category);
 }
