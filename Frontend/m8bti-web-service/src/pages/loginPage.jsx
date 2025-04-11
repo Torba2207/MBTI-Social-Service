@@ -106,19 +106,26 @@ export default function Login(){
                     </div>
                     {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
-                        <Button type={"submit"} color='none' className='w-[30%]' 
+                        <Button type={"submit"} color='none' className='w-[30%]'
+                            isDynamic={true}
+                            currentBG={bgColor}
+                            currentText={secColor}
+                            /*
                             style={{
                                 background:bgColor,
                                 color:secColor,
                                 transition:"background 1s ease-in-out, color 1s ease-in-out"
-                            }}
+                            }}*/
                         >Sign in</Button>
                         <Button color='none' className='w-[30%]'
-                            style={{
+                            isDynamic={true}
+                            currentBG={bgColor}
+                            currentText={secColor}
+                            /*style={{
                                 background:bgColor,
                                 color:secColor,
                                 transition:"background 1s ease-in-out, color 1s ease-in-out"
-                            }}
+                            }}*/
                         >Sign up</Button>
                     </div>
                 </form>
