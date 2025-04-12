@@ -38,6 +38,7 @@ class UsersControllerTest {
 
     private User user1;
     private User user2;
+    private User user3;
     private List<User> userList;
 
     @BeforeEach
@@ -62,6 +63,19 @@ class UsersControllerTest {
                 .password("password")
                 .email("user2@mbti.com")
                 .mbtiType(MBTIType.ENFP)
+                .birthday(Date.valueOf("2000-01-01"))
+                .gender(Gender.FEMALE)
+                .pronouns(Pronouns.SHE_HER)
+                .role(Role.VERIFIED)
+                .build();
+
+        user3 = User.builder()
+                .nickname("user3")
+                .name("Maria")
+                .surname("Lopez")
+                .password("password")
+                .email("user3@mbti.com")
+                .mbtiType(MBTIType.ISTP)
                 .birthday(Date.valueOf("2000-01-01"))
                 .gender(Gender.FEMALE)
                 .pronouns(Pronouns.SHE_HER)
@@ -108,7 +122,7 @@ class UsersControllerTest {
 
     @Test
     void searchUsersReturnsMatchingUsers() {
-        UserSearchDto searchDto = new UserSearchDto("Jane", null, null, null, null, null, null);
+        UserSearchDto searchDto = new UserSearchDto("Jane", null, null, null, null, null, null, null);
         when(usersService.searchUsers(searchDto)).thenReturn(Collections.singletonList(user2));
 
         ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
@@ -121,7 +135,7 @@ class UsersControllerTest {
 
     @Test
     void searchUsersWithMultipleFilters() {
-        UserSearchDto searchDto = new UserSearchDto(null, null, MBTIType.INTJ, Gender.MALE, null, "name", "asc");
+        UserSearchDto searchDto = new UserSearchDto(null, null, MBTIType.INTJ, Gender.MALE, null, "name", "asc", null);
         when(usersService.searchUsers(searchDto)).thenReturn(Collections.singletonList(user1));
 
         ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
@@ -134,7 +148,7 @@ class UsersControllerTest {
 
     @Test
     void searchUsersReturnsEmptyListWhenNoMatches() {
-        UserSearchDto searchDto = new UserSearchDto("NonExistent", null, null, null, null, null, null);
+        UserSearchDto searchDto = new UserSearchDto("NonExistent", null, null, null, null, null, null, null);
         when(usersService.searchUsers(searchDto)).thenReturn(Collections.emptyList());
 
         ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
@@ -142,5 +156,30 @@ class UsersControllerTest {
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEmpty();
         verify(usersService).searchUsers(searchDto);
+    }
+
+    @Test
+    void searchUsersSortsCorrectlyByCompatibility() {
+        MBTIType referenceType = MBTIType.ENFJ;
+
+        UserSearchDto ascSearchDto = new UserSearchDto(null, null, null, null, null,
+                "compatibility", "asc", referenceType);
+        UserSearchDto descSearchDto = new UserSearchDto(null, null, null, null, null,
+                "compatibility", "desc", referenceType);
+
+        List<User> ascSortedUsers = Arrays.asList(user3, user1, user2);
+        List<User> descSortedUsers = Arrays.asList(user2, user1, user3);
+
+        when(usersService.searchUsers(ascSearchDto)).thenReturn(ascSortedUsers);
+        when(usersService.searchUsers(descSearchDto)).thenReturn(descSortedUsers);
+
+        ResponseEntity<List<User>> ascResponse = usersController.searchUsers(ascSearchDto);
+        assertThat(ascResponse.getBody()).containsExactly(user3, user1, user2);
+
+        ResponseEntity<List<User>> descResponse = usersController.searchUsers(descSearchDto);
+        assertThat(descResponse.getBody()).containsExactly(user2, user1, user3);
+
+        verify(usersService).searchUsers(ascSearchDto);
+        verify(usersService).searchUsers(descSearchDto);
     }
 }
