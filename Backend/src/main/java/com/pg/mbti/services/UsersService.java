@@ -1,12 +1,10 @@
 package com.pg.mbti.services;
 
+import com.pg.mbti.components.MbtiCompatibilityCalculator;
 import com.pg.mbti.dto.UserSearchDto;
 import com.pg.mbti.dto.UserUpdateDto;
-import com.pg.mbti.entity.Tag;
 import com.pg.mbti.entity.User;
-import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
-import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.repositories.TagsRepository;
 import com.pg.mbti.repositories.UsersRepository;
 import lombok.AllArgsConstructor;
@@ -16,10 +14,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @AllArgsConstructor
@@ -27,6 +22,7 @@ public class UsersService {
 
     private final UsersRepository usersRepository;
     private final TagsRepository tagsRepository;
+    private final MbtiCompatibilityCalculator compatibilityCalculator;
 
     public List<User> getUsers() {
         return usersRepository.findAll();
@@ -34,65 +30,61 @@ public class UsersService {
 
     public User getUserByNickname(final String username) {
         return usersRepository.findByNickname(username)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     public void updateUser(User user) {
         usersRepository.save(user);
     }
 
-    public void updateUserProfile(String name, UserUpdateDto userUpdateDto) {
-        final var user = usersRepository.findByNickname(name)
+    public void updateUserProfile(String name, UserUpdateDto dto) {
+        User user = usersRepository.findByNickname(name)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
-        if (userUpdateDto.latitude() != null) {
-            user.setLatitude(userUpdateDto.latitude());
-        }
-        if (userUpdateDto.longitude() != null) {
-            user.setLongitude(userUpdateDto.longitude());
-        }
-        if (userUpdateDto.birthday() != null) {
+        Optional.ofNullable(dto.latitude()).ifPresent(user::setLatitude);
+        Optional.ofNullable(dto.longitude()).ifPresent(user::setLongitude);
+        Optional.ofNullable(dto.gender()).ifPresent(user::setGender);
+        Optional.ofNullable(dto.description()).ifPresent(user::setDescription);
+        Optional.ofNullable(dto.links()).ifPresent(user::setLinks);
+        Optional.ofNullable(dto.pronouns()).ifPresent(user::setPronouns);
+
+        if (dto.birthday() != null) {
             try {
-                Date birthday = new SimpleDateFormat("yyyy-MM-dd").parse(userUpdateDto.birthday());
-                user.setBirthday(birthday);
+                user.setBirthday(new SimpleDateFormat("yyyy-MM-dd").parse(dto.birthday()));
             } catch (ParseException e) {
                 throw new IllegalArgumentException("Invalid date format. Expected format: yyyy-MM-dd");
             }
         }
-        if (userUpdateDto.gender() != null) {
-            user.setGender(userUpdateDto.gender());
+
+        if (dto.tagIds() != null) {
+            user.setTags(tagsRepository.findAllByIdIn(dto.tagIds()));
         }
-        if (userUpdateDto.description() != null) {
-            user.setDescription(userUpdateDto.description());
-        }
-        if (userUpdateDto.links() != null) {
-            user.setLinks(userUpdateDto.links());
-        }
-        if (userUpdateDto.pronouns() != null) {
-            user.setPronouns(userUpdateDto.pronouns());
-        }
-        if (userUpdateDto.tagIds() != null) {
-            Set<Tag> tags = tagsRepository.findAllByIdIn(userUpdateDto.tagIds());
-            user.setTags(tags);
-        }
+
         usersRepository.save(user);
     }
 
-    public List<User> searchUsers(UserSearchDto searchDto) {
-        String name = searchDto.name();
-        String surname = searchDto.surname();
-        MBTIType mbtiType = searchDto.mbtiType();
-        Gender gender = searchDto.gender();
-        Set<UUID> tagIds = searchDto.tagIds();
+    public List<User> searchUsers(UserSearchDto search) {
+        MBTIType referenceType = search.referenceType();
+        boolean sortByCompatibility = referenceType != null &&
+                "compatibility".equals(search.sortBy());
+        boolean descending = "desc".equalsIgnoreCase(search.sortDirection());
 
         Sort sort = Sort.unsorted();
-        if (searchDto.sortBy() != null && !searchDto.sortBy().isEmpty()) {
-            Sort.Direction direction = searchDto.sortDirection() != null &&
-                    searchDto.sortDirection().equalsIgnoreCase("desc") ?
-                    Sort.Direction.DESC : Sort.Direction.ASC;
-            sort = Sort.by(direction, searchDto.sortBy());
+        if (!sortByCompatibility && search.sortBy() != null && !search.sortBy().isEmpty()) {
+            sort = Sort.by(descending ? Sort.Direction.DESC : Sort.Direction.ASC, search.sortBy());
         }
 
-        return usersRepository.findUsersByFilters(name, surname, mbtiType, gender, tagIds, sort);
+        List<User> users = usersRepository.findUsersByFilters(
+                search.name(), search.surname(), search.mbtiType(),
+                search.gender(), search.tagIds(), sort);
+
+        if (sortByCompatibility) {
+            Comparator<User> comparator = Comparator.comparing(
+                    user -> compatibilityCalculator.calculateCompatibility(user.getMbtiType(), referenceType)
+            );
+            users.sort(descending ? comparator.reversed() : comparator);
+        }
+
+        return users;
     }
 }

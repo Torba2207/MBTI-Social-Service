@@ -6,22 +6,22 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public enum MBTIType {
-    ISTJ("ISTJ"),
-    ISFJ("ISFJ"),
-    INFJ("INFJ"),
-    INTJ("INTJ"),
-    ISTP("ISTP"),
-    ISFP("ISFP"),
-    INFP("INFP"),
-    INTP("INTP"),
-    ESTP("ESTP"),
-    ESFP("ESFP"),
-    ENFP("ENFP"),
-    ENTP("ENTP"),
-    ESTJ("ESTJ"),
-    ESFJ("ESFJ"),
     ENFJ("ENFJ"),
-    ENTJ("ENTJ");
+    ENFP("ENFP"),
+    ENTJ("ENTJ"),
+    ENTP("ENTP"),
+    ESFJ("ESFJ"),
+    ESFP("ESFP"),
+    ESTJ("ESTJ"),
+    ESTP("ESTP"),
+    INFJ("INFJ"),
+    INFP("INFP"),
+    INTJ("INTJ"),
+    INTP("INTP"),
+    ISFJ("ISFJ"),
+    ISFP("ISFP"),
+    ISTJ("ISTJ"),
+    ISTP("ISTP");
 
     private final String name;
 }
