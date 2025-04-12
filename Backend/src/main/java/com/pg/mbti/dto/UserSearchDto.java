@@ -13,5 +13,6 @@ public record UserSearchDto(
         Gender gender,
         Set<UUID> tagIds,
         String sortBy,
-        String sortDirection
+        String sortDirection,
+        MBTIType referenceType
 ) {}
