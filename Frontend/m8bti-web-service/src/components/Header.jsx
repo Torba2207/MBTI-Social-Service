@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 import { SearchIcon } from "./SVGComponents/SearchIcon";
 import { FriendsIcon } from "./SVGComponents/FriendsIcon";
 import { NotificationBellIcon } from "./SVGComponents/NotificationBellIcon";
+import { HomeIcon } from "./SVGComponents/HomeIcon";
 
 export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
   return (
@@ -23,30 +24,63 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
       </div>
 
       {/* icons */}
-      <div className="flex justify-center items-center h-12 pb-2">
-        <div className="flex space-x-124"> {/* distance between the icons*/}
-          <div className="relative">
-            <SearchIcon className="h-6 w-6" />
-            
+      <div className="flex justify-center items-center h-16 pb-2">
+        <div className="flex space-x-100"> 
+          {/* Home Icon */}
+          <div className="flex flex-col items-center group">
+            <div className="relative p-2 rounded-full transition-all duration-200 
+                          group-hover:bg-gray-200 group-hover:bg-opacity-50">
+              <HomeIcon className="h-6 w-6" />
+            </div>
+            <span className="text-xs text-purple-900 font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+              Home
+            </span>
           </div>
           
-          <div className="relative">
-            <FriendsIcon className="h-6 w-6" />
+          {/* Search Icon */}
+          <div className="flex flex-col items-center group">
+            <div className="relative p-2 rounded-full transition-all duration-200 
+                          group-hover:bg-gray-200 group-hover:bg-opacity-50">
+              <SearchIcon className="h-6 w-6" />
+            </div>
+            <span className="text-xs text-purple-900 font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+              Search
+            </span>
           </div>
           
-          <div className="flex flex-col items-center space-y-1">
-              <div className="relative rounded-full px-4 py-2"
-              style={{ backgroundColor: MBTIColors({ colorDest: "Primary", mbti }) }}>
-                <NotificationBellIcon className="h-5 w-5 " />
-                {newInvites > 0 && (
-                  <span className="absolute bottom-0 right-0 bg-white text-purple-700 text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center shadow">
-                    {newInvites > 9 ? "9+" : newInvites}
-                  </span>
-                )}
-              </div>
-            <span className="text-xs text-purple-900 font-medium">New Invites</span>
+          {/* Friends Icon */}
+          <div className="flex flex-col items-center group">
+            <div className="relative p-2 rounded-full transition-all duration-200 
+                          group-hover:bg-gray-200 group-hover:bg-opacity-50">
+              <FriendsIcon className="h-6 w-6" />
+            </div>
+            <span className="text-xs text-purple-900 font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+              Friends
+            </span>
           </div>
-
+          
+          {/* Notification Icon */}
+          <div className="flex flex-col items-center group">
+            <div className="relative p-2 rounded-full transition-all duration-200 
+                          group-hover:bg-gray-200 group-hover:bg-opacity-50"
+                  >
+              <NotificationBellIcon className="h-5 w-5" />
+              {newInvites > 0 && (
+                <span className="absolute bottom-0 right-0 bg-white text-purple-700 
+                               text-xs font-bold rounded-full h-5 w-5 flex items-center 
+                               justify-center shadow">
+                  {newInvites > 9 ? "9+" : newInvites}
+                </span>
+              )}
+            </div>
+            <span className="text-xs text-purple-900 font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+              Notifications
+            </span>
+          </div>
         </div>
       </div>
     </header>
