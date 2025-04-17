@@ -35,11 +35,13 @@ export default function ProfilePage(){
             <Head>
                 <title>M8TI - {nickname}</title>
             </Head>
+            <div className={clsx(`h-f min-h-screen bg-[${secondaryColor}]`)}>
             <Header mbti={groupIndex} userName={userData.name+" "+userData.surname}/>
             <ProfileMain primaryColor={primaryColor} secondaryColor={secondaryColor}
                 extraColor={extraColor} mbti={groupIndex} nickname={nickname} currentUser={currentUser}
                 userAbout={userData.description}/>
             <Button color={groupIndex} onClick={logout}> Log Out</Button>
+            </div>
         </AuthRoute>
     )
 }
