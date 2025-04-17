@@ -40,16 +40,35 @@ export default function Login(){
                 credentials: "include",
             });
             console.log(response.status);
+            if (response.ok){
+                window.location.href = `/loginPage`;
+            }
+
+
             //router.push("/profilePage")
+            /*
             if (response.ok) {
+                const meRes=await fetch("http://localhost:8080/api/user/me", {
+                    method:'GET',
+                    credentials:"include",
+                });
+                if(meRes.ok){
+                    const uData=await meRes.json;
+                    console.log(uData)
+                    window.location.href = `profile/${uData.nickname}`;
+                    //router.push(`/profile/${uData.nickname}`);
+                }else{
+                    setError("Could not retrieve user info after login.")
+                }
                 // Option 1: reload the whole page (quick + easy)
-                window.location.href = "/profilePage";
+                //window.location.href = "/profilePage";
           
                 // Option 2 (better): set loading=true again and refetch user in AuthContext
               } else {
                 const data = await response.json();
                 setError(data.message || "Login failed.");
               }
+                */
             
         } catch (err) {
             setError(err.response?.data?.message || 'Login failed. Please try again.');
@@ -57,7 +76,7 @@ export default function Login(){
         
     };
     if(currentUser){
-        router.push("/profilePage")
+        router.push(`/profile/${currentUser}`)
         return(<></>)
     }else
     return(
