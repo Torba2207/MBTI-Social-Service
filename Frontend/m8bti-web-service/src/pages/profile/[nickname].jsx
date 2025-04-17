@@ -7,9 +7,12 @@ import { getMBTIGroupIndex } from "@/components/MBTIMap";
 import clsx from "clsx";
 import { Button } from "@/components/Button";
 import { Header } from "@/components/Header";
+import { useRouter } from "next/router";
 
 export default function ProfilePage(){
-    
+    const router = useRouter();
+    const { nickname } = router.query;
+    //console.log(nickname)
     const {currentUser}=useContext(AuthContext)
     if(currentUser===null)
         return(
