@@ -1,6 +1,7 @@
 package com.pg.mbti.components;
 
 import lombok.AllArgsConstructor;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -14,6 +15,7 @@ class MultipartFileImpl implements MultipartFile {
     private final String name;
     private final String contentType;
 
+    @NotNull
     @Override
     public String getName() {
         return name;
@@ -39,18 +41,20 @@ class MultipartFileImpl implements MultipartFile {
         return size;
     }
 
+    @NotNull
     @Override
     public byte[] getBytes() throws IOException {
         return inputStream.readAllBytes();
     }
 
+    @NotNull
     @Override
     public InputStream getInputStream() {
         return inputStream;
     }
 
     @Override
-    public void transferTo(File dest) throws IOException, IllegalStateException {
+    public void transferTo(@NotNull File dest) throws IOException, IllegalStateException {
         try (FileOutputStream output = new FileOutputStream(dest)) {
             output.write(getBytes());
         }
