@@ -1,8 +1,8 @@
 package com.pg.mbti.services;
 
 import com.pg.mbti.dto.EmailContextDto;
-import com.pg.mbti.dto.ResetPasswordDto;
-import com.pg.mbti.dto.UpdatePasswordDto;
+import com.pg.mbti.dto.password.ResetPasswordDto;
+import com.pg.mbti.dto.password.UpdatePasswordDto;
 import com.pg.mbti.exceptions.EmailSendingFailedException;
 import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.exceptions.InvalidTokenException;

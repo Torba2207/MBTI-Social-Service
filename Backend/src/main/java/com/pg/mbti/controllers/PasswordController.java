@@ -1,8 +1,8 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.dto.ForgotPasswordDto;
-import com.pg.mbti.dto.ResetPasswordDto;
-import com.pg.mbti.dto.UpdatePasswordDto;
+import com.pg.mbti.dto.password.ForgotPasswordDto;
+import com.pg.mbti.dto.password.ResetPasswordDto;
+import com.pg.mbti.dto.password.UpdatePasswordDto;
 import com.pg.mbti.services.PasswordService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

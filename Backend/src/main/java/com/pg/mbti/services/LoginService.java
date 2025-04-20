@@ -1,7 +1,7 @@
 package com.pg.mbti.services;
 
-import com.pg.mbti.dto.LoginRequestDto;
-import com.pg.mbti.dto.LoginResponseDto;
+import com.pg.mbti.dto.auth.LoginRequestDto;
+import com.pg.mbti.dto.auth.LoginResponseDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.exceptions.EmailNotConfirmedException;
