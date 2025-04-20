@@ -42,4 +42,8 @@ public class AnswerService {
         answerSetRepository.saveAll(answerSets);
         return savedAnswer;
     }
+
+    public List<Answer> getAllAnswers() {
+        return answerRepository.findAll();
+    }
 }
