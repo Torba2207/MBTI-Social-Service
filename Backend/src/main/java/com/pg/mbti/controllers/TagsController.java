@@ -9,10 +9,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -61,5 +58,19 @@ public class TagsController {
     })
     public ResponseEntity<List<Tag>> getTagsByCategory(@PathVariable String category) {
         return ResponseEntity.ok(tagsService.getTagsByCategory(category));
+    }
+    
+    @PostMapping
+    @Operation(summary = "Create a new tag",
+            description = "Creates a new tag with the specified name and category")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Tag successfully created",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Tag.class))),
+            @ApiResponse(responseCode = "400", description = "Invalid tag data"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<Tag> createTag(@RequestBody Tag tag) {
+        return ResponseEntity.status(201).body(tagsService.createTag(tag));
     }
 }

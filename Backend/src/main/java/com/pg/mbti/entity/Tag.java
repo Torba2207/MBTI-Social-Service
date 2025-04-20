@@ -3,8 +3,6 @@ package com.pg.mbti.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -25,7 +23,4 @@ public class Tag {
 
     @Column(name = "category", nullable = false)
     private String category;
-
-    @ManyToMany(mappedBy = "tags")
-    private Set<User> users = new HashSet<>();
 }

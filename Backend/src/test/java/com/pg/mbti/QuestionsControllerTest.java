@@ -1,12 +1,8 @@
 package com.pg.mbti;
 
 import com.pg.mbti.controllers.QuestionsController;
-import com.pg.mbti.dto.UserAnswerDto;
-import com.pg.mbti.entity.questions.Answer;
 import com.pg.mbti.entity.questions.Question;
-import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.exceptions.QuestionNotFoundException;
-import com.pg.mbti.services.AnswerService;
 import com.pg.mbti.services.QuestionsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -30,9 +26,6 @@ class QuestionsControllerTest {
 
     @Mock
     private QuestionsService questionsService;
-
-    @Mock
-    private AnswerService answerService;
 
     @InjectMocks
     private QuestionsController questionsController;
@@ -80,35 +73,43 @@ class QuestionsControllerTest {
     }
 
     @Test
-    void submitAnswersProcessesUserAnswersSuccessfully() {
-        UUID answerId = UUID.randomUUID();
-        UUID questionId = UUID.randomUUID();
-        List<UserAnswerDto> answers = List.of(new UserAnswerDto(questionId, true));
-        MBTIType mbtiType = MBTIType.ENFJ;
+    void createQuestionReturnsCreatedQuestionWithStatus201() {
+        Question inputQuestion = new Question();
+        Question savedQuestion = new Question();
 
-        Answer answer = Answer.builder().id(answerId).build();
+        when(questionsService.createQuestion(inputQuestion)).thenReturn(savedQuestion);
 
-        when(answerService.processUserAnswers(answers, mbtiType)).thenReturn(answer);
+        ResponseEntity<Question> response = questionsController.createQuestion(inputQuestion);
 
-        ResponseEntity<String> response = questionsController.submitAnswers(answers, mbtiType);
-
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("Answers submitted successfully with ID: " + answerId);
-        verify(answerService).processUserAnswers(answers, mbtiType);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isEqualTo(savedQuestion);
+        verify(questionsService).createQuestion(inputQuestion);
     }
 
     @Test
-    void submitAnswersHandlesEmptyAnswersList() {
-        UUID answerId = UUID.randomUUID();
-        List<UserAnswerDto> emptyAnswers = List.of();
-        MBTIType mbtiType = MBTIType.INTJ;
+    void getAllQuestionsReturnsEmptyListWhenNoQuestions() {
+        List<Question> emptyList = List.of();
 
-        Answer answer = Answer.builder().id(answerId).build();
-        when(answerService.processUserAnswers(emptyAnswers, mbtiType)).thenReturn(answer);
+        when(questionsService.getAllQuestions()).thenReturn(emptyList);
 
-        ResponseEntity<String> response = questionsController.submitAnswers(emptyAnswers, mbtiType);
+        ResponseEntity<List<Question>> response = questionsController.getAllQuestions();
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("Answers submitted successfully with ID: " + answerId);
+        assertThat(response.getBody()).isEmpty();
+        verify(questionsService).getAllQuestions();
+    }
+
+    @Test
+    void createQuestionWithNullBodyShouldBeDelegatedToService() {
+        Question nullQuestion = null;
+        Question createdQuestion = new Question();
+
+        when(questionsService.createQuestion(nullQuestion)).thenReturn(createdQuestion);
+
+        ResponseEntity<Question> response = questionsController.createQuestion(nullQuestion);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isEqualTo(createdQuestion);
+        verify(questionsService).createQuestion(nullQuestion);
     }
 }

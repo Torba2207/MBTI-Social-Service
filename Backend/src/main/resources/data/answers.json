@@ -1,0 +1,85 @@
+{
+  "answers": {
+    "ISTJ": [
+      ["yes", "no", "no", "yes", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "no", "no"],
+      ["yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes"],
+      ["yes", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "yes", "no", "yes"]
+    ],
+    "ENFP": [
+      ["no", "yes", "yes", "no", "no", "no", "no", "no", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "no", "no", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "no"],
+      ["no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes"],
+      ["no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no"]
+    ],
+    "INFJ": [
+      ["yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "yes", "no", "no", "yes"],
+      ["yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "yes", "no", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "no", "yes"],
+      ["yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "no"],
+      ["no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "no", "no", "no", "yes", "yes", "no", "yes"]
+    ],
+    "ESTP": [
+      ["no", "no", "no", "no", "no", "yes", "no", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "no"],
+      ["yes", "no", "no", "yes", "no", "yes", "no", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "yes", "no", "no", "no", "yes", "no", "no", "no", "yes", "no", "no", "no", "yes", "yes", "no"]
+    ],
+    "ISFP": [
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "no", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "yes", "no"],
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no"],
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "no", "yes", "no"]
+    ],
+    "ENTJ": [
+      ["no", "yes", "no", "yes", "no", "yes", "no", "yes", "no", "no", "no", "no", "yes", "no", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes"],
+      ["no", "yes", "no", "yes", "no", "no", "no", "no", "no", "no", "yes", "no", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "no", "yes"],
+      ["yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "no", "yes", "no", "yes", "no", "yes", "no", "no", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "no", "yes"]
+    ],
+    "INFP": [
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes"],
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "yes", "no"],
+      ["yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes"],
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes"]
+    ],
+    "ESTJ": [
+      ["no", "no", "yes", "yes", "no", "yes", "no", "no", "no", "yes", "no", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes"],
+      ["no", "no", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes"],
+      ["no", "no", "no", "yes", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes"]
+    ],
+    "ISFJ": [
+      ["yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "no", "no"],
+      ["no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no"],
+      ["yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "no"],
+      ["yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "no"]
+    ],
+    "ENTP": [
+      ["no", "yes", "no", "no", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no"],
+      ["no", "yes", "no", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "no", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "no"],
+      ["no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no"]
+    ],
+    "INTJ": [
+      ["yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "yes", "yes"],
+      ["yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes"],
+      ["yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "yes"]
+    ],
+    "ESFP": [
+      ["no", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "no", "yes", "yes", "no"],
+      ["no", "no", "yes", "no", "no", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "yes", "no"],
+      ["no", "no", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "no", "no", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no"]
+    ],
+    "ISTP": [
+      ["yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "no", "no", "no", "no", "no", "yes", "yes", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "no"],
+      ["no", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no"],
+      ["yes", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no"],
+      ["yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "no", "no", "no", "yes", "no", "no", "no", "no", "yes", "yes", "no", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no"]
+    ],
+    "ENFJ": [
+      ["no", "yes", "yes", "yes", "no", "yes", "no", "no", "no", "no", "no", "no", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "no", "yes", "yes", "yes", "yes", "no", "no", "no", "yes", "no", "yes", "yes", "no", "yes"],
+      ["no", "no", "yes", "yes", "no", "yes", "no", "no", "no", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "no", "no", "no", "yes", "no", "yes", "yes", "yes", "yes"],
+      ["no", "yes", "yes", "yes", "no", "no", "no", "no", "no", "no", "yes", "no", "yes", "no", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "yes", "yes", "yes"]
+    ],
+    "INTP": [
+      ["yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "yes", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "no", "yes", "yes"],
+      ["yes", "yes", "no", "no", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "no", "yes", "yes", "yes", "yes", "yes", "no", "no", "no", "yes", "no", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "no", "yes", "yes"]
+    ],
+    "ESFJ": [
+      ["yes", "yes", "yes", "yes", "no", "no", "no", "no", "no", "yes", "no", "no", "no", "yes", "yes", "no", "yes", "yes", "no", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "yes", "yes", "no", "yes", "yes", "no", "no", "yes", "yes", "no", "yes", "yes", "yes"],
+      ["no", "yes", "yes", "yes", "no", "yes", "no", "no", "no", "yes", "no", "no", "no", "yes", "yes", "yes", "yes", "yes", "yes", "yes", "no", "yes", "no", "yes", "no", "yes", "yes", "yes", "yes", "no", "yes", "no", "no", "yes", "yes", "yes", "no", "no", "yes", "yes"]
+    ]
+  }
+}

@@ -23,4 +23,8 @@ public class QuestionsService {
         return questionsRepository.findById(id)
                 .orElseThrow(() -> new QuestionNotFoundException("Question not found"));
     }
+
+    public Question createQuestion(Question question) {
+        return questionsRepository.save(question);
+    }
 }

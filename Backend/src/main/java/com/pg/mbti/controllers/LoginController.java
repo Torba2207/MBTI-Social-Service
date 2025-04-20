@@ -1,7 +1,7 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.dto.LoginRequestDto;
-import com.pg.mbti.dto.LoginResponseDto;
+import com.pg.mbti.dto.auth.LoginRequestDto;
+import com.pg.mbti.dto.auth.LoginResponseDto;
 import com.pg.mbti.services.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

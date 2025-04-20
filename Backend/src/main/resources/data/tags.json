@@ -1,0 +1,164 @@
+{
+  "tags": [
+    {
+      "name": "Reading",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Gaming",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Hiking",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Photography",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Cooking",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Meditation",
+      "category": "Hobbies"
+    },
+    {
+      "name": "Honesty",
+      "category": "Values"
+    },
+    {
+      "name": "Loyalty",
+      "category": "Values"
+    },
+    {
+      "name": "Creativity",
+      "category": "Values"
+    },
+    {
+      "name": "Independence",
+      "category": "Values"
+    },
+    {
+      "name": "Empathy",
+      "category": "Values"
+    },
+    {
+      "name": "Direct",
+      "category": "Communication"
+    },
+    {
+      "name": "Diplomatic",
+      "category": "Communication"
+    },
+    {
+      "name": "Listener",
+      "category": "Communication"
+    },
+    {
+      "name": "Expressive",
+      "category": "Communication"
+    },
+    {
+      "name": "Remote Work",
+      "category": "Work"
+    },
+    {
+      "name": "Team Player",
+      "category": "Work"
+    },
+    {
+      "name": "Leadership",
+      "category": "Work"
+    },
+    {
+      "name": "Structured",
+      "category": "Work"
+    },
+    {
+      "name": "Flexible",
+      "category": "Work"
+    },
+    {
+      "name": "Visual Learner",
+      "category": "Learning"
+    },
+    {
+      "name": "Auditory Learner",
+      "category": "Learning"
+    },
+    {
+      "name": "Hands-on Learner",
+      "category": "Learning"
+    },
+    {
+      "name": "Self-taught",
+      "category": "Learning"
+    },
+    {
+      "name": "Introvert",
+      "category": "Social"
+    },
+    {
+      "name": "Extrovert",
+      "category": "Social"
+    },
+    {
+      "name": "Small Groups",
+      "category": "Social"
+    },
+    {
+      "name": "Networking",
+      "category": "Social"
+    },
+    {
+      "name": "Travel",
+      "category": "Interests"
+    },
+    {
+      "name": "Music",
+      "category": "Interests"
+    },
+    {
+      "name": "Films",
+      "category": "Interests"
+    },
+    {
+      "name": "Tech",
+      "category": "Interests"
+    },
+    {
+      "name": "Sports",
+      "category": "Interests"
+    },
+    {
+      "name": "Nature",
+      "category": "Interests"
+    },
+    {
+      "name": "Family-oriented",
+      "category": "Lifestyle"
+    },
+    {
+      "name": "Career-focused",
+      "category": "Lifestyle"
+    },
+    {
+      "name": "Minimalist",
+      "category": "Lifestyle"
+    },
+    {
+      "name": "Adventurous",
+      "category": "Lifestyle"
+    },
+    {
+      "name": "Early Bird",
+      "category": "Lifestyle"
+    },
+    {
+      "name": "Night Owl",
+      "category": "Lifestyle"
+    }
+  ]
+}

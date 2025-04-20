@@ -18,4 +18,6 @@ public interface TagsRepository extends JpaRepository<Tag, UUID> {
 
     @Query("SELECT t FROM Tag t WHERE t.category = :category")
     List<Tag> findAllByCategory(String category);
+
+    boolean existsByName(String name);
 }

@@ -1,4 +1,4 @@
-package com.pg.mbti.dto;
+package com.pg.mbti.dto.password;
 
 import lombok.Builder;
 

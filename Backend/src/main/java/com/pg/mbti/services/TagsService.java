@@ -27,4 +27,11 @@ public class TagsService {
         }
         return tagsRepository.findAllByCategory(category);
     }
+
+    public Tag createTag(Tag tag) {
+        if (tagsRepository.existsByName(tag.getName())) {
+            throw new IllegalArgumentException("Tag with this name already exists");
+        }
+        return tagsRepository.save(tag);
+    }
 }

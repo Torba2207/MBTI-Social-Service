@@ -24,9 +24,9 @@ public class PhotoController {
     private final UsersService usersService;
     private final PhotoService photoService;
 
-    @GetMapping("{nickname}")
+    @GetMapping("/profile")
     @Operation(summary = "Get user profile photo",
-            description = "Retrieves the profile photo of a user by their nickname")
+            description = "Retrieves the profile photo by user nickname")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Profile photo retrieved successfully",
                     content = @Content(mediaType = "image/jpeg")),
@@ -37,11 +37,12 @@ public class PhotoController {
     })
     public ResponseEntity<Resource> getProfilePhoto(
             @Parameter(description = "Nickname of the user whose profile photo is requested", required = true)
-            @PathVariable String nickname) {
+            @RequestParam String nickname) {
         final var user = usersService.getUserByNickname(nickname);
         String fileName = user.getProfilePicture();
         return photoService.getProfilePhotoResponse(fileName);
     }
+
 
     @PostMapping
     @Operation(summary = "Upload photo",
@@ -60,8 +61,8 @@ public class PhotoController {
     }
 
     @GetMapping("/{fileName}")
-    @Operation(summary = "Get photo by file name",
-            description = "Retrieves a photo by its file name")
+    @Operation(summary = "Get photo by filename",
+            description = "Retrieves any photo by file name")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Photo retrieved successfully",
                     content = @Content(mediaType = "image/jpeg")),
@@ -71,8 +72,9 @@ public class PhotoController {
                     content = @Content)
     })
     public ResponseEntity<Resource> getPhotoByFileName(
-            @Parameter(description = "File name of the photo to retrieve", required = true)
+            @Parameter(description = "File name of the photo", required = true)
             @PathVariable String fileName) {
         return photoService.getProfilePhotoResponse(fileName);
     }
+
 }
