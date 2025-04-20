@@ -24,14 +24,22 @@ public class PhotoService {
     @Value("${minio.bucket}")
     private String bucketName;
 
+    @Value("${image.default.path}")
+    private String defaultImagePath;
+
     public String uploadPhoto(MultipartFile file) {
         try {
-            String fileName = switch(file.getOriginalFilename()) {
-                case null -> throw new FileUploadException("File name is null");
-                case "" -> throw new FileUploadException("File name is empty");
-                case "default.jpg" -> file.getOriginalFilename();
-                default -> UUID.randomUUID() + "_" + file.getOriginalFilename();
-            };
+            String originalFilename = file.getOriginalFilename();
+            String fileName;
+            if (originalFilename == null) {
+                throw new FileUploadException("File name is null");
+            } else if (originalFilename.isEmpty()) {
+                throw new FileUploadException("File name is empty");
+            } else if (originalFilename.equals(defaultImagePath)) {
+                fileName = originalFilename;
+            } else {
+                fileName = UUID.randomUUID() + "_" + originalFilename;
+            }
 
             boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
             if (!found) {
