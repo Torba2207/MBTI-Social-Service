@@ -1,10 +1,6 @@
 package com.pg.mbti.controllers;
 
-import com.pg.mbti.dto.UserAnswerDto;
-import com.pg.mbti.entity.questions.Answer;
 import com.pg.mbti.entity.questions.Question;
-import com.pg.mbti.enums.MBTIType;
-import com.pg.mbti.services.AnswerService;
 import com.pg.mbti.services.QuestionsService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,10 +19,9 @@ import java.util.UUID;
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/questions")
-@Tag(name = "Questions", description = "Endpoints for retrieving test questions")
+@Tag(name = "Questions", description = "Endpoints for manage test questions")
 public class QuestionsController {
     private final QuestionsService questionsService;
-    private final AnswerService answerService;
 
     @GetMapping
     @Operation(summary = "Get all questions",
@@ -57,22 +52,19 @@ public class QuestionsController {
         return ResponseEntity.ok(questionsService.getQuestionById(id));
     }
 
-    @PostMapping("/submit")
-    @Operation(summary = "Send all user answers",
-            description = "Send all user answers to the server with the specified MBTI type")
+    @PostMapping
+    @Operation(summary = "Create a new question",
+            description = "Creates a new question with the specified details")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Answers successfully submitted",
+            @ApiResponse(responseCode = "201", description = "Question successfully created",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = String.class))),
+                            schema = @Schema(implementation = Question.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request body"),
-            @ApiResponse(responseCode = "404", description = "Question not found"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<String> submitAnswers(
-            @RequestBody List<UserAnswerDto> answers,
-            @Parameter(description = "MBTI type of the user", required = true)
-            @RequestParam MBTIType mbtiType) {
-        Answer processedAnswer = answerService.processUserAnswers(answers, mbtiType);
-        return ResponseEntity.ok("Answers submitted successfully with ID: " + processedAnswer.getId());
+    public ResponseEntity<Question> createQuestion(
+            @Parameter(description = "Details of the question to be created", required = true)
+            @RequestBody Question question) {
+        return ResponseEntity.status(201).body(questionsService.createQuestion(question));
     }
 }
