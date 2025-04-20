@@ -1,4 +1,4 @@
-package com.pg.mbti.dto;
+package com.pg.mbti.dto.auth;
 
 public record LoginRequestDto(
         String usernameOrEmail,

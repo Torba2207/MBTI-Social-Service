@@ -1,4 +1,4 @@
-package com.pg.mbti.dto;
+package com.pg.mbti.dto.auth;
 
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Gender;
