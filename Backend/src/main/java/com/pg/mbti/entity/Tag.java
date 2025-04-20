@@ -25,7 +25,4 @@ public class Tag {
 
     @Column(name = "category", nullable = false)
     private String category;
-
-    @ManyToMany(mappedBy = "tags")
-    private Set<User> users = new HashSet<>();
 }
