@@ -1,8 +1,8 @@
 package com.pg.mbti;
 
 import com.pg.mbti.controllers.LoginController;
-import com.pg.mbti.dto.LoginRequestDto;
-import com.pg.mbti.dto.LoginResponseDto;
+import com.pg.mbti.dto.auth.LoginRequestDto;
+import com.pg.mbti.dto.auth.LoginResponseDto;
 import com.pg.mbti.exceptions.EmailNotConfirmedException;
 import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
