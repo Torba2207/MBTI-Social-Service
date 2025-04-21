@@ -57,13 +57,17 @@ export default function SignUp() {
         else if (/^[\d-]+$/.test(surname)) newErrors.surname = alert("Surname cannot contain numbers");
         
         if (!nickname) newErrors.nickname = alert("Nickname is required");
+        if (nickname.length < 3) newErrors.nickname = alert("Nickname must be at least 3 characters long");
     } 
     else if (step === 1) {
         if (!email) newErrors.email = alert("Email is required"); 
         else if (!email.includes("@") || !email.includes(".")) newErrors.email = alert("Invalid email format");
 
         if (!password) newErrors.password = alert("Password is required");
+        else if (password.length < 8) newErrors.password = alert("Password must be at least 8 characters long");
+
         if (!location) newErrors.location = alert("Location is required");
+
     } 
     else if (step === 2) {
         if (!mbtiType) newErrors.mbtiType = alert("MBTI type is required");
