@@ -41,4 +41,18 @@ public class AnswerController {
         return ResponseEntity.ok("Answers submitted successfully with ID: " + processedAnswer.getId());
     }
 
+    @GetMapping
+    @Operation(summary = "Get all answers",
+            description = "Retrieve all answers from the database")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Answers retrieved successfully",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Answer.class))),
+            @ApiResponse(responseCode = "404", description = "No answers found"),
+            @ApiResponse(responseCode = "500", description = "Internal server error")
+    })
+    public ResponseEntity<List<Answer>> getAllAnswers() {
+        List<Answer> answers = answerService.getAllAnswers();
+        return ResponseEntity.ok(answers);
+    }
 }
