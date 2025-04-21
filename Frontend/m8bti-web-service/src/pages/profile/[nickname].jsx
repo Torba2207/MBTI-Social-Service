@@ -7,9 +7,13 @@ import { getMBTIGroupIndex } from "@/components/MBTIMap";
 import clsx from "clsx";
 import { Button } from "@/components/Button";
 import { Header } from "@/components/Header";
+import { useRouter } from "next/router";
+import { ProfileMain } from "@/components/ProfileMain";
 
 export default function ProfilePage(){
-    
+    const router = useRouter();
+    const { nickname } = router.query;
+    //console.log(nickname)
     const {currentUser}=useContext(AuthContext)
     if(currentUser===null)
         return(
@@ -29,10 +33,15 @@ export default function ProfilePage(){
     return(
         <AuthRoute>
             <Head>
-                <title>M8TI - Profile Page</title>
+                <title>M8TI - {nickname}</title>
             </Head>
+            <div className={clsx(`h-f min-h-screen bg-[${secondaryColor}]`)}>
             <Header mbti={groupIndex} userName={userData.name+" "+userData.surname}/>
+            <ProfileMain primaryColor={primaryColor} secondaryColor={secondaryColor}
+                extraColor={extraColor} mbti={groupIndex} nickname={nickname} currentUser={currentUser}
+                userAbout={userData.description}/>
             <Button color={groupIndex} onClick={logout}> Log Out</Button>
+            </div>
         </AuthRoute>
     )
 }
