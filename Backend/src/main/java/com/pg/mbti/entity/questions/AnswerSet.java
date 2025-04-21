@@ -1,5 +1,6 @@
 package com.pg.mbti.entity.questions;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,5 +33,6 @@ public class AnswerSet {
 
     @ManyToOne
     @JoinColumn(name = "answer_id", nullable = false)
+    @JsonIgnore
     private Answer answer;
 }
