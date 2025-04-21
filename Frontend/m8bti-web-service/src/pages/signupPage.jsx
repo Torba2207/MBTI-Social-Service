@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import clsx from 'clsx';
 import useColorCycle from '@/hooks/useColorCycle';
 import { MBTIColors } from '@/components/MBTIColors';
+import { useRouter } from "next/router";
 
 const tfClassName = "w-[80%] mx-auto";
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
@@ -32,6 +33,9 @@ export default function SignUp() {
     const [gender, setGender] = useState("");
     const [birthDate, setBirthDate] = useState("");
 
+    let router=useRouter();
+    const [error, setError] = useState('');
+
     const handleDateInput = (e) => {
         const value = e.target.value;
 
@@ -57,7 +61,6 @@ export default function SignUp() {
         else if (/^[\d-]+$/.test(surname)) newErrors.surname = alert("Surname cannot contain numbers");
         
         if (!nickname) newErrors.nickname = alert("Nickname is required");
-        if (nickname.length < 3) newErrors.nickname = alert("Nickname must be at least 3 characters long");
     } 
     else if (step === 1) {
         if (!email) newErrors.email = alert("Email is required"); 
@@ -66,7 +69,7 @@ export default function SignUp() {
         if (!password) newErrors.password = alert("Password is required");
         else if (password.length < 8) newErrors.password = alert("Password must be at least 8 characters long");
 
-        if (!location) newErrors.location = alert("Location is required");
+        //if (!location) newErrors.location = alert("Location is required");
 
     } 
     else if (step === 2) {
@@ -81,18 +84,68 @@ export default function SignUp() {
     return Object.keys(newErrors).length === 0;
 };
 
-const isValidDate = (date) => {
-    const [day, month, year] = date.split("/").map(Number);
-    const d = new Date(year, month - 1, day);
-    return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
-};
+    const isValidDate = (date) => {
+        const [day, month, year] = date.split("/").map(Number);
+        const d = new Date(year, month - 1, day);
+        return d.getFullYear() === year && d.getMonth() === month - 1 && d.getDate() === day;
+    };
 
     const handleNext = () => {
         if (validateStep()) changeStep(step + 1);
     };
 
+    const handleSignUp = async () => {
+        try {
+            // Fomat date to be transferred to backend
+          const [day, month, year] = birthDate.split('/');
+          const formattedDate = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+      
+          const userData = {
+            name,
+            surname,
+            nickname,
+            email,
+            password,
+            mbti: mbtiType,
+            birthday: formattedDate,
+            gender,
+            pronouns: "OTHER",
+            ...(location && {
+              latitude: parseFloat(location.split(',')[0]),
+              longitude: parseFloat(location.split(',')[1])
+            })
+          };
+      
+          const response = await fetch('http://localhost:8080/api/auth/register', {
+            method: 'POST',
+            headers: { 
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
+            credentials: "include",
+          });
+      
+          const contentType = response.headers.get('content-type');
+          if (!response.ok) {
+            const errorData = contentType?.includes('application/json') 
+              ? await response.json() 
+              : await response.text();
+            setError(errorData.message || "Registration failed");
+            return;
+          }
+      
+          router.push("/loginPage");
+          
+        } catch (err) {
+          console.error("Registration error:", err);
+          setError("Please check your data and try again");
+        }
+      };
+
     const handleFinish = () => {
         if (validateStep()) alert("Registration complete!");
+        handleSignUp();
+        //router.push("/loginPage");
     };
 
     const totalSteps = 3;
@@ -236,7 +289,7 @@ const isValidDate = (date) => {
                                         required
                                         >
                                         <option value="">Choose Gender</option>
-                                        {["male", "female", "other"].map((type) => (
+                                        {["MALE", "FEMALE", "PEDIK"].map((type) => ( 
                                             <option key={type} value={type}>
                                             {type}
                                             </option>
