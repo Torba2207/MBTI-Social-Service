@@ -16,6 +16,7 @@ const secondaryColors=MBTIColors({colorDest:"Secondary",mbti:5});
 const extraColors=MBTIColors({colorDest:"Extra",mbti:5});
 export default function Login(){
     //console.log(bgColors);
+
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
@@ -25,13 +26,43 @@ export default function Login(){
     const [password, setPassword] = useState("");
     const [error, setError] = useState('');
     //const [success, setSuccess] = useState(false);
-    const [correctFields, setCorrectFields] = useState(true);
+    const [fieldErrors, setFieldErrors] = useState({
+        usernameOrEmail: '',
+        password: ''
+    });
+    const [triedSubmit, setTriedSubmit] = useState(false);
 
     let router=useRouter();
+
+    const validateFields = () => {
+        const errors = {
+            usernameOrEmail: '',
+            password: ''
+        };
+        let isValid = true;
+
+        if (!usernameOrEmail.trim()) {
+            errors.usernameOrEmail = 'Please enter your email or username';
+            isValid = false;
+        }
+        if (!password.trim()) {
+            errors.password = 'Please enter your password';
+            isValid = false;
+        }
+
+        setFieldErrors(errors);
+        return isValid;
+    };
 
     const handleLogIn = async (event) => {
         event.preventDefault();
         setError('');
+
+        setTriedSubmit(true); 
+        if (!validateFields()) {
+           // setError("Please fill in both fields.");
+            return;
+        }
         try {
             const response = await fetch('http://localhost:8080/api/auth/login', {
                 method: 'POST',
@@ -95,8 +126,8 @@ export default function Login(){
                     }}>Sign In</h1>
                 <form className='mt-[10%]' onSubmit={handleLogIn}>
                     <div>
-                      <TextField
-                        className={clsx('pb-[10%]', tfClassName)}
+                    <TextField
+                        className={clsx('pb-[2%]', tfClassName)}
                         labelColor={bgColor}
                         fieldBGColor={secColor}
                         isDynamic={true}
@@ -106,46 +137,79 @@ export default function Login(){
                         type="text"
                         autoComplete="email"
                         value={usernameOrEmail}
-                        onChange={(e)=>{setEmail(e.target.value), setCorrectFields(true)}}
-                        />
-                        <TextField
+                        onChange={(e)=>{setEmail(e.target.value), setFieldErrors({...fieldErrors, usernameOrEmail: ''})}}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleLogIn(e);
+                            }
+                        }}
+                      />
+                      {triedSubmit && fieldErrors.usernameOrEmail && (
+                        <p className="text-red-500 text-sm w-[80%] mx-auto pb-[5%]">
+                            {fieldErrors.usernameOrEmail}
+                        </p>
+                      )}
+
+                      <TextField
                         className={tfClassName}
                         label="Password"
                         labelColor={bgColor}
                         fieldBGColor={secColor}
                         isDynamic={true}
-                        inputClassName={`border-[#785D87]`}
                         id="password"
                         name="password"
                         type="password"
                         autoComplete="current-password"
                         value={password}
-                        onChange={(e)=>{setPassword(e.target.value), setCorrectFields(true)}}
-                        required/>
+                        onChange={(e)=>{setPassword(e.target.value), setFieldErrors({...fieldErrors, password: ''})}}
+                        onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                                e.preventDefault();
+                                handleLogIn(e);
+                            }
+                        }}
+                        required
+                      />
+                      {triedSubmit && fieldErrors.password && (
+                        <p className="text-red-500 text-sm w-[80%] mx-auto pt-[2%]">
+                            {fieldErrors.password}
+                        </p>
+                      )}
                     </div>
                     {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
-                        <Button type={"submit"} color='none' className='w-[30%]'
+                        <Button 
+                            variant="solid"
+                            type="submit"
+                            color='none'
+                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
                             currentBG={bgColor}
                             currentText={secColor}
-                            /*
                             style={{
-                                background:bgColor,
-                                color:secColor,
-                                transition:"background 1s ease-in-out, color 1s ease-in-out"
-                            }}*/
-                        >Sign in</Button>
-                        <Button color='none' className='w-[30%]'
+                            border: `2px solid ${bgColor}`,
+                            transition: "all 0.3s ease-in-out"
+                            }}
+                        >
+                            Sign in
+                        </Button>
+                        
+                        <Button 
+                            variant="solid"
+                            color='none'
+                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
-                            currentBG={bgColor}
-                            currentText={secColor}
-                            /*style={{
-                                background:bgColor,
-                                color:secColor,
-                                transition:"background 1s ease-in-out, color 1s ease-in-out"
-                            }}*/
-                        >Sign up</Button>
+                            currentBG={secColor}
+                            currentText={bgColor}
+                            style={{
+                            border: `2px solid ${bgColor}`,
+                            transition: "all 0.3s ease-in-out"
+                            }}
+                            onClick={() => window.location.href = "http://localhost:3000/signupPage"}
+                        >
+                            Sign up
+                        </Button>
                     </div>
                 </form>
             </AuthLayout>
