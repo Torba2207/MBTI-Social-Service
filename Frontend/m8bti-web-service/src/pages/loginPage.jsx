@@ -40,31 +40,19 @@ export default function Login(){
             password: ''
         };
         let isValid = true;
-    
-        const passwordReg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/;
-        const nicknameReg = /^[a-zA-Z0-9_]{3,20}$/;
-    
+
         if (!usernameOrEmail.trim()) {
             errors.usernameOrEmail = 'Please enter your email or username';
             isValid = false;
-        } else if (!usernameOrEmail.includes('@') && !nicknameReg.test(usernameOrEmail)) {
-          
-            errors.usernameOrEmail = 'Invalid nickname format';
-            isValid = false;
         }
-    
         if (!password.trim()) {
             errors.password = 'Please enter your password';
             isValid = false;
-        } else if (!passwordReg.test(password)) {
-            errors.password = 'Password must contain uppercase, lowercase, digit, and special character';
-            isValid = false;
         }
-    
+
         setFieldErrors(errors);
         return isValid;
     };
-    
 
     const handleLogIn = async (event) => {
         event.preventDefault();
@@ -181,7 +169,7 @@ export default function Login(){
                                 handleLogIn(e);
                             }
                         }}
-                        
+                        required
                       />
                       {triedSubmit && fieldErrors.password && (
                         <p className="text-red-500 text-sm w-[80%] mx-auto pt-[2%]">
@@ -192,19 +180,33 @@ export default function Login(){
                     {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
                         <Button 
+                            variant="solid"
+                            type="submit"
+                            color='none'
+                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
                             currentBG={bgColor}
                             currentText={secColor}
+                            style={{
+                            border: `2px solid ${bgColor}`,
+                            transition: "all 0.3s ease-in-out"
+                            }}
                         >
                             Sign in
                         </Button>
                         
                         <Button 
+                            variant="solid"
+                            color='none'
+                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
-                            currentBG={bgColor}
-                            currentText={secColor}
-                           
-                            onClick={() => router.push("/signupPage")}
+                            currentBG={secColor}
+                            currentText={bgColor}
+                            style={{
+                            border: `2px solid ${bgColor}`,
+                            transition: "all 0.3s ease-in-out"
+                            }}
+                            onClick={() => window.location.href = "http://localhost:3000/signupPage"}
                         >
                             Sign up
                         </Button>
