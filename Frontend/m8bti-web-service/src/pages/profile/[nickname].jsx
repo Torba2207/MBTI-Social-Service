@@ -66,7 +66,10 @@ export default function ProfilePage(){
             <Head>
                 <title>M8TI - {nickname}</title>
             </Head>
-            <div className={clsx(`h-f min-h-screen bg-[${secondaryColor}]`)}>
+            <div className="h-f min-h-screen"
+                style={{
+                    backgroundColor: secondaryColor,
+                }}>
             <Header mbti={groupIndex} userName={userPageData.name+" "+userPageData.surname}/>
             <ProfileMain primaryColor={primaryColor} secondaryColor={secondaryColor}
                 extraColor={extraColor} mbti={groupIndex} nickname={nickname} currentUser={currentUser}
