@@ -31,7 +31,7 @@ export function TextField({ id, label, type = 'text', className,inputClassName,f
         style={{
           color: props.labelColor,
           background:fieldBGColor,
-          transition: "color 1s ease-in-out, background-color 1s ease-in-out"
+          ...(props.isDynamic?{transition: "color 1s ease-in-out, background-color 1s ease-in-out"}:{})
         }}
          />
     </div>
