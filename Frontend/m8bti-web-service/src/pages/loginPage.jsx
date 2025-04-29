@@ -169,7 +169,7 @@ export default function Login(){
                                 handleLogIn(e);
                             }
                         }}
-                        required
+                        
                       />
                       {triedSubmit && fieldErrors.password && (
                         <p className="text-red-500 text-sm w-[80%] mx-auto pt-[2%]">
@@ -180,32 +180,18 @@ export default function Login(){
                     {error && <p className="text-red-500 text-center mt-2">{error}</p>}
                     <div className='pt-[10%] flex justify-between w-[80%] mx-auto'>
                         <Button 
-                            variant="solid"
-                            type="submit"
-                            color='none'
-                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
                             currentBG={bgColor}
                             currentText={secColor}
-                            style={{
-                            border: `2px solid ${bgColor}`,
-                            transition: "all 0.3s ease-in-out"
-                            }}
                         >
                             Sign in
                         </Button>
                         
                         <Button 
-                            variant="solid"
-                            color='none'
-                            className='w-[45%] py-3 rounded-lg font-medium text-lg'
                             isDynamic={true}
-                            currentBG={secColor}
-                            currentText={bgColor}
-                            style={{
-                            border: `2px solid ${bgColor}`,
-                            transition: "all 0.3s ease-in-out"
-                            }}
+                            currentBG={bgColor}
+                            currentText={secColor}
+                           
                             onClick={() => window.location.href = "http://localhost:3000/signupPage"}
                         >
                             Sign up
