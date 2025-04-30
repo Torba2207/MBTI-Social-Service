@@ -97,11 +97,11 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             fetchTagCategories();
             fetchTags();
         },[])
-        /*
+        
         useEffect(()=>{
             console.log(usersTags)
         }, [usersTags])
-        */
+        
         //console.log(tagCategories)
         //console.log(tags)
         useEffect(()=>{
