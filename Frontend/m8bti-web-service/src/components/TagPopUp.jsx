@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
+import { Button } from "./Button";
+import axios from "axios";
 
 export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userTags,
     ...props}){
-        const [tags, setTags] = useState(userTags || []);
+        const [tags, setTags] = useState([]);
+        const [usersTags, setUsersTags] = useState(userTags || []);
         const [tagCategories, setTagCategories] = useState([]);
         const [seletedCategory, setSelectedCategory] = useState("")
         const [selectedTag, setSelectedTag] = useState(null);
@@ -14,7 +17,7 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
 
         const handleCatDropdownClick = () => {
             setCatDropdownState(!catDropdownState);
-          };
+        };
         const handleSetCatDropdownValue = (value) => {
             setCatDropdownValue(value);
             setSelectedCategory(value);
@@ -30,6 +33,16 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             setTagDropdownState(!tagDropdownState);
             console.log(tagDropdownValue)
         };
+
+        const addTag=()=>{
+            if(selectedTag===null||selectedTag===undefined||seletedCategory==="")
+                return;
+            setUsersTags(usersTags.concat(selectedTag))
+            setTagDropdownValue("");
+            setSelectedTag(null);
+            setCatDropdownValue("");
+            //console.log(usersTags)
+        }
 
 
         const fetchTagCategories=async()=>{
@@ -61,17 +74,51 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             }
         }
 
+        const handleTagsSave=async()=>{
+            try{
+                console.log(usersTags)
+                const response = await axios.put("http://localhost:8080/api/user/me", {
+                    tags: usersTags
+                },
+                {
+                    withCredentials: true,
+                });
+                console.log("Tags updated:", response.data);
+                if (!response.ok) throw new Error("Failed to save tags");
+                const data = await response.json();
+                console.log(data)
+            }
+            catch{
+                console.log("Error saving tags")
+            }
+        }
+
         useEffect(()=>{
             fetchTagCategories();
             fetchTags();
         },[])
+        /*
+        useEffect(()=>{
+            console.log(usersTags)
+        }, [usersTags])
+        */
         //console.log(tagCategories)
         //console.log(tags)
-        
+        useEffect(()=>{
+            if(userTags!==null&&userTags!==undefined){
+                setUsersTags(userTags)
+                setTagDropdownValue("");
+                setSelectedTag(null);
+                setCatDropdownValue("");
+                setSelectedCategory("");
+            }
+        }, [userTags])
+        console.log(userTags||"No tags")
 
         return(
             <div>
-                <div>{/* Categories Dropdown */}
+                {/* Categories Dropdown */}
+                <div>
                     <button onClick={handleCatDropdownClick}>
                         {catDropdownValue === ""||catDropdownState ? "Categories" : catDropdownValue}
                     </button>
@@ -89,7 +136,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                         ))}
                     </div>
                 </div>
-                <div>{/* Tags Dropdown */}
+                {/* Tags Dropdown */}
+                <div>
                     <button onClick={handleTagDropdownClick}>
                         {tagDropdownValue === ""||tagDropdownState ? "Tags" : tagDropdownValue.name}
                     </button>
@@ -99,7 +147,7 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                         }`}
                     >
                         {tags.map((tag) =>(
-                            tag.category === seletedCategory &&(
+                            tag.category === seletedCategory && !userTags.includes(tag) &&(
                             <div key={tag.id}>
                                 <button onClick={() => handleSetTagDropdownValue(tag)}>
                                     {tag.name}
@@ -108,6 +156,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                         ))}
                     </div>
                 </div>
+                <Button color={mbti} onClick={addTag}> Add Tag</Button>
+                <Button color={mbti} onClick={handleTagsSave}> Save Tags</Button>
             </div>
         )
     }
