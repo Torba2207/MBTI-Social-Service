@@ -33,7 +33,7 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
         setAboutText(userAbout || "");
         console.log(userAbout, aboutText)
     }, [userAbout]);
-    console.log(userTags||"No tags")
+    
     //console.log(width, height);
     return(
         <div  className={`w-f h-f`}>
