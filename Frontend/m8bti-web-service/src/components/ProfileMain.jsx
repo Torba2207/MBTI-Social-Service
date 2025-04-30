@@ -4,11 +4,13 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { Button } from "./Button";
 import { useState, useEffect, use } from "react";
 import axios from "axios";
-export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout,
+import TagPopUp from "./TagPopUp";
+export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,
     ...props}){
     const { width, height } = useScreenSize();
     const [aboutText, setAboutText] = useState(userAbout || "");
     const [oldAboutText, setOldAboutText] = useState(aboutText || "");
+    
     //console.log(aboutText)
     const handleSave = async () => {
         try {
@@ -31,6 +33,7 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
         setAboutText(userAbout || "");
         console.log(userAbout, aboutText)
     }, [userAbout]);
+    console.log(userTags||"No tags")
     //console.log(width, height);
     return(
         <div  className={`w-f h-f`}>
@@ -70,6 +73,10 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                 <div className={currentUser!==nickname||aboutText===oldAboutText?"hidden":""}> 
                     <Button color={mbti} onClick={handleSave}> Save</Button>
                 </div>
+            </div>
+            <div>
+                <TagPopUp primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} 
+                    mbti={mbti} nickname={nickname} currentUser={currentUser} userTags={userTags}/>
             </div>
         </div>
     );
