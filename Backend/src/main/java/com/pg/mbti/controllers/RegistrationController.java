@@ -2,7 +2,6 @@ package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.auth.RegistrationRequestDto;
 import com.pg.mbti.dto.auth.RegistrationResponseDto;
-import com.pg.mbti.entity.User;
 import com.pg.mbti.mappers.RegistrationMapper;
 import com.pg.mbti.services.RegistrationService;
 import io.swagger.v3.oas.annotations.Operation;

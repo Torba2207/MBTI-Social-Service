@@ -3,7 +3,6 @@ package com.pg.mbti;
 import com.pg.mbti.controllers.RegistrationController;
 import com.pg.mbti.dto.auth.RegistrationRequestDto;
 import com.pg.mbti.dto.auth.RegistrationResponseDto;
-import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
