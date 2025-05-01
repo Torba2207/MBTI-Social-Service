@@ -1,16 +1,21 @@
 package com.pg.mbti.services;
 
 import com.pg.mbti.components.MbtiCompatibilityCalculator;
+import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.dto.UserSearchDto;
 import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.MBTIType;
+import com.pg.mbti.mappers.UserMapper;
 import com.pg.mbti.repositories.TagsRepository;
 import com.pg.mbti.repositories.UsersRepository;
 import lombok.AllArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.core.io.Resource;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -23,6 +28,7 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final TagsRepository tagsRepository;
     private final MbtiCompatibilityCalculator compatibilityCalculator;
+    private final PhotoService photoService;
 
     public List<User> getUsers() {
         return usersRepository.findAll();
@@ -31,10 +37,6 @@ public class UsersService {
     public User getUserByNickname(final String username) {
         return usersRepository.findByNickname(username)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
-    }
-
-    public void updateUser(User user) {
-        usersRepository.save(user);
     }
 
     public void updateUserProfile(String name, UserUpdateDto dto) {
@@ -86,5 +88,27 @@ public class UsersService {
         }
 
         return users;
+    }
+
+    public String uploadProfilePhoto(String username, MultipartFile file) {
+        String fileName = photoService.uploadPhoto(file);
+        User user = getUserByNickname(username);
+        user.setProfilePicture(fileName);
+        usersRepository.save(user);
+        return fileName;
+    }
+
+    public UserProfileDto getUserProfileByNickname(String name) {
+        User user = getUserByNickname(name);
+        return UserMapper.toUserProfileDto(user);
+    }
+
+    public Resource getProfilePhoto(String name) {
+        User user = getUserByNickname(name);
+        String fileName = user.getProfilePicture();
+        if (StringUtils.isBlank(fileName)) {
+            throw new IllegalArgumentException("No profile photo found for user");
+        }
+        return photoService.getPhoto(fileName);
     }
 }

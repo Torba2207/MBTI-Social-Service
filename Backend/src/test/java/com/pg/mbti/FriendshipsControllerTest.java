@@ -2,7 +2,6 @@ package com.pg.mbti;
 
 import com.pg.mbti.controllers.FriendshipsController;
 import com.pg.mbti.dto.FriendshipDto;
-import com.pg.mbti.entity.Friendship;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
@@ -10,7 +9,6 @@ import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.exceptions.FriendshipAlreadyExistsException;
 import com.pg.mbti.exceptions.FriendshipNotFoundException;
-import com.pg.mbti.mappers.FriendshipsMapper;
 import com.pg.mbti.services.FriendshipsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +26,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -38,15 +35,11 @@ class FriendshipsControllerTest {
     private FriendshipsService friendshipsService;
 
     @Mock
-    private FriendshipsMapper friendshipsMapper;
-
-    @Mock
     private Authentication authentication;
 
     @InjectMocks
     private FriendshipsController friendshipsController;
 
-    private Friendship friendship;
     private FriendshipDto friendshipDto;
 
     @BeforeEach
@@ -76,7 +69,6 @@ class FriendshipsControllerTest {
                 .pronouns(Pronouns.HE_HIM)
                 .role(Role.VERIFIED)
                 .build();
-        friendship = new Friendship(user1, user2);
         friendshipDto = new FriendshipDto(user1.getId(), user2.getId(), false, Date.valueOf("2000-01-01"));
 
         lenient().when(authentication.getName()).thenReturn("user1");
@@ -84,10 +76,9 @@ class FriendshipsControllerTest {
 
     @Test
     void getAllFriendshipsReturnsAllFriendshipsFromService() {
-        List<Friendship> friendships = Collections.singletonList(friendship);
+        List<FriendshipDto> friendships = Collections.singletonList(friendshipDto);
 
         when(friendshipsService.getAllFriendships()).thenReturn(friendships);
-        when(friendshipsMapper.toFriendshipDto(any(Friendship.class))).thenReturn(friendshipDto);
 
         List<FriendshipDto> result = friendshipsController.getFriendships();
 
@@ -98,10 +89,9 @@ class FriendshipsControllerTest {
 
     @Test
     void getPendingFriendshipsByNicknameReturnsPendingFriendships() {
-        List<Friendship> pendingFriendships = Collections.singletonList(friendship);
+        List<FriendshipDto> pendingFriendships = Collections.singletonList(friendshipDto);
 
         when(friendshipsService.getMyPendingFriendships("user1")).thenReturn(pendingFriendships);
-        when(friendshipsMapper.toFriendshipDto(any(Friendship.class))).thenReturn(friendshipDto);
 
         ResponseEntity<List<FriendshipDto>> response = friendshipsController.getPendingFriendshipsByNickname(authentication);
 
@@ -113,10 +103,9 @@ class FriendshipsControllerTest {
 
     @Test
     void getMyFriendshipsReturnsAcceptedFriendships() {
-        List<Friendship> acceptedFriendships = Collections.singletonList(friendship);
+        List<FriendshipDto> acceptedFriendships = Collections.singletonList(friendshipDto);
 
         when(friendshipsService.getFriendshipsByNickname("user1")).thenReturn(acceptedFriendships);
-        when(friendshipsMapper.toFriendshipDto(any(Friendship.class))).thenReturn(friendshipDto);
 
         ResponseEntity<List<FriendshipDto>> response = friendshipsController.getMyFriendships(authentication);
 

@@ -2,8 +2,6 @@ package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.dto.UserUpdateDto;
-import com.pg.mbti.mappers.UserMapper;
-import com.pg.mbti.services.PhotoService;
 import com.pg.mbti.services.UsersService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -26,8 +24,6 @@ import org.springframework.web.multipart.MultipartFile;
 public class UserProfileController {
 
     private final UsersService usersService;
-    private final UserMapper userMapper;
-    private PhotoService photoService;
 
     @GetMapping
     @Operation(summary = "Get current user profile",
@@ -43,8 +39,7 @@ public class UserProfileController {
     public ResponseEntity<UserProfileDto> getUserProfile(
             @Parameter(description = "Authentication information of the current user")
             final Authentication authentication) {
-        final var user = usersService.getUserByNickname(authentication.getName());
-        return ResponseEntity.ok(userMapper.toUserProfileDto(user));
+        return ResponseEntity.ok(usersService.getUserProfileByNickname(authentication.getName()));
     }
 
     @PostMapping("photo/upload")
@@ -62,10 +57,7 @@ public class UserProfileController {
             Authentication authentication,
             @Parameter(description = "Image file to upload (max 10MB)", required = true)
             @RequestParam("image") MultipartFile file) {
-        String fileName = photoService.uploadPhoto(file);
-        final var user = usersService.getUserByNickname(authentication.getName());
-        user.setProfilePicture(fileName);
-        usersService.updateUser(user);
+        String fileName = usersService.uploadProfilePhoto(authentication.getName(), file);
         return ResponseEntity.ok("File uploaded successfully: " + fileName);
     }
 
@@ -82,9 +74,7 @@ public class UserProfileController {
     public ResponseEntity<Resource> getProfilePhoto(
             @Parameter(description = "Authentication information of the current user")
             Authentication authentication) {
-        final var user = usersService.getUserByNickname(authentication.getName());
-        String fileName = user.getProfilePicture();
-        return photoService.getProfilePhotoResponse(fileName);
+        return ResponseEntity.ok(usersService.getProfilePhoto(authentication.getName()));
     }
 
     @PutMapping

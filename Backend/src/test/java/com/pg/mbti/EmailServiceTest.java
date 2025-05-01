@@ -57,7 +57,7 @@ class EmailServiceTest {
 
         assertThatThrownBy(() -> emailService.sendMail(emailContext))
                 .isInstanceOf(EmailSendingFailedException.class)
-                .hasMessageContaining("Failed to send email: Connection timeout");
+                .hasMessageContaining(String.format("Failed to send email to %s", emailContext.recipient()));
     }
 
     @Test
