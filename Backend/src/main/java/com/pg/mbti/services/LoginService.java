@@ -9,7 +9,7 @@ import com.pg.mbti.exceptions.InvalidEmailException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.repositories.UsersRepository;
-import com.pg.mbti.services.email.EmailValidator;
+import com.pg.mbti.util.EmailValidator;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

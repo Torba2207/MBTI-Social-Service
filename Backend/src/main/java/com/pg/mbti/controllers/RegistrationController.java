@@ -40,9 +40,8 @@ public class RegistrationController {
     public ResponseEntity<RegistrationResponseDto> registerUser(
             @Parameter(description = "Registration data for new user", required = true)
             @Valid @RequestBody final RegistrationRequestDto registrationDTO) {
-        User user = registrationMapper.toEntity(registrationDTO);
-        registrationService.registerUser(user);
-        return ResponseEntity.ok(registrationMapper.toRegistrationResponseDto(user));
+        registrationService.registerUser(registrationDTO);
+        return ResponseEntity.ok(registrationMapper.toRegistrationResponseDto(registrationDTO));
     }
 
     @GetMapping("/confirm-email")
