@@ -2,7 +2,7 @@ package com.pg.mbti;
 
 import com.pg.mbti.dto.EmailContextDto;
 import com.pg.mbti.exceptions.EmailSendingFailedException;
-import com.pg.mbti.services.email.EmailService;
+import com.pg.mbti.services.EmailService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
@@ -57,7 +57,7 @@ class EmailServiceTest {
 
         assertThatThrownBy(() -> emailService.sendMail(emailContext))
                 .isInstanceOf(EmailSendingFailedException.class)
-                .hasMessageContaining("Failed to send email: Connection timeout");
+                .hasMessageContaining(String.format("Failed to send email to %s", emailContext.recipient()));
     }
 
     @Test

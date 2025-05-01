@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -65,6 +66,6 @@ public class QuestionsController {
     public ResponseEntity<Question> createQuestion(
             @Parameter(description = "Details of the question to be created", required = true)
             @RequestBody Question question) {
-        return ResponseEntity.status(201).body(questionsService.createQuestion(question));
+        return ResponseEntity.status(HttpStatus.CREATED.value()).body(questionsService.createQuestion(question));
     }
 }

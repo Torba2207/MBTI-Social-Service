@@ -1,4 +1,4 @@
-package com.pg.mbti.services.email;
+package com.pg.mbti.services;
 
 import com.pg.mbti.dto.EmailContextDto;
 import com.pg.mbti.exceptions.EmailSendingFailedException;
@@ -23,7 +23,7 @@ public class EmailService {
 
             emailSender.send(message);
         } catch (Exception e) {
-            throw new EmailSendingFailedException("Failed to send email: " + e.getMessage());
+            throw new EmailSendingFailedException(String.format("Failed to send email to %s", emailContext.recipient()));
         }
     }
 }

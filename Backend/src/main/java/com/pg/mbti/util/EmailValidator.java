@@ -1,4 +1,4 @@
-package com.pg.mbti.services.email;
+package com.pg.mbti.util;
 
 import com.pg.mbti.exceptions.InvalidEmailException;
 

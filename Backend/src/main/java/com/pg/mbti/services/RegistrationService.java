@@ -1,6 +1,7 @@
 package com.pg.mbti.services;
 
 import com.pg.mbti.dto.EmailContextDto;
+import com.pg.mbti.dto.auth.RegistrationRequestDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.Role;
 import com.pg.mbti.exceptions.EmailSendingFailedException;
@@ -8,13 +9,13 @@ import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.exceptions.UserAlreadyExistsException;
 import com.pg.mbti.repositories.UsersRepository;
-import com.pg.mbti.services.email.EmailService;
+import com.pg.mbti.util.EmailValidator;
+import com.pg.mbti.util.RegistrationValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import com.pg.mbti.services.email.EmailValidator;
 
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -31,39 +32,45 @@ public class RegistrationService {
     @Value("${app.email.confirm-email-url}")
     private String confirmEmailUrl;
 
-    @Value("${image.default.path}")
-    private String defaultImagePath;
-
     @Transactional
-    public void registerUser(User request) {
-        EmailValidator.validateEmailFormat(request.getEmail());
+    public void registerUser(RegistrationRequestDto registrationRequestDto) {
+        RegistrationValidator.validate(registrationRequestDto);
+        EmailValidator.validateEmailFormat(registrationRequestDto.email());
+        checkUserExists(registrationRequestDto);
 
-        if (userRepository.existsByNickname(request.getNickname()) ||
-                userRepository.existsByEmail(request.getEmail())) {
+        User user = createUser(registrationRequestDto);
+        userRepository.save(user);
+        sendConfirmationEmail(user);
+    }
+
+    private void checkUserExists(RegistrationRequestDto dto) {
+        if (userRepository.existsByNickname(dto.nickname()) ||
+                userRepository.existsByEmail(dto.email())) {
             throw new UserAlreadyExistsException("Nickname or Email already exists");
         }
+    }
 
-        User user = User.builder()
-                .nickname(request.getNickname())
-                .email(request.getEmail())
-                .password(passwordEncoder.encode(request.getPassword()))
+    private User createUser(RegistrationRequestDto dto) {
+        return User.builder()
+                .nickname(dto.nickname())
+                .email(dto.email())
+                .password(passwordEncoder.encode(dto.password()))
                 .role(Role.ANONYMOUS)
-                .birthday(request.getBirthday())
-                .name(request.getName())
-                .surname(request.getSurname())
-                .latitude(request.getLatitude())
-                .longitude(request.getLongitude())
-                .profilePicture(defaultImagePath)
-                .mbtiType(request.getMbtiType())
-                .gender(request.getGender())
-                .pronouns(request.getPronouns())
+                .birthday(dto.birthday())
+                .name(dto.name())
+                .surname(dto.surname())
+                .latitude(dto.latitude())
+                .longitude(dto.longitude())
+                .profilePicture("default.jpg")
+                .mbtiType(dto.mbtiType())
+                .gender(dto.gender())
+                .pronouns(dto.pronouns())
                 .build();
+    }
 
-        userRepository.save(user);
-
+    private void sendConfirmationEmail(User user) {
         try {
-            int tokenExpirationTime = 1;
-            String token = secureTokenService.generateToken(user.getId().toString(), tokenExpirationTime, TimeUnit.DAYS);
+            String token = secureTokenService.generateToken(user.getId().toString(), 1, TimeUnit.DAYS);
             String confirmationLink = confirmEmailUrl + token;
             EmailContextDto emailContext = EmailContextDto.builder()
                     .recipient(user.getEmail())
@@ -77,10 +84,8 @@ public class RegistrationService {
     }
 
     public void confirmEmail(String token) {
-        String userId = secureTokenService.getValue(token);
-        if (userId == null) {
-            throw new InvalidTokenException("Invalid or expired token");
-        }
+        String userId = secureTokenService.getValue(token)
+                .orElseThrow(() -> new InvalidTokenException("Invalid or expired token"));
 
         User user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));

@@ -38,8 +38,7 @@ public class PhotoController {
     public ResponseEntity<Resource> getProfilePhoto(
             @Parameter(description = "Nickname of the user whose profile photo is requested", required = true)
             @RequestParam String nickname) {
-        final var user = usersService.getUserByNickname(nickname);
-        String fileName = user.getProfilePicture();
+        String fileName = usersService.getUserByNickname(nickname).getProfilePicture();
         return photoService.getProfilePhotoResponse(fileName);
     }
 

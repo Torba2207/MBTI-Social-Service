@@ -72,8 +72,7 @@ public class PasswordController {
             @RequestBody UpdatePasswordDto updatePasswordRequest,
             @Parameter(description = "Authentication information of the current user")
             Authentication authentication) {
-        String nickname = authentication.getName();
-        passwordService.handleUpdatePassword(nickname, updatePasswordRequest);
+        passwordService.handleUpdatePassword(authentication.getName(), updatePasswordRequest);
         return ResponseEntity.ok("Password updated successfully");
     }
 }
