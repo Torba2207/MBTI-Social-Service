@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -27,7 +28,7 @@ public interface FriendshipsRepository extends JpaRepository<Friendship, UUID> {
             "AND f.senderId.nickname = ?2) " +
             "OR (f.receiverId.nickname = ?2 " +
             "AND f.senderId.nickname = ?1)")
-    Friendship findByFriends(String currentNickname, String newFriendNickname);
+    Optional<Friendship> findByFriends(String currentNickname, String newFriendNickname);
 
     @Query("SELECT CASE WHEN COUNT(f) > 0 THEN true ELSE false END " +
             "FROM Friendship f " +

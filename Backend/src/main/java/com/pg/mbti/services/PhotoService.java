@@ -3,6 +3,7 @@ package com.pg.mbti.services;
 import com.pg.mbti.exceptions.FileNotFoundException;
 import com.pg.mbti.exceptions.FileUploadException;
 import io.minio.*;
+import org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.InputStreamResource;
@@ -13,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.InputStream;
 import java.util.UUID;
 
 @Service
@@ -30,21 +30,15 @@ public class PhotoService {
     public String uploadPhoto(MultipartFile file) {
         try {
             String originalFilename = file.getOriginalFilename();
-            String fileName;
-            if (originalFilename == null) {
-                throw new FileUploadException("File name is null");
-            } else if (originalFilename.isEmpty()) {
-                throw new FileUploadException("File name is empty");
-            } else if (originalFilename.equals(defaultImagePath)) {
-                fileName = originalFilename;
-            } else {
-                fileName = UUID.randomUUID() + "_" + originalFilename;
+            if (StringUtils.isBlank(originalFilename)) {
+                throw new FileUploadException("Invalid file name");
             }
 
-            boolean found = minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build());
-            if (!found) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
-            }
+            String fileName = originalFilename.equals(defaultImagePath)
+                    ? originalFilename
+                    : UUID.randomUUID() + "_" + originalFilename;
+
+            ensureBucketExists();
 
             minioClient.putObject(
                     PutObjectArgs.builder()
@@ -56,39 +50,42 @@ public class PhotoService {
             );
             return fileName;
         } catch (Exception e) {
-            throw new FileUploadException("Error uploading file: " + e.getMessage());
+            throw new FileUploadException(String.format("Failed to upload file: %s", file.getOriginalFilename()));
         }
     }
 
     public Resource getPhoto(String fileName) {
         try {
-            InputStream stream = minioClient.getObject(
+            return new InputStreamResource(minioClient.getObject(
                     GetObjectArgs.builder()
                             .bucket(bucketName)
                             .object(fileName)
                             .build()
-            );
-            return new InputStreamResource(stream);
+            ));
         } catch (Exception e) {
-            throw new FileNotFoundException("Error retrieving file: " + e.getMessage());
+            throw new FileNotFoundException(String.format("Failed to retrieve file: %s", fileName));
         }
     }
 
     public ResponseEntity<Resource> getProfilePhotoResponse(String fileName) {
+        if (StringUtils.isEmpty(fileName)) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Resource photoResource = getPhoto(fileName);
+        return ResponseEntity.ok()
+                .contentType(MediaType.IMAGE_JPEG)
+                .header(HttpHeaders.CONTENT_DISPOSITION, String.format("attachment; filename=\"%s\"", fileName))
+                .body(photoResource);
+    }
+
+    private void ensureBucketExists() {
         try {
-            if (fileName == null) {
-                return ResponseEntity.notFound().build();
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
             }
-
-            return ResponseEntity.ok()
-                    .contentType(MediaType.IMAGE_JPEG)
-                    .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileName + "\"")
-                    .body(getPhoto(fileName));
-
-        } catch (FileNotFoundException e) {
-            throw e;
         } catch (Exception e) {
-            throw new FileUploadException("Error retrieving profile photo: " + e.getMessage());
+            throw new FileUploadException(String.format("Error checking or creating bucket: %s", e.getMessage()));
         }
     }
 }

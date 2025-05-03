@@ -8,7 +8,7 @@ import com.pg.mbti.exceptions.InvalidPasswordException;
 import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.repositories.UsersRepository;
-import com.pg.mbti.services.email.EmailService;
+import com.pg.mbti.util.DtoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,41 +27,39 @@ public class PasswordService {
     @Value("${app.email.reset-password-url}")
     private String resetPasswordUrl;
 
-    public void handleForgotPassword(String email) {
-        if (!userRepository.existsByEmail(email)) {
-            throw new ResourceNotFoundException("User not found");
+    public void handleResetPassword(ResetPasswordDto resetPasswordDto) {
+        DtoValidator.validate(resetPasswordDto);
+
+        String email = secureTokenService.getValue(resetPasswordDto.token())
+                .orElseThrow(() -> new InvalidTokenException("Invalid token"));
+
+        userRepository.updatePasswordByEmail(email, passwordEncoder.encode(resetPasswordDto.newPassword()));
+        secureTokenService.deleteValue(resetPasswordDto.token());
+    }
+
+    public void handleUpdatePassword(String nickname, UpdatePasswordDto updatePasswordDto) {
+        DtoValidator.validate(updatePasswordDto);
+
+        var user = userRepository.findByNickname(nickname)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        if (!passwordEncoder.matches(updatePasswordDto.oldPassword(), user.getPassword())) {
+            throw new InvalidPasswordException("Old password is incorrect");
         }
 
+        userRepository.updatePasswordByEmail(user.getEmail(),
+                passwordEncoder.encode(updatePasswordDto.newPassword()));
+    }
+
+    public void handleForgotPassword(String email) {
         try {
-            int tokenExpirationTime = 1;
-            String token = secureTokenService.generateToken(email, tokenExpirationTime, TimeUnit.DAYS);
+            String token = secureTokenService.generateToken(email, 1, TimeUnit.DAYS);
             String resetLink = resetPasswordUrl + token;
             EmailContextDto emailContext = new EmailContextDto(email,
                     "Reset Password", "Click the link to reset your password: " + resetLink);
             emailService.sendMail(emailContext);
         } catch (Exception e) {
             throw new EmailSendingFailedException("Failed to send reset password email: " + e.getMessage());
-        }
-    }
-
-    public void handleResetPassword(ResetPasswordDto resetPasswordRequest) {
-        String email = secureTokenService.getValue(resetPasswordRequest.token());
-        if (email != null) {
-            userRepository.updatePasswordByEmail(email, passwordEncoder.encode(resetPasswordRequest.newPassword()));
-            secureTokenService.deleteValue(resetPasswordRequest.token());
-        } else {
-            throw new InvalidTokenException("Invalid or expired token");
-        }
-    }
-
-    public void handleUpdatePassword(String nickname, UpdatePasswordDto updatePasswordRequest) {
-        var user = userRepository.findByNickname(nickname)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        if (passwordEncoder.matches(updatePasswordRequest.oldPassword(), user.getPassword())) {
-            userRepository.updatePasswordByEmail(user.getEmail(), passwordEncoder.encode(updatePasswordRequest.newPassword()));
-        } else {
-            throw new InvalidPasswordException("Old password is incorrect");
         }
     }
 }

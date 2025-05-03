@@ -22,6 +22,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.IntStream;
+import java.util.stream.StreamSupport;
 
 @Component
 @RequiredArgsConstructor
@@ -47,28 +50,20 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        try {
-            log.info("Loading questions from JSON file");
-            ClassPathResource resource = new ClassPathResource("data/questions.json");
-            try (InputStream inputStream = resource.getInputStream()) {
-                JsonNode rootNode = objectMapper.readTree(inputStream);
-                List<String> questionTexts = objectMapper.convertValue(
-                        rootNode.get("questions"),
-                        new TypeReference<>() {}
-                );
+        loadJsonData("data/questions.json", "questions", rootNode ->
+                Optional.ofNullable(rootNode.get("questions"))
+                        .ifPresent(questionsNode -> {
+                            List<String> questionTexts = objectMapper.convertValue(
+                                    questionsNode, new TypeReference<>() {});
 
-                log.info("Found {} questions in JSON file", questionTexts.size());
-                questionTexts.forEach(text -> {
-                    Question question = Question.builder()
-                            .content(text)
-                            .build();
-                    questionsService.createQuestion(question);
-                });
-                log.info("Successfully initialized questions from JSON file");
-            }
-        } catch (IOException e) {
-            log.error("Error loading questions from JSON file", e);
-        }
+                            log.info("Found {} questions in JSON file", questionTexts.size());
+                            questionTexts.stream()
+                                    .map(text -> Question.builder().content(text).build())
+                                    .forEach(questionsService::createQuestion);
+
+                            log.info("Successfully initialized questions from JSON file");
+                        })
+        );
     }
 
     private void initializeTags() {
@@ -77,29 +72,23 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        try {
-            log.info("Loading tags from JSON file");
-            ClassPathResource resource = new ClassPathResource("data/tags.json");
-            try (InputStream inputStream = resource.getInputStream()) {
-                JsonNode rootNode = objectMapper.readTree(inputStream);
-                List<JsonNode> tagNodes = objectMapper.convertValue(
-                        rootNode.get("tags"),
-                        new TypeReference<>() {}
-                );
+        loadJsonData("data/tags.json", "tags", rootNode ->
+                Optional.ofNullable(rootNode.get("tags"))
+                        .ifPresent(tagsNode -> {
+                            List<JsonNode> tagNodes = objectMapper.convertValue(
+                                    tagsNode, new TypeReference<>() {});
 
-                log.info("Found {} tags in JSON file", tagNodes.size());
-                tagNodes.forEach(tagNode -> {
-                    Tag tag = Tag.builder()
-                            .name(tagNode.get("name").asText())
-                            .category(tagNode.get("category").asText())
-                            .build();
-                    tagsService.createTag(tag);
-                });
-                log.info("Successfully initialized tags from JSON file");
-            }
-        } catch (IOException e) {
-            log.error("Error loading tags from JSON file", e);
-        }
+                            log.info("Found {} tags in JSON file", tagNodes.size());
+                            tagNodes.stream()
+                                    .map(node -> Tag.builder()
+                                            .name(node.get("name").asText())
+                                            .category(node.get("category").asText())
+                                            .build())
+                                    .forEach(tagsService::createTag);
+
+                            log.info("Successfully initialized tags from JSON file");
+                        })
+        );
     }
 
     private void initializeAnswers() {
@@ -108,79 +97,94 @@ public class DataInitializer implements CommandLineRunner {
             return;
         }
 
-        try {
-            log.info("Loading MBTI answers from JSON file");
-            ClassPathResource resource = new ClassPathResource("data/answers.json");
-            try (InputStream inputStream = resource.getInputStream()) {
-                JsonNode rootNode = objectMapper.readTree(inputStream);
-                JsonNode mbtiAnswers = rootNode.get("answers");
-
-                if (mbtiAnswers == null || mbtiAnswers.isEmpty()) {
-                    log.warn("No MBTI answers found in JSON file");
-                    return;
-                }
-
-                List<Question> allQuestions = questionsService.getAllQuestions();
-                if (allQuestions.isEmpty()) {
-                    log.error("Cannot initialize answers: no questions found in database");
-                    return;
-                }
-
-                mbtiAnswers.fieldNames().forEachRemaining(mbtiTypeStr -> {
-                    try {
-                        MBTIType mbtiType = MBTIType.valueOf(mbtiTypeStr);
-                        JsonNode answerSetsNode = mbtiAnswers.get(mbtiTypeStr);
-
-                        if (answerSetsNode.isArray()) {
-                            for (JsonNode answerSetNode : answerSetsNode) {
-                                List<String> answerSet = objectMapper.convertValue(
-                                        answerSetNode,
-                                        new TypeReference<>() {}
-                                );
-
-                                List<UserAnswerDto> userAnswers = new ArrayList<>();
-                                for (int i = 0; i < Math.min(allQuestions.size(), answerSet.size()); i++) {
-                                    boolean isYes = "yes".equalsIgnoreCase(answerSet.get(i));
-                                    userAnswers.add(new UserAnswerDto(allQuestions.get(i).getId(), isYes));
-                                }
-
-                                answerService.processUserAnswers(userAnswers, mbtiType);
-                                log.info("Created sample {} answer set", mbtiType);
-                            }
-                        }
-                    } catch (Exception e) {
-                        log.error("Error processing answers for MBTI type {}: {}", mbtiTypeStr, e.getMessage());
-                    }
-                });
-
-                log.info("Successfully initialized MBTI answers from JSON file");
-            }
-        } catch (IOException e) {
-            log.error("Error loading MBTI answers from JSON file", e);
+        List<Question> allQuestions = questionsService.getAllQuestions();
+        if (allQuestions.isEmpty()) {
+            log.error("Cannot initialize answers: no questions found in database");
+            return;
         }
+
+        loadJsonData("data/answers.json", "answers", rootNode ->
+                Optional.ofNullable(rootNode.get("answers"))
+                        .ifPresent(mbtiAnswers -> {
+                            final List<Runnable> tasks = new ArrayList<>();
+
+                            mbtiAnswers.fieldNames().forEachRemaining(mbtiTypeStr -> {
+                                try {
+                                    MBTIType mbtiType = MBTIType.valueOf(mbtiTypeStr);
+                                    JsonNode answerSetsNode = mbtiAnswers.get(mbtiTypeStr);
+
+                                    if (answerSetsNode.isArray()) {
+                                        StreamSupport.stream(answerSetsNode.spliterator(), false)
+                                                .forEach(answerSetNode -> {
+                                                    List<String> answerSet = objectMapper.convertValue(
+                                                            answerSetNode, new TypeReference<>() {});
+
+                                                    List<UserAnswerDto> userAnswers = IntStream.range(0, Math.min(allQuestions.size(), answerSet.size()))
+                                                            .mapToObj(i -> new UserAnswerDto(
+                                                                    allQuestions.get(i).getId(),
+                                                                    "yes".equalsIgnoreCase(answerSet.get(i))))
+                                                            .toList();
+
+                                                    tasks.add(() -> {
+                                                        answerService.processUserAnswers(userAnswers, mbtiType);
+                                                        log.info("Created sample {} answer set", mbtiType);
+                                                    });
+                                                });
+                                    }
+                                } catch (Exception e) {
+                                    log.error("Error processing answers for MBTI type {}: {}", mbtiTypeStr, e.getMessage());
+                                }
+                            });
+
+                            tasks.forEach(Runnable::run);
+                            log.info("Successfully initialized MBTI answers from JSON file");
+                        })
+        );
     }
 
     private void initializeDefaultPhoto() {
+        log.info("Initializing default profile picture");
         try {
-            log.info("Initializing default profile picture");
             ClassPathResource resource = new ClassPathResource("static/images/default.png");
-            if (resource.exists()) {
-                try (InputStream inputStream = resource.getInputStream()) {
-                    MultipartFile multipartFile = new MultipartFileImpl(
-                            inputStream,
-                            resource.contentLength(),
-                            "default.png",
-                            "image/png"
+            Optional.of(resource)
+                    .filter(ClassPathResource::exists)
+                    .ifPresentOrElse(
+                            res -> {
+                                try (InputStream inputStream = res.getInputStream()) {
+                                    MultipartFile multipartFile = new MultipartFileImpl(
+                                            inputStream,
+                                            res.contentLength(),
+                                            "default.png",
+                                            "image/png"
+                                    );
+                                    photoService.uploadPhoto(multipartFile);
+                                    log.info("Default profile picture uploaded successfully");
+                                } catch (Exception e) {
+                                    log.error("Error reading default profile picture: {}", e.getMessage());
+                                }
+                            },
+                            () -> log.error("Default profile picture not found in resources")
                     );
-                    photoService.uploadPhoto(multipartFile);
-                    log.info("Default profile picture uploaded successfully");
-                }
-            } else {
-                log.error("Default profile picture not found in resources");
-            }
         } catch (Exception e) {
             log.error("Error uploading default profile picture: {}", e.getMessage());
         }
     }
 
+    private void loadJsonData(String resourcePath, String resourceType, JsonProcessor processor) {
+        try {
+            log.info("Loading {} from JSON file", resourceType);
+            ClassPathResource resource = new ClassPathResource(resourcePath);
+            try (InputStream inputStream = resource.getInputStream()) {
+                JsonNode rootNode = objectMapper.readTree(inputStream);
+                processor.process(rootNode);
+            }
+        } catch (IOException e) {
+            log.error("Error loading {} from JSON file", resourceType, e);
+        }
+    }
+
+    @FunctionalInterface
+    private interface JsonProcessor {
+        void process(JsonNode rootNode) throws IOException;
+    }
 }

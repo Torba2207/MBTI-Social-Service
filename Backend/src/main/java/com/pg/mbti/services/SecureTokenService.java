@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -18,8 +19,8 @@ public class SecureTokenService {
         return token;
     }
 
-    public String getValue(String token) {
-        return redisTemplate.opsForValue().get(token);
+    public Optional<String> getValue(String token) {
+        return Optional.ofNullable(redisTemplate.opsForValue().get(token));
     }
 
     public void deleteValue(String token) {

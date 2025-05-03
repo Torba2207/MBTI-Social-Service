@@ -1,39 +1,31 @@
 package com.pg.mbti.configurations;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.config.annotation.web.configurers.SessionManagementConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.HeaderWriterLogoutHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
-import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
-
 @Configuration
 @EnableWebSecurity
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class SecurityConfig {
-
     private final AuthenticationProvider authenticationProvider;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-
     @Bean
-    public SecurityFilterChain securityFilterChain(
-            final HttpSecurity http
-    ) throws Exception {
-        SecurityContextRepository securityContextRepository = new HttpSessionSecurityContextRepository();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -47,23 +39,21 @@ public class SecurityConfig {
                         ).permitAll()
                         .anyRequest().authenticated()
                 )
-                .securityContext((context) -> context.securityContextRepository(securityContextRepository))
-                .sessionManagement((session) -> {
-                            session.maximumSessions(1).maxSessionsPreventsLogin(true);
-                            session.sessionFixation(SessionManagementConfigurer.SessionFixationConfigurer::newSession);
-                            session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
-                        }
+                .securityContext(context -> context
+                        .securityContextRepository(new HttpSessionSecurityContextRepository())
                 )
-                .logout((logout) -> {
-                            logout.logoutUrl("/api/auth/logout");
-                            logout.addLogoutHandler(
-                                    new HeaderWriterLogoutHandler(
-                                            new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES)
-                                    )
-                            );
-                            logout.deleteCookies("MY_SESSION_COOKIE");
-                            logout.logoutSuccessHandler(customLogoutSuccessHandler);
-                        }
+                .sessionManagement(session -> {
+                    session.maximumSessions(1).maxSessionsPreventsLogin(true);
+                    session.sessionFixation().newSession();
+                    session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
+                })
+                .logout(logout -> logout
+                        .logoutUrl("/api/auth/logout")
+                        .addLogoutHandler(new HeaderWriterLogoutHandler(
+                                new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES)
+                        ))
+                        .deleteCookies("MY_SESSION_COOKIE")
+                        .logoutSuccessHandler(customLogoutSuccessHandler)
                 )
                 .authenticationProvider(authenticationProvider)
                 .build();
