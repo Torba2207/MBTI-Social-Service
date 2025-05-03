@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import axios from "axios";
 
-export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userTags,
+export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userTags, setIsPopUpOpen, onTagsUpdated,
     ...props}){
         const [tags, setTags] = useState([]);
         const [usersTags, setUsersTags] = useState(userTags || []);
@@ -84,13 +84,21 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                 {
                     withCredentials: true,
                 });
+                console.log(response.status);
                 console.log("Tags updated:", response.data);
-                if (!response.ok) throw new Error("Failed to save tags");
-                const data = await response.json();
-                console.log(data)
+                if (response.status === 200) {
+                    console.log("Tags successfully updated!");
+                    onTagsUpdated(usersTags);
+                    setIsPopUpOpen(false);
+
+                }
+                //if (!response.ok) throw new Error("Failed to save tags");
+                //const data = await response.json();
+                //console.log(data)
             }
-            catch{
-                console.log("Error saving tags")
+            catch(error)
+            {
+                console.log("Error saving tags: ", error);
             }
         }
 
@@ -117,48 +125,63 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
         console.log(userTags||"No tags")
 
         return(
-            <div>
-                {/* Categories Dropdown */}
-                <div>
-                    <button onClick={handleCatDropdownClick}>
-                        {catDropdownValue === ""||catDropdownState ? "Categories" : catDropdownValue}
-                    </button>
-                    <div
-                        className={`${
-                        catDropdownState ? "" : "hidden"
-                        }`}
-                    >
-                        {tagCategories.map((category,id) => (
-                            <div key={id}>
-                                <button onClick={() => handleSetCatDropdownValue(category)}>
-                                    {category}
-                                </button>
-                            </div>
-                        ))}
+            <div className="w-screen h-screen fixed top-0 left-0 z-50 items-center"
+            style={{
+                background: 'rgba(128,128,128,0.7)'
+            }}
+            onClick={(e) => {
+                if (e.target === e.currentTarget) {
+                    setIsPopUpOpen(false);
+                }
+            }}
+            >
+                <div className="w-[50%] h-[50%] mx-auto mt-[10%] rounded-lg border-2 border-gray-300 shadow-lg"
+                        style={{
+                            background: extraColor
+                        }}
+                >
+                    {/* Categories Dropdown */}
+                    <div>
+                        <button onClick={handleCatDropdownClick}>
+                            {catDropdownValue === ""||catDropdownState ? "Categories" : catDropdownValue}
+                        </button>
+                        <div
+                            className={`${
+                            catDropdownState ? "" : "hidden"
+                            }`}
+                        >
+                            {tagCategories.map((category,id) => (
+                                <div key={id}>
+                                    <button onClick={() => handleSetCatDropdownValue(category)}>
+                                        {category}
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
                     </div>
-                </div>
-                {/* Tags Dropdown */}
-                <div>
-                    <button onClick={handleTagDropdownClick}>
-                        {tagDropdownValue === ""||tagDropdownState ? "Tags" : tagDropdownValue.name}
-                    </button>
-                    <div
-                        className={`${
-                        tagDropdownState ? "" : "hidden"
-                        }`}
-                    >
-                        {tags.map((tag) =>(
-                            tag.category === seletedCategory && !userTags.includes(tag) &&(
-                            <div key={tag.id}>
-                                <button onClick={() => handleSetTagDropdownValue(tag)}>
-                                    {tag.name}
-                                </button>
-                            </div>)
-                        ))}
+                    {/* Tags Dropdown */}
+                    <div>
+                        <button onClick={handleTagDropdownClick}>
+                            {tagDropdownValue === ""||tagDropdownState ? "Tags" : tagDropdownValue.name}
+                        </button>
+                        <div
+                            className={`${
+                            tagDropdownState ? "" : "hidden"
+                            }`}
+                        >
+                            {tags.map((tag) =>(
+                                tag.category === seletedCategory && !userTags.some(userTag=>userTag.id===tag.id) &&(
+                                <div key={tag.id}>
+                                    <button onClick={() => handleSetTagDropdownValue(tag)}>
+                                        {tag.name}
+                                    </button>
+                                </div>)
+                            ))}
+                        </div>
                     </div>
+                    <Button color={mbti} onClick={addTag}> Add Tag</Button>
+                    <Button color={mbti} onClick={handleTagsSave}> Save Tags</Button>
                 </div>
-                <Button color={mbti} onClick={addTag}> Add Tag</Button>
-                <Button color={mbti} onClick={handleTagsSave}> Save Tags</Button>
             </div>
         )
     }
