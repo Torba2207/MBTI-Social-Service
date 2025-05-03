@@ -13,6 +13,7 @@ import com.pg.mbti.services.QuestionsService;
 import com.pg.mbti.services.TagsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
@@ -35,6 +36,9 @@ public class DataInitializer implements CommandLineRunner {
     private final AnswerService answerService;
     private final PhotoService photoService;
     private final ObjectMapper objectMapper;
+
+    @Value("${image.default.path}")
+    private String defaultProfilePicture;
 
     @Override
     public void run(String... args) {
@@ -108,66 +112,74 @@ public class DataInitializer implements CommandLineRunner {
                         .ifPresent(mbtiAnswers -> {
                             final List<Runnable> tasks = new ArrayList<>();
 
-                            mbtiAnswers.fieldNames().forEachRemaining(mbtiTypeStr -> {
-                                try {
-                                    MBTIType mbtiType = MBTIType.valueOf(mbtiTypeStr);
-                                    JsonNode answerSetsNode = mbtiAnswers.get(mbtiTypeStr);
-
-                                    if (answerSetsNode.isArray()) {
-                                        StreamSupport.stream(answerSetsNode.spliterator(), false)
-                                                .forEach(answerSetNode -> {
-                                                    List<String> answerSet = objectMapper.convertValue(
-                                                            answerSetNode, new TypeReference<>() {});
-
-                                                    List<UserAnswerDto> userAnswers = IntStream.range(0, Math.min(allQuestions.size(), answerSet.size()))
-                                                            .mapToObj(i -> new UserAnswerDto(
-                                                                    allQuestions.get(i).getId(),
-                                                                    "yes".equalsIgnoreCase(answerSet.get(i))))
-                                                            .toList();
-
-                                                    tasks.add(() -> {
-                                                        answerService.processUserAnswers(userAnswers, mbtiType);
-                                                        log.info("Created sample {} answer set", mbtiType);
-                                                    });
-                                                });
-                                    }
-                                } catch (Exception e) {
-                                    log.error("Error processing answers for MBTI type {}: {}", mbtiTypeStr, e.getMessage());
-                                }
-                            });
-
+                            mbtiAnswers.fieldNames().forEachRemaining(mbtiTypeStr -> uploadAnswers(allQuestions, mbtiAnswers, mbtiTypeStr, tasks));
                             tasks.forEach(Runnable::run);
                             log.info("Successfully initialized MBTI answers from JSON file");
                         })
         );
     }
 
-    private void initializeDefaultPhoto() {
-        log.info("Initializing default profile picture");
+    private void uploadAnswers(List<Question> allQuestions, JsonNode mbtiAnswers, String mbtiTypeStr, List<Runnable> tasks) {
         try {
-            ClassPathResource resource = new ClassPathResource("static/images/default.png");
-            Optional.of(resource)
-                    .filter(ClassPathResource::exists)
-                    .ifPresentOrElse(
-                            res -> {
-                                try (InputStream inputStream = res.getInputStream()) {
-                                    MultipartFile multipartFile = new MultipartFileImpl(
-                                            inputStream,
-                                            res.contentLength(),
-                                            "default.png",
-                                            "image/png"
-                                    );
-                                    photoService.uploadPhoto(multipartFile);
-                                    log.info("Default profile picture uploaded successfully");
-                                } catch (Exception e) {
-                                    log.error("Error reading default profile picture: {}", e.getMessage());
-                                }
-                            },
-                            () -> log.error("Default profile picture not found in resources")
-                    );
+            MBTIType mbtiType = MBTIType.valueOf(mbtiTypeStr);
+            JsonNode answerSetsNode = mbtiAnswers.get(mbtiTypeStr);
+
+            if (!answerSetsNode.isArray()) {
+                log.error("Invalid answer set format for MBTI type {}: expected an array", mbtiTypeStr);
+                return;
+            }
+            StreamSupport.stream(answerSetsNode.spliterator(), false)
+                    .forEach(answerSetNode -> {
+                        List<String> answerSet = objectMapper.convertValue(
+                                answerSetNode, new TypeReference<>() {});
+
+                        List<UserAnswerDto> userAnswers = IntStream.range(0, Math.min(allQuestions.size(), answerSet.size()))
+                                .mapToObj(i -> new UserAnswerDto(
+                                        allQuestions.get(i).getId(),
+                                        "yes".equalsIgnoreCase(answerSet.get(i))))
+                                .toList();
+
+                        tasks.add(() -> {
+                            answerService.processUserAnswers(userAnswers, mbtiType);
+                            log.info("Created sample {} answer set", mbtiType);
+                        });
+                    });
+        } catch (Exception e) {
+            log.error("Error processing answers for MBTI type {}: {}", mbtiTypeStr, e.getMessage());
+        }
+    }
+
+    private void initializeDefaultPhoto() {
+        if (photoService.fileExists(defaultProfilePicture)) {
+            log.info("Default profile picture already exists in storage");
+            return;
+        }
+
+        try {
+            ClassPathResource resource = getDefaultPhotoResource();
+            if (resource.exists()) {
+                MultipartFile multipartFile = createMultipartFile(resource, defaultProfilePicture);
+                photoService.uploadPhoto(multipartFile);
+                log.info("Default profile picture uploaded successfully");
+            } else {
+                log.error("Default profile picture not found in resources");
+            }
         } catch (Exception e) {
             log.error("Error uploading default profile picture: {}", e.getMessage());
         }
+    }
+
+    private ClassPathResource getDefaultPhotoResource() {
+        return new ClassPathResource(String.format("static/images/%s", defaultProfilePicture));
+    }
+
+    private MultipartFile createMultipartFile(ClassPathResource resource, String filename) throws IOException {
+        return new MultipartFileImpl(
+                resource.getInputStream(),
+                resource.contentLength(),
+                filename,
+                "image/png"
+        );
     }
 
     private void loadJsonData(String resourcePath, String resourceType, JsonProcessor processor) {

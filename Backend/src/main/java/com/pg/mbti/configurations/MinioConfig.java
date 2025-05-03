@@ -31,6 +31,7 @@ public class MinioConfig {
         private String url;
         private String accessKey;
         private String secretKey;
+        public static String bucketName;
 
     }
 }

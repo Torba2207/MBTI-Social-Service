@@ -32,6 +32,9 @@ public class RegistrationService {
     @Value("${app.email.confirm-email-url}")
     private String confirmEmailUrl;
 
+    @Value("${image.default.path}")
+    private String defaultProfilePicture;
+
     @Transactional
     public void registerUser(RegistrationRequestDto registrationRequestDto) {
         RegistrationValidator.validate(registrationRequestDto);
@@ -61,7 +64,7 @@ public class RegistrationService {
                 .surname(dto.surname())
                 .latitude(dto.latitude())
                 .longitude(dto.longitude())
-                .profilePicture("default.jpg")
+                .profilePicture(defaultProfilePicture)
                 .mbtiType(dto.mbtiType())
                 .gender(dto.gender())
                 .pronouns(dto.pronouns())

@@ -1,8 +1,10 @@
 package com.pg.mbti.services;
 
+import com.pg.mbti.configurations.MinioConfig;
 import com.pg.mbti.exceptions.FileNotFoundException;
 import com.pg.mbti.exceptions.FileUploadException;
 import io.minio.*;
+import io.minio.errors.ErrorResponseException;
 import org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -20,9 +22,6 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PhotoService {
     private final MinioClient minioClient;
-
-    @Value("${minio.bucket}")
-    private String bucketName;
 
     @Value("${image.default.path}")
     private String defaultImagePath;
@@ -42,7 +41,7 @@ public class PhotoService {
 
             minioClient.putObject(
                     PutObjectArgs.builder()
-                            .bucket(bucketName)
+                            .bucket(MinioConfig.MinioProperties.bucketName)
                             .object(fileName)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
@@ -58,7 +57,7 @@ public class PhotoService {
         try {
             return new InputStreamResource(minioClient.getObject(
                     GetObjectArgs.builder()
-                            .bucket(bucketName)
+                            .bucket(MinioConfig.MinioProperties.bucketName)
                             .object(fileName)
                             .build()
             ));
@@ -79,10 +78,29 @@ public class PhotoService {
                 .body(photoResource);
     }
 
+    public boolean fileExists(String fileName) {
+        try {
+            minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket(MinioConfig.MinioProperties.bucketName)
+                            .object(fileName)
+                            .build()
+            );
+            return true;
+        } catch (ErrorResponseException e) {
+            if (e.errorResponse().code().equals("NoSuchKey")) {
+                return false;
+            }
+            throw new RuntimeException(String.format("Error checking if file exists: %s", e.getMessage()));
+        } catch (Exception e) {
+            throw new RuntimeException(String.format("Error checking if file exists: %s", e.getMessage()));
+        }
+    }
+
     private void ensureBucketExists() {
         try {
-            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(bucketName).build())) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(bucketName).build());
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(MinioConfig.MinioProperties.bucketName).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(MinioConfig.MinioProperties.bucketName).build());
             }
         } catch (Exception e) {
             throw new FileUploadException(String.format("Error checking or creating bucket: %s", e.getMessage()));
