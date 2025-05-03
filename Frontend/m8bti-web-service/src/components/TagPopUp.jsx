@@ -77,8 +77,9 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
         const handleTagsSave=async()=>{
             try{
                 console.log(usersTags)
+                console.log(usersTags.map((tag) => (tag.id)))
                 const response = await axios.put("http://localhost:8080/api/user/me", {
-                    tags: usersTags
+                    tagIds: usersTags.map((tag) => (tag.id))
                 },
                 {
                     withCredentials: true,
