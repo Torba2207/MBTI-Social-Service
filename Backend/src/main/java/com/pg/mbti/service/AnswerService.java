@@ -3,7 +3,6 @@ package com.pg.mbti.service;
 import com.pg.mbti.dto.UserAnswerDto;
 import com.pg.mbti.model.questions.Answer;
 import com.pg.mbti.model.questions.AnswerSet;
-import com.pg.mbti.model.questions.Question;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.repository.AnswerRepository;
 import com.pg.mbti.repository.AnswerSetRepository;
