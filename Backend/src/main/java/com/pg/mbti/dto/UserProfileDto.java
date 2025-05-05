@@ -1,6 +1,6 @@
 package com.pg.mbti.dto;
 
-import com.pg.mbti.entity.Tag;
+import com.pg.mbti.model.Tag;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;

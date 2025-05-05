@@ -1,17 +1,17 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.RegistrationController;
+import com.pg.mbti.controller.RegistrationController;
 import com.pg.mbti.dto.auth.RegistrationRequestDto;
 import com.pg.mbti.dto.auth.RegistrationResponseDto;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
-import com.pg.mbti.exceptions.EmailSendingFailedException;
-import com.pg.mbti.exceptions.InvalidTokenException;
-import com.pg.mbti.exceptions.ResourceNotFoundException;
-import com.pg.mbti.exceptions.UserAlreadyExistsException;
-import com.pg.mbti.util.mappers.RegistrationMapper;
-import com.pg.mbti.services.RegistrationService;
+import com.pg.mbti.exception.EmailSendingFailedException;
+import com.pg.mbti.exception.InvalidTokenException;
+import com.pg.mbti.exception.ResourceNotFoundException;
+import com.pg.mbti.exception.UserAlreadyExistsException;
+import com.pg.mbti.util.mapper.RegistrationMapper;
+import com.pg.mbti.service.auth.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

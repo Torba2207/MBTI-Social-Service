@@ -1,10 +1,10 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.AnswerController;
+import com.pg.mbti.controller.AnswerController;
 import com.pg.mbti.dto.UserAnswerDto;
-import com.pg.mbti.entity.questions.Answer;
+import com.pg.mbti.model.questions.Answer;
 import com.pg.mbti.enums.MBTIType;
-import com.pg.mbti.services.AnswerService;
+import com.pg.mbti.service.AnswerService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

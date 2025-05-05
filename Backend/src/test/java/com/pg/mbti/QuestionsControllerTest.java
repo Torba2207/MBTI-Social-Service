@@ -1,9 +1,9 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.QuestionsController;
-import com.pg.mbti.entity.questions.Question;
-import com.pg.mbti.exceptions.QuestionNotFoundException;
-import com.pg.mbti.services.QuestionsService;
+import com.pg.mbti.controller.QuestionsController;
+import com.pg.mbti.model.questions.Question;
+import com.pg.mbti.exception.QuestionNotFoundException;
+import com.pg.mbti.service.QuestionsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

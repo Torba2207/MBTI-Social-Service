@@ -1,12 +1,12 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.ProfileController;
+import com.pg.mbti.controller.ProfileController;
 import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
-import com.pg.mbti.services.UsersService;
+import com.pg.mbti.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
