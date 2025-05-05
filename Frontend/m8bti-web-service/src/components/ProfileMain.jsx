@@ -4,11 +4,16 @@ import useScreenSize from "@/hooks/useScreenSize";
 import { Button } from "./Button";
 import { useState, useEffect, use } from "react";
 import axios from "axios";
-export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout,
+import TagPopUp from "./TagPopUp";
+export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,
     ...props}){
     const { width, height } = useScreenSize();
     const [aboutText, setAboutText] = useState(userAbout || "");
+    const [usersTags, setUsersTags] = useState(userTags || []);
     const [oldAboutText, setOldAboutText] = useState(aboutText || "");
+    const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    //const [hoveredTag, setHoveredTag] = useState(null);
+    
     //console.log(aboutText)
     const handleSave = async () => {
         try {
@@ -31,14 +36,16 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
         setAboutText(userAbout || "");
         console.log(userAbout, aboutText)
     }, [userAbout]);
+    useEffect(() => {
+        setUsersTags(userTags || []);
+        console.log(userTags, usersTags)
+    }, [userTags]);
+    
     //console.log(width, height);
     return(
         <div  className={`w-f h-f`}>
             <div 
-                className={`pl-[15%] pt-[5%]`}
-                style={{
-                    height:height*0.7,
-                }}
+                className={`pl-[15%] pt-[5%] h-[80%]`}
                 >
                 <h1 
                     className="text-2xl font-bold"
@@ -61,7 +68,7 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                             color:primaryColor,
                             background:extraColor,
                             borderColor:primaryColor,
-                            height:height*0.5,
+                            height:height*0.5
                         }
                     }
 
@@ -70,6 +77,38 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                 <div className={currentUser!==nickname||aboutText===oldAboutText?"hidden":""}> 
                     <Button color={mbti} onClick={handleSave}> Save</Button>
                 </div>
+            </div>
+            
+
+            <div>
+                {usersTags!==null&&usersTags!==undefined&&usersTags.length>0&&(
+                    <div className="w-[70%] flex flex-row flex-wrap items-center ml-[14%]">
+                        {usersTags.map((tag, id) => (
+                            <div 
+                            className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
+                            /*
+                            onMouseEnter={() => setHoveredTag(id)}
+                            onMouseLeave={() => setHoveredTag(null)}
+                            */
+                            style={{
+                                backgroundColor: extraColor,//hoveredTag === id&&currentUser===nickname ? primaryColor : extraColor,
+                                color: primaryColor,//hoveredTag === id&&currentUser===nickname ? extraColor : primaryColor,
+                                borderColor: primaryColor,
+                            }}>
+                                {tag.name}
+                            </div>
+                        ))}
+                    </div>
+                )}
+                <div className={currentUser!==nickname?"hidden":""+"flex flex-row items-center ml-[14.6%] mt-[1%]"}> 
+                    <Button color={mbti} onClick={() => setIsPopUpOpen(!isPopUpOpen)}> Edit Tags</Button>
+                </div>
+            </div>
+            
+            <div className={isPopUpOpen?"":"hidden"}>
+                <TagPopUp primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} 
+                    mbti={mbti} nickname={nickname} currentUser={currentUser} userTags={userTags} setIsPopUpOpen={setIsPopUpOpen}
+                    onTagsUpdated={(newTags) => setUsersTags(newTags)}/>
             </div>
         </div>
     );
