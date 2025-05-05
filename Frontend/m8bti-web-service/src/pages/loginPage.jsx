@@ -40,19 +40,31 @@ export default function Login(){
             password: ''
         };
         let isValid = true;
-
+    
+        const passwordReg = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=!]).*$/;
+        const nicknameReg = /^[a-zA-Z0-9_]{3,20}$/;
+    
         if (!usernameOrEmail.trim()) {
             errors.usernameOrEmail = 'Please enter your email or username';
             isValid = false;
+        } else if (!usernameOrEmail.includes('@') && !nicknameReg.test(usernameOrEmail)) {
+          
+            errors.usernameOrEmail = 'Invalid nickname format';
+            isValid = false;
         }
+    
         if (!password.trim()) {
             errors.password = 'Please enter your password';
             isValid = false;
+        } else if (!passwordReg.test(password)) {
+            errors.password = 'Password must contain uppercase, lowercase, digit, and special character';
+            isValid = false;
         }
-
+    
         setFieldErrors(errors);
         return isValid;
     };
+    
 
     const handleLogIn = async (event) => {
         event.preventDefault();
@@ -192,7 +204,7 @@ export default function Login(){
                             currentBG={bgColor}
                             currentText={secColor}
                            
-                            onClick={() => window.location.href = "http://localhost:3000/signupPage"}
+                            onClick={() => router.push("/signupPage")}
                         >
                             Sign up
                         </Button>
