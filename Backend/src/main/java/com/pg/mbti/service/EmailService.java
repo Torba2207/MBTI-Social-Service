@@ -2,21 +2,25 @@ package com.pg.mbti.service;
 
 import com.pg.mbti.dto.EmailContextDto;
 import com.pg.mbti.exception.EmailSendingFailedException;
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class EmailService {
 
     private final JavaMailSender emailSender;
 
+    @Value("${spring.mail.email}")
+    private String email;
+
     public void sendMail(EmailContextDto emailContext) {
         try {
             SimpleMailMessage message = new SimpleMailMessage();
-            message.setFrom("mbtiservice2@gmail.com");
+            message.setFrom(email);
             message.setTo(emailContext.recipient());
             message.setSubject(emailContext.subject());
             message.setText(emailContext.message());
