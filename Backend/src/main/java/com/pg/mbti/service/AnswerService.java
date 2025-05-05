@@ -13,34 +13,32 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
 public class AnswerService {
-
     private final AnswerRepository answerRepository;
     private final AnswerSetRepository answerSetRepository;
     private final QuestionsService questionService;
 
     @Transactional
     public Answer processUserAnswers(List<UserAnswerDto> userAnswers, MBTIType mbtiType) {
-        Answer answer = Answer.builder()
+        Answer answer = answerRepository.save(Answer.builder()
                 .mbtiType(mbtiType)
                 .answers(new ArrayList<>())
-                .build();
-        Answer savedAnswer = answerRepository.save(answer);
-        List<AnswerSet> answerSets = new ArrayList<>();
-        for (UserAnswerDto dto : userAnswers) {
-            Question question = questionService.getQuestionById(dto.questionId());
-            AnswerSet answerSet = AnswerSet.builder()
-                    .answer(answer)
-                    .isYes(dto.isYes())
-                    .question(question)
-                    .build();
-            answerSets.add(answerSet);
-        }
+                .build());
+
+        List<AnswerSet> answerSets = userAnswers.stream()
+                .map(dto -> AnswerSet.builder()
+                        .answer(answer)
+                        .isYes(dto.isYes())
+                        .question(questionService.getQuestionById(dto.questionId()))
+                        .build())
+                .collect(Collectors.toList());
+
         answerSetRepository.saveAll(answerSets);
-        return savedAnswer;
+        return answer;
     }
 
     public List<Answer> getAllAnswers() {
