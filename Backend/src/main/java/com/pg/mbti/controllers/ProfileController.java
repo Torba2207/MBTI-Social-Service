@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api/user/me")
 @AllArgsConstructor
 @Tag(name = "User Profile", description = "Endpoints for managing authenticated user's profile")
-public class UserProfileController {
+public class ProfileController {
 
     private final UsersService usersService;
 

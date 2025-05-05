@@ -1,6 +1,6 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.UserProfileController;
+import com.pg.mbti.controllers.ProfileController;
 import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.enums.Gender;
@@ -26,7 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class UserProfileControllerTest {
+class ProfileControllerTest {
 
     @Mock
     private UsersService usersService;
@@ -41,7 +41,7 @@ class UserProfileControllerTest {
     private MultipartFile multipartFile;
 
     @InjectMocks
-    private UserProfileController userProfileController;
+    private ProfileController profileController;
 
     private UserProfileDto userProfileDto;
 
@@ -71,7 +71,7 @@ class UserProfileControllerTest {
     void getUserProfileReturnsCurrentUserProfile() {
         when(usersService.getUserProfileByNickname("user1")).thenReturn(userProfileDto);
 
-        ResponseEntity<UserProfileDto> response = userProfileController.getUserProfile(authentication);
+        ResponseEntity<UserProfileDto> response = profileController.getUserProfile(authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(userProfileDto);
@@ -83,7 +83,7 @@ class UserProfileControllerTest {
         String fileName = "new-profile.jpg";
         when(usersService.uploadProfilePhoto("user1", multipartFile)).thenReturn(fileName);
 
-        ResponseEntity<String> response = userProfileController.uploadProfilePhoto(authentication, multipartFile);
+        ResponseEntity<String> response = profileController.uploadProfilePhoto(authentication, multipartFile);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("File uploaded successfully: " + fileName);
@@ -94,7 +94,7 @@ class UserProfileControllerTest {
     void getProfilePhotoReturnsUserProfilePhoto() {
         when(usersService.getProfilePhoto("user1")).thenReturn(resource);
 
-        ResponseEntity<Resource> response = userProfileController.getProfilePhoto(authentication);
+        ResponseEntity<Resource> response = profileController.getProfilePhoto(authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo(resource);
@@ -114,7 +114,7 @@ class UserProfileControllerTest {
                 null
         );
 
-        ResponseEntity<String> response = userProfileController.updateUserProfile(authentication, updateDto);
+        ResponseEntity<String> response = profileController.updateUserProfile(authentication, updateDto);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEqualTo("Profile successfully updated");
