@@ -45,6 +45,16 @@ services:
     depends_on:
       - mbti_backend
 
+  python_backend:
+    build:
+      context: ./TestMBTI
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - mbti_backend
 
   database:
     image: postgres:latest
