@@ -4,11 +4,13 @@ import com.pg.mbti.model.Tag;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
+import lombok.Builder;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+@Builder
 public record UserProfileDto(
         String email,
         String nickname,
