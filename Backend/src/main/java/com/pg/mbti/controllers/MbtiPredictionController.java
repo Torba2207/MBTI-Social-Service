@@ -1,7 +1,6 @@
 package com.pg.mbti.controllers;
 
 import com.pg.mbti.dto.UserAnswerDto;
-import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.services.MbtiPredictionService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +13,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @AllArgsConstructor
@@ -39,33 +39,19 @@ public class MbtiPredictionController {
         return ResponseEntity.ok(result);
     }
 
-    @GetMapping("/questions")
-    @Operation(summary = "Get MBTI questions",
-            description = "Retrieves all questions used in the MBTI test")
+    @Operation(summary = "Get next step in MBTI prediction process",
+            description = "Retrieves the next step in the MBTI prediction process based on user answers")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Questions successfully retrieved",
+            @ApiResponse(responseCode = "200", description = "Next step successfully retrieved",
                     content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "500", description = "Internal server error")
-    })
-    public ResponseEntity<List<String>> getQuestions() {
-        List<String> questions = mbtiPredictionService.getQuestions();
-        return ResponseEntity.ok(questions);
-    }
-
-    @PostMapping("/predict")
-    @Operation(summary = "Predict MBTI personality type",
-            description = "Predicts MBTI personality type based on user answers")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Prediction successfully made",
-                    content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = MBTIType.class))),
             @ApiResponse(responseCode = "400", description = "Invalid request body"),
             @ApiResponse(responseCode = "500", description = "Internal server error")
     })
-    public ResponseEntity<MBTIType> predictPersonality(
+    @PostMapping("/step")
+    public ResponseEntity<Map<String, Object>> nextStep(
             @Parameter(description = "User answers to MBTI questions", required = true)
             @RequestBody List<UserAnswerDto> answers) {
-        MBTIType prediction = mbtiPredictionService.predictPersonality(answers);
-        return ResponseEntity.ok(prediction);
+        Map<String, Object> response = mbtiPredictionService.nextStep(answers);
+        return ResponseEntity.ok(response);
     }
 }
