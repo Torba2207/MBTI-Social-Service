@@ -1,4 +1,4 @@
-package com.pg.mbti.mappers;
+package com.pg.mbti.util.mappers;
 
 import com.pg.mbti.dto.FriendshipDto;
 import com.pg.mbti.entity.Friendship;

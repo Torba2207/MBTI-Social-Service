@@ -10,7 +10,7 @@ import com.pg.mbti.exceptions.EmailSendingFailedException;
 import com.pg.mbti.exceptions.InvalidTokenException;
 import com.pg.mbti.exceptions.ResourceNotFoundException;
 import com.pg.mbti.exceptions.UserAlreadyExistsException;
-import com.pg.mbti.mappers.RegistrationMapper;
+import com.pg.mbti.util.mappers.RegistrationMapper;
 import com.pg.mbti.services.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

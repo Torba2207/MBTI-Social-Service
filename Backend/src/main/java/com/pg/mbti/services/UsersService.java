@@ -6,7 +6,7 @@ import com.pg.mbti.dto.UserSearchDto;
 import com.pg.mbti.dto.UserUpdateDto;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.enums.MBTIType;
-import com.pg.mbti.mappers.UserMapper;
+import com.pg.mbti.util.mappers.UserMapper;
 import com.pg.mbti.repositories.TagsRepository;
 import com.pg.mbti.repositories.UsersRepository;
 import lombok.AllArgsConstructor;

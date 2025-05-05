@@ -5,7 +5,7 @@ import com.pg.mbti.entity.Friendship;
 import com.pg.mbti.entity.User;
 import com.pg.mbti.exceptions.FriendshipAlreadyExistsException;
 import com.pg.mbti.exceptions.FriendshipNotFoundException;
-import com.pg.mbti.mappers.FriendshipsMapper;
+import com.pg.mbti.util.mappers.FriendshipsMapper;
 import com.pg.mbti.repositories.FriendshipsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
