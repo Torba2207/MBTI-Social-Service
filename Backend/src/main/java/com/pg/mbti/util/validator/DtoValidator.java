@@ -9,7 +9,6 @@ import java.util.Set;
 
 public class DtoValidator {
 
-    // Method to validate any DTO
     public static <T> void validate(T dto) {
         try (ValidatorFactory factory = Validation.buildDefaultValidatorFactory()) {
             Validator validator = factory.getValidator();
