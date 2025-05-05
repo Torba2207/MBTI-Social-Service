@@ -8,7 +8,8 @@ import lombok.Getter;
 public enum  Gender {
     MALE("Male"),
     FEMALE("Female"),
-    PEDIK("Pedik");
+    OTHER("Other"),
+    PREFER_NOT_TO_SAY("Prefer not to say");
 
     private final String name;
 }

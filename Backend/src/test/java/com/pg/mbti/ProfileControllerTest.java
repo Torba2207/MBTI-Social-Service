@@ -47,22 +47,18 @@ class ProfileControllerTest {
 
     @BeforeEach
     void setUp() {
-        userProfileDto = new UserProfileDto(
-                "user1@mbti.com",
-                "user1",
-                "John",
-                "Doe",
-                Date.valueOf("2000-01-01"),
-                MBTIType.INTJ,
-                null,
-                null,
-                Gender.MALE,
-                "profile.jpg",
-                "",
-                Pronouns.HE_HIM,
-                null,
-                null
-        );
+        userProfileDto = UserProfileDto.builder()
+                .email("user1@mbti.com")
+                .nickname("user1")
+                .name("John")
+                .surname("Doe")
+                .birthday(Date.valueOf("2000-01-01"))
+                .mbtiType(MBTIType.INTJ)
+                .gender(Gender.MALE)
+                .profilePictureUrl("profile.jpg")
+                .description("")
+                .pronouns(Pronouns.HE_HIM)
+                .build();
 
         when(authentication.getName()).thenReturn("user1");
     }
@@ -103,16 +99,15 @@ class ProfileControllerTest {
 
     @Test
     void updateUserProfileCallsServiceWithCorrectParameters() {
-        UserUpdateDto updateDto = new UserUpdateDto(
-                50.0,
-                50.0,
-                "2000-02-02",
-                Gender.PEDIK,
-                "Updated description",
-                Collections.singletonList("Updated links"),
-                Pronouns.THEY_THEM,
-                null
-        );
+        UserUpdateDto updateDto = UserUpdateDto.builder()
+                .latitude(50.0)
+                .longitude(50.0)
+                .birthday("2000-02-02")
+                .gender(Gender.MALE)
+                .description("Updated description")
+                .links(Collections.singletonList("Updated links"))
+                .pronouns(Pronouns.THEY_THEM)
+                .build();
 
         ResponseEntity<String> response = profileController.updateUserProfile(authentication, updateDto);
 
