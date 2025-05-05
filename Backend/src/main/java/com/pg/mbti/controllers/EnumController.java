@@ -26,7 +26,7 @@ import java.util.List;
 @Tag(name = "Enums Management", description = "Endpoints for getting enums present in service")
 public class EnumController {
 
-    EnumsService enumsService;
+    private final EnumsService enumsService;
 
     @GetMapping("/roles")
     @Operation(summary = "Get user roles", description = "Fetch all roles available for user profile")

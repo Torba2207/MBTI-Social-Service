@@ -22,7 +22,7 @@ import java.util.List;
 @Tag(name = "Users", description = "Endpoints for retrieving user information")
 public class UsersController {
 
-    UsersService usersService;
+    private final UsersService usersService;
 
     @GetMapping("/users")
     @Operation(summary = "Get all users",
