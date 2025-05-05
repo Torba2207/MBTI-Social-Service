@@ -10,10 +10,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@EnableConfigurationProperties(MinioConfig.MinioProperties.class)
 @RequiredArgsConstructor
 public class MinioConfig {
-
     private final MinioProperties minioProperties;
 
     @Bean
@@ -22,16 +20,5 @@ public class MinioConfig {
                 .endpoint(minioProperties.getUrl())
                 .credentials(minioProperties.getAccessKey(), minioProperties.getSecretKey())
                 .build();
-    }
-
-    @Setter
-    @Getter
-    @ConfigurationProperties(prefix = "minio")
-    public static class MinioProperties {
-        private String url;
-        private String accessKey;
-        private String secretKey;
-        public static String bucketName;
-
     }
 }

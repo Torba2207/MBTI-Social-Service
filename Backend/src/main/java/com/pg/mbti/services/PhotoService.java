@@ -1,6 +1,5 @@
 package com.pg.mbti.services;
-
-import com.pg.mbti.configurations.MinioConfig;
+import com.pg.mbti.configurations.MinioProperties;
 import com.pg.mbti.exceptions.FileNotFoundException;
 import com.pg.mbti.exceptions.FileUploadException;
 import io.minio.*;
@@ -22,6 +21,7 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class PhotoService {
     private final MinioClient minioClient;
+    private final MinioProperties minioProperties;
 
     @Value("${image.default.path}")
     private String defaultImagePath;
@@ -41,7 +41,7 @@ public class PhotoService {
 
             minioClient.putObject(
                     PutObjectArgs.builder()
-                            .bucket(MinioConfig.MinioProperties.bucketName)
+                            .bucket(minioProperties.getBucket())
                             .object(fileName)
                             .stream(file.getInputStream(), file.getSize(), -1)
                             .contentType(file.getContentType())
@@ -57,7 +57,7 @@ public class PhotoService {
         try {
             return new InputStreamResource(minioClient.getObject(
                     GetObjectArgs.builder()
-                            .bucket(MinioConfig.MinioProperties.bucketName)
+                            .bucket(minioProperties.getBucket())
                             .object(fileName)
                             .build()
             ));
@@ -82,7 +82,7 @@ public class PhotoService {
         try {
             minioClient.statObject(
                     StatObjectArgs.builder()
-                            .bucket(MinioConfig.MinioProperties.bucketName)
+                            .bucket(minioProperties.getBucket())
                             .object(fileName)
                             .build()
             );
@@ -99,8 +99,8 @@ public class PhotoService {
 
     private void ensureBucketExists() {
         try {
-            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(MinioConfig.MinioProperties.bucketName).build())) {
-                minioClient.makeBucket(MakeBucketArgs.builder().bucket(MinioConfig.MinioProperties.bucketName).build());
+            if (!minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucket()).build())) {
+                minioClient.makeBucket(MakeBucketArgs.builder().bucket(minioProperties.getBucket()).build());
             }
         } catch (Exception e) {
             throw new FileUploadException(String.format("Error checking or creating bucket: %s", e.getMessage()));
