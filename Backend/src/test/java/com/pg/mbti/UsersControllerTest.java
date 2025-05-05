@@ -1,14 +1,14 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.UsersController;
+import com.pg.mbti.controller.UsersController;
 import com.pg.mbti.dto.UserSearchDto;
-import com.pg.mbti.entity.User;
+import com.pg.mbti.model.User;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
-import com.pg.mbti.exceptions.ResourceNotFoundException;
-import com.pg.mbti.services.UsersService;
+import com.pg.mbti.exception.ResourceNotFoundException;
+import com.pg.mbti.service.UsersService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

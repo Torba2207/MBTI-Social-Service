@@ -6,7 +6,7 @@ import com.pg.mbti.enums.Pronouns;
 
 import java.util.Date;
 
-import com.pg.mbti.util.ValidationPatterns;
+import com.pg.mbti.util.validator.ValidationPatterns;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
