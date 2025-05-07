@@ -1,8 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, use } from "react";
 import { Button } from "./Button";
 import axios from "axios";
 
-export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userTags, setIsPopUpOpen, onTagsUpdated,
+export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, 
+    userTags, setIsPopUpOpen, isPopUpOpen, onTagsUpdated,
     ...props}){
         const [tags, setTags] = useState([]);
         const [usersTags, setUsersTags] = useState(userTags || []);
@@ -13,6 +14,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
         const [catDropdownValue, setCatDropdownValue] = useState("");
         const [tagDropdownState, setTagDropdownState] = useState(false);
         const [tagDropdownValue, setTagDropdownValue] = useState("");
+        const [hoveredTag, setHoveredTag] = useState(null);
+
         
 
         const handleCatDropdownClick = () => {
@@ -42,6 +45,13 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             setSelectedTag(null);
             setCatDropdownValue("");
             //console.log(usersTags)
+        }
+
+
+        const removeTag=(tag)=>{
+            setUsersTags(usersTags.filter((t) => t.id !== tag.id));
+            setHoveredTag(null);
+            console.log(usersTags)
         }
 
 
@@ -106,6 +116,9 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             fetchTagCategories();
             fetchTags();
         },[])
+        useEffect(()=>{
+            setUsersTags(userTags)
+        }, [isPopUpOpen])
         
         useEffect(()=>{
             console.log(usersTags)
@@ -170,7 +183,7 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                             }`}
                         >
                             {tags.map((tag) =>(
-                                tag.category === seletedCategory && !userTags.some(userTag=>userTag.id===tag.id) &&(
+                                tag.category === seletedCategory && !usersTags.some(userTag=>userTag.id===tag.id) &&(
                                 <div key={tag.id}>
                                     <button onClick={() => handleSetTagDropdownValue(tag)}>
                                         {tag.name}
@@ -179,6 +192,30 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                             ))}
                         </div>
                     </div>
+                    <div>
+                        {usersTags!==null&&usersTags!==undefined&&usersTags.length>0&&(
+                            <div className="w-[70%] flex flex-row flex-wrap items-center ml-[14%]">
+                                {usersTags.map((tag, id) => (
+                                    <div 
+                                        className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
+                                        
+                                        onMouseEnter={() => setHoveredTag(id)}
+                                        onMouseLeave={() => setHoveredTag(null)}
+                                        onClick={() => removeTag(tag)}
+                                        
+                                        style={{
+                                            backgroundColor: hoveredTag === id&&currentUser===nickname ? primaryColor : extraColor,
+                                            color: hoveredTag === id&&currentUser===nickname ? extraColor : primaryColor,
+                                            borderColor: primaryColor,
+                                            cursor: "pointer",
+                                        }}
+                                    >
+                                        <span className={hoveredTag===id?"":"hidden"}>X </span>{tag.name}
+                                    </div>
+                                ))}
+                            </div>
+                    )}
+                </div>
                     <Button color={mbti} onClick={addTag}> Add Tag</Button>
                     <Button color={mbti} onClick={handleTagsSave}> Save Tags</Button>
                 </div>
