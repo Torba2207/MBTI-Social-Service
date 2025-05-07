@@ -1,15 +1,15 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.FriendshipsController;
+import com.pg.mbti.controller.FriendshipsController;
 import com.pg.mbti.dto.FriendshipDto;
-import com.pg.mbti.entity.User;
+import com.pg.mbti.model.User;
 import com.pg.mbti.enums.Gender;
 import com.pg.mbti.enums.MBTIType;
 import com.pg.mbti.enums.Pronouns;
 import com.pg.mbti.enums.Role;
-import com.pg.mbti.exceptions.FriendshipAlreadyExistsException;
-import com.pg.mbti.exceptions.FriendshipNotFoundException;
-import com.pg.mbti.services.FriendshipsService;
+import com.pg.mbti.exception.FriendshipAlreadyExistsException;
+import com.pg.mbti.exception.FriendshipNotFoundException;
+import com.pg.mbti.service.FriendshipsService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

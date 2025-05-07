@@ -1,6 +1,6 @@
 package com.pg.mbti.dto.password;
 
-import com.pg.mbti.util.ValidationPatterns;
+import com.pg.mbti.util.validator.ValidationPatterns;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;

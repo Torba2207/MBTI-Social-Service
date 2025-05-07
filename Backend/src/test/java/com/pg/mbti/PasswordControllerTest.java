@@ -1,14 +1,14 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.PasswordController;
+import com.pg.mbti.controller.PasswordController;
 import com.pg.mbti.dto.password.ForgotPasswordDto;
 import com.pg.mbti.dto.password.ResetPasswordDto;
 import com.pg.mbti.dto.password.UpdatePasswordDto;
-import com.pg.mbti.exceptions.EmailSendingFailedException;
-import com.pg.mbti.exceptions.InvalidPasswordException;
-import com.pg.mbti.exceptions.InvalidTokenException;
-import com.pg.mbti.exceptions.ResourceNotFoundException;
-import com.pg.mbti.services.PasswordService;
+import com.pg.mbti.exception.EmailSendingFailedException;
+import com.pg.mbti.exception.InvalidPasswordException;
+import com.pg.mbti.exception.InvalidTokenException;
+import com.pg.mbti.exception.ResourceNotFoundException;
+import com.pg.mbti.service.auth.PasswordService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

@@ -1,12 +1,12 @@
 package com.pg.mbti;
 
-import com.pg.mbti.controllers.LoginController;
+import com.pg.mbti.controller.LoginController;
 import com.pg.mbti.dto.auth.LoginRequestDto;
 import com.pg.mbti.dto.auth.LoginResponseDto;
-import com.pg.mbti.exceptions.EmailNotConfirmedException;
-import com.pg.mbti.exceptions.InvalidPasswordException;
-import com.pg.mbti.exceptions.ResourceNotFoundException;
-import com.pg.mbti.services.LoginService;
+import com.pg.mbti.exception.EmailNotConfirmedException;
+import com.pg.mbti.exception.InvalidPasswordException;
+import com.pg.mbti.exception.ResourceNotFoundException;
+import com.pg.mbti.service.auth.LoginService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
