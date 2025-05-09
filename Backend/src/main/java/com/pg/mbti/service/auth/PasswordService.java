@@ -9,7 +9,7 @@ import com.pg.mbti.exception.InvalidTokenException;
 import com.pg.mbti.exception.ResourceNotFoundException;
 import com.pg.mbti.repository.UsersRepository;
 import com.pg.mbti.service.EmailService;
-import com.pg.mbti.service.SecureTokenService;
+import com.pg.mbti.util.SecureTokenUtil;
 import com.pg.mbti.util.validator.DtoValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 @RequiredArgsConstructor
 public class PasswordService {
 
-    private final SecureTokenService secureTokenService;
+    private final SecureTokenUtil secureTokenUtil;
     private final EmailService emailService;
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -32,11 +32,11 @@ public class PasswordService {
     public void handleResetPassword(ResetPasswordDto resetPasswordDto) {
         DtoValidator.validate(resetPasswordDto);
 
-        String email = secureTokenService.getValue(resetPasswordDto.token())
+        String email = secureTokenUtil.getValue(resetPasswordDto.token())
                 .orElseThrow(() -> new InvalidTokenException("Invalid token"));
 
         userRepository.updatePasswordByEmail(email, passwordEncoder.encode(resetPasswordDto.newPassword()));
-        secureTokenService.deleteValue(resetPasswordDto.token());
+        secureTokenUtil.deleteValue(resetPasswordDto.token());
     }
 
     public void handleUpdatePassword(String nickname, UpdatePasswordDto updatePasswordDto) {
@@ -55,7 +55,8 @@ public class PasswordService {
 
     public void handleForgotPassword(String email) {
         try {
-            String token = secureTokenService.generateToken(email, 1, TimeUnit.DAYS);
+            String token = secureTokenUtil.generateToken(email, 1, TimeUnit.DAYS)
+                    .orElseThrow(() -> new InvalidTokenException("Invalid token"));
             String resetLink = resetPasswordUrl + token;
             EmailContextDto emailContext = new EmailContextDto(email,
                     "Reset Password", "Click the link to reset your password: " + resetLink);

@@ -10,7 +10,7 @@ import com.pg.mbti.exception.ResourceNotFoundException;
 import com.pg.mbti.exception.UserAlreadyExistsException;
 import com.pg.mbti.repository.UsersRepository;
 import com.pg.mbti.service.EmailService;
-import com.pg.mbti.service.SecureTokenService;
+import com.pg.mbti.util.SecureTokenUtil;
 import com.pg.mbti.util.validator.EmailValidator;
 import com.pg.mbti.util.validator.RegistrationValidator;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,7 @@ public class RegistrationService {
     private final UsersRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
-    private final SecureTokenService secureTokenService;
+    private final SecureTokenUtil secureTokenUtil;
 
     @Value("${app.email.confirm-email-url}")
     private String confirmEmailUrl;
@@ -75,7 +75,8 @@ public class RegistrationService {
 
     private void sendConfirmationEmail(User user) {
         try {
-            String token = secureTokenService.generateToken(user.getId().toString(), 1, TimeUnit.DAYS);
+            String token = secureTokenUtil.generateToken(user.getId().toString(), 1, TimeUnit.DAYS)
+                    .orElseThrow(() -> new InvalidTokenException("Invalid token"));
             String confirmationLink = confirmEmailUrl + token;
             EmailContextDto emailContext = EmailContextDto.builder()
                     .recipient(user.getEmail())
@@ -89,13 +90,13 @@ public class RegistrationService {
     }
 
     public void confirmEmail(String token) {
-        String userId = secureTokenService.getValue(token)
+        String userId = secureTokenUtil.getValue(token)
                 .orElseThrow(() -> new InvalidTokenException("Invalid or expired token"));
 
         User user = userRepository.findById(UUID.fromString(userId))
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         user.setRole(Role.VERIFIED);
         userRepository.save(user);
-        secureTokenService.deleteValue(token);
+        secureTokenUtil.deleteValue(token);
     }
 }
