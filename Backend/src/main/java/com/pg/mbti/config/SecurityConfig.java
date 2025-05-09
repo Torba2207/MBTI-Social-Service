@@ -18,6 +18,10 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import java.util.List;
 
+/**
+ * Configuration for application security.
+ * Manages authentication, authorization, CORS, sessions, and logout handling.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -25,8 +29,16 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
+    // ===== Security Filter Chain =====
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        // Configures the main security filter chain with:
+        // - CSRF disabled for API endpoints
+        // - CORS configuration for cross-origin requests
+        // - URL-based authorization rules
+        // - Session management with max sessions and fixation protection
+        // - Custom logout handling with cookie clearing
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
@@ -63,8 +75,12 @@ public class SecurityConfig {
                 .build();
     }
 
+    // ===== CORS Configuration =====
+
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        // Configures Cross-Origin Resource Sharing (CORS) to allow frontend access
+        // from different origins while maintaining security
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(List.of("*"));
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
