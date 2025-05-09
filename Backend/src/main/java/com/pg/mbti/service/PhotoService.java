@@ -1,5 +1,5 @@
 package com.pg.mbti.service;
-import com.pg.mbti.config.MinioProperties;
+import com.pg.mbti.config.property.MinioProperties;
 import com.pg.mbti.exception.FileNotFoundException;
 import com.pg.mbti.exception.FileUploadException;
 import io.minio.*;
