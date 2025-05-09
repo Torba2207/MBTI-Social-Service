@@ -1,4 +1,4 @@
-package com.pg.mbti.config;
+package com.pg.mbti.config.property;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
