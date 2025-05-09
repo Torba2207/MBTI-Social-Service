@@ -1,22 +1,26 @@
-package com.pg.mbti.service;
+package com.pg.mbti.util;
 
 import lombok.AllArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-@Service
+@Component
 @AllArgsConstructor
-public class SecureTokenService {
+public class SecureTokenUtil {
     private final RedisTemplate<String, String> redisTemplate;
 
-    public String generateToken(String valueToStore, int duration, TimeUnit timeUnit) {
+    public Optional<String> generateToken(String valueToStore, int duration, TimeUnit timeUnit) {
         String token = UUID.randomUUID().toString();
-        redisTemplate.opsForValue().set(token, valueToStore, duration, timeUnit);
-        return token;
+        try {
+            redisTemplate.opsForValue().set(token, valueToStore, duration, timeUnit);
+        } catch (Exception e) {
+            return Optional.empty();
+        }
+        return Optional.of(token);
     }
 
     public Optional<String> getValue(String token) {
