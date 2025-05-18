@@ -107,7 +107,8 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
             
             <div className={isPopUpOpen?"":"hidden"}>
                 <TagPopUp primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} 
-                    mbti={mbti} nickname={nickname} currentUser={currentUser} userTags={userTags} setIsPopUpOpen={setIsPopUpOpen}
+                    mbti={mbti} nickname={nickname} currentUser={currentUser} userTags={usersTags}
+                    setIsPopUpOpen={setIsPopUpOpen} isPopUpOpen={isPopUpOpen} screenHeight={height} screenWidth={width}
                     onTagsUpdated={(newTags) => setUsersTags(newTags)}/>
             </div>
         </div>
