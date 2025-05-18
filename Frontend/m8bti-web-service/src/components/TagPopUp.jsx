@@ -3,7 +3,7 @@ import { Button } from "./Button";
 import axios from "axios";
 
 export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, 
-    userTags, setIsPopUpOpen, isPopUpOpen, onTagsUpdated,
+    userTags, setIsPopUpOpen, isPopUpOpen, onTagsUpdated, screenWidth, screenHeight,
     ...props}){
         const [tags, setTags] = useState([]);
         const [usersTags, setUsersTags] = useState(userTags || []);
@@ -150,7 +150,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
             >
                 <div className="w-[50%] h-[50%] mx-auto mt-[10%] rounded-lg border-2 border-gray-300 shadow-lg"
                         style={{
-                            background: extraColor
+                            background: extraColor,
+
                         }}
                 >
                     {/* Categories Dropdown */}
@@ -161,7 +162,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                         <div
                             className={`${
                             catDropdownState ? "" : "hidden"
-                            }`}
+                            } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white z-10 max-w-[30%] max-h-[20%]`}
+                            
                         >
                             {tagCategories.map((category,id) => (
                                 <div key={id}>
@@ -180,7 +182,7 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                         <div
                             className={`${
                             tagDropdownState ? "" : "hidden"
-                            }`}
+                            } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white z-10 max-w-[30%] max-h-[20%]`}
                         >
                             {tags.map((tag) =>(
                                 tag.category === seletedCategory && !usersTags.some(userTag=>userTag.id===tag.id) &&(
