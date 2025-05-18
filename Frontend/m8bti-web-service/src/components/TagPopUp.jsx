@@ -148,78 +148,96 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                 }
             }}
             >
-                <div className="w-[50%] h-[50%] mx-auto mt-[10%] rounded-lg border-2 border-gray-300 shadow-lg"
+                <div className="w-[50%] min-h-[50%] h-[50%] mx-auto my-[15%] rounded-lg border-2 border-gray-300 shadow-lg"
                         style={{
                             background: extraColor,
 
                         }}
                 >
-                    {/* Categories Dropdown */}
-                    <div>
-                        <button onClick={handleCatDropdownClick}>
-                            {catDropdownValue === ""||catDropdownState ? "Categories" : catDropdownValue}
-                        </button>
-                        <div
-                            className={`${
-                            catDropdownState ? "" : "hidden"
-                            } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white z-10 max-w-[30%] max-h-[20%]`}
-                            
-                        >
-                            {tagCategories.map((category,id) => (
-                                <div key={id}>
-                                    <button onClick={() => handleSetCatDropdownValue(category)}>
-                                        {category}
-                                    </button>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-                    {/* Tags Dropdown */}
-                    <div>
-                        <button onClick={handleTagDropdownClick}>
-                            {tagDropdownValue === ""||tagDropdownState ? "Tags" : tagDropdownValue.name}
-                        </button>
-                        <div
-                            className={`${
-                            tagDropdownState ? "" : "hidden"
-                            } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white z-10 max-w-[30%] max-h-[20%]`}
-                        >
-                            {tags.map((tag) =>(
-                                tag.category === seletedCategory && !usersTags.some(userTag=>userTag.id===tag.id) &&(
-                                <div key={tag.id}>
-                                    <button onClick={() => handleSetTagDropdownValue(tag)}>
-                                        {tag.name}
-                                    </button>
-                                </div>)
-                            ))}
-                        </div>
-                    </div>
-                    <div>
-                        {usersTags!==null&&usersTags!==undefined&&usersTags.length>0&&(
-                            <div className="w-[70%] flex flex-row flex-wrap items-center ml-[14%]">
-                                {usersTags.map((tag, id) => (
-                                    <div 
-                                        className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
-                                        
-                                        onMouseEnter={() => setHoveredTag(id)}
-                                        onMouseLeave={() => setHoveredTag(null)}
-                                        onClick={() => removeTag(tag)}
-                                        
-                                        style={{
-                                            backgroundColor: hoveredTag === id&&currentUser===nickname ? primaryColor : extraColor,
-                                            color: hoveredTag === id&&currentUser===nickname ? extraColor : primaryColor,
-                                            borderColor: primaryColor,
-                                            cursor: "pointer",
-                                        }}
-                                    >
-                                        <span className={hoveredTag===id?"":"hidden"}>X </span>{tag.name}
+                    <div className="grid-cols-2 grid min-h-[40%] max-h-[40%] pt-[2%]">
+                        {/* Categories Dropdown */}
+                        <div className="mx-auto flex flex-col">
+                            <button onClick={handleCatDropdownClick} className="border-2 rounded-md"
+                                style={{
+                                    background: catDropdownState ? primaryColor : extraColor,
+                                    color: catDropdownState ? extraColor : primaryColor,
+                                    borderColor: primaryColor,
+                                    cursor: "pointer",
+                                    }}>
+                                {catDropdownValue === ""||catDropdownState ? "Categories" : catDropdownValue}
+                            </button>
+                            <div
+                                className={`${
+                                catDropdownState ? "" : "hidden"
+                                } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white z-10 max-h-[50%]`}
+                                
+                            >
+                                {tagCategories.map((category,id) => (
+                                    <div key={id}>
+                                        <button onClick={() => handleSetCatDropdownValue(category)}>
+                                            {category}
+                                        </button>
                                     </div>
                                 ))}
                             </div>
-                    )}
-                </div>
+                        </div>
+                        {/* Tags Dropdown */}
+                        <div className="mx-auto flex flex-col">
+                            <button onClick={handleTagDropdownClick} className="border-2 rounded-md"
+                            style={{
+                                    background: tagDropdownState ? primaryColor : extraColor,
+                                    color: tagDropdownState ? extraColor : primaryColor,
+                                    borderColor: primaryColor,
+                                    cursor: "pointer",
+                                    }}>
+                                {tagDropdownValue === ""||tagDropdownState ? "Tags" : tagDropdownValue.name}
+                            </button>
+                            <div
+                                className={`${
+                                tagDropdownState ? "" : "hidden"
+                                } overflow-y-auto mt-2 rounded-md border border-gray-300 shadow-md bg-white max-h-[50%]`}
+                            >
+                                {tags.map((tag) =>(
+                                    tag.category === seletedCategory && !usersTags.some(userTag=>userTag.id===tag.id) &&(
+                                    <div key={tag.id}>
+                                        <button onClick={() => handleSetTagDropdownValue(tag)}>
+                                            {tag.name}
+                                        </button>
+                                    </div>)
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div>
+                            {usersTags!==null&&usersTags!==undefined&&usersTags.length>0&&(
+                                <div className="flex flex-row flex-wrap items-center px-[5%] pt-[2%]">
+                                    {usersTags.map((tag, id) => (
+                                        <div 
+                                            className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
+                                            
+                                            onMouseEnter={() => setHoveredTag(id)}
+                                            onMouseLeave={() => setHoveredTag(null)}
+                                            onClick={() => removeTag(tag)}
+                                            
+                                            style={{
+                                                backgroundColor: hoveredTag === id&&currentUser===nickname ? primaryColor : extraColor,
+                                                color: hoveredTag === id&&currentUser===nickname ? extraColor : primaryColor,
+                                                borderColor: primaryColor,
+                                                cursor: "pointer",
+                                            }}
+                                        >
+                                            <span className={hoveredTag===id?"":"hidden"}>X </span>{tag.name}
+                                        </div>
+                                    ))}
+                                </div>
+                        )}
+                    </div>
+                    <div className="flex flex-row flex-wrap items-center justify-between px-[5%] pt-[2%]">
                     <Button color={mbti} onClick={addTag}> Add Tag</Button>
                     <Button color={mbti} onClick={handleTagsSave}> Save Tags</Button>
+                    </div>
+                </div>
                 </div>
             </div>
         )
