@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import useColorCycle from '@/hooks/useColorCycle';
 import { MBTIColors } from '@/components/MBTIColors';
 import { useRouter } from "next/router";
+import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
 
 const tfClassName = "w-[80%] mx-auto";
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
@@ -30,6 +31,7 @@ export default function SignUp() {
     const [shareLocation, setShareLocation] = useState(false);
     const [location, setLocation] = useState(null);
     const [locationError, setLocationError] = useState("");
+    const [isLocationChecked, setIsLocationChecked] = useState(false);
 
     const [mbtiType, setMbtiType] = useState("");
     const [gender, setGender] = useState("");
@@ -66,6 +68,8 @@ export default function SignUp() {
         const wantsToShare = e.target.checked;
         setShareLocation(wantsToShare);
         setLocationError("");
+        setIsLocationChecked(false);
+        setErrors(prev => ({...prev, location: ''}));
 
         if (wantsToShare) {
             try {
@@ -79,14 +83,17 @@ export default function SignUp() {
                 
                 const { latitude, longitude } = position.coords;
                 setLocation({ latitude, longitude });
+                setIsLocationChecked(true);
             } catch (err) {
                 console.error("Error getting location:", err);
                 setLocationError("Failed to get location. Please check your permissions or try again.");
                 setShareLocation(false);
                 setLocation(null);
+                setIsLocationChecked(false);
             }
         } else {
             setLocation(null);
+            setIsLocationChecked(false);
         }
     };
 
@@ -142,6 +149,15 @@ export default function SignUp() {
                 newErrors.password = "Password must contain uppercase, lowercase, digit, and special character";
                 isValid = false;
             }
+
+           if (!shareLocation) {
+                newErrors.location = "You must agree to share your location";
+                isValid = false;
+            } else if (!isLocationChecked) {
+                newErrors.location = "Please wait while we get your location";
+                isValid = false;
+            }
+        
         } 
         
         else if (step === 2) {
@@ -245,6 +261,35 @@ export default function SignUp() {
     
     const RequiredStar = () => <span className="text-red-500">*</span>;
 
+
+    const Tooltip = ({ children }) => (
+        <div className="relative inline-flex ml-2 group">
+          <QuestionMarkCircleIcon className="h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer" />
+          <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block w-64 p-3 bg-white text-sm text-gray-700 rounded-md shadow-lg z-10 whitespace-normal">
+            <div className="space-y-1">
+              {children}
+            </div>
+          </div>
+        </div>
+      );
+      const PasswordTooltip = () => (
+        <div className="relative inline-flex ml-2 group">
+          <QuestionMarkCircleIcon className="h-5 w-5 text-gray-400 hover:text-gray-500 cursor-pointer" />
+          <div className="absolute left-full ml-2 top-1/2 transform -translate-y-1/2 hidden group-hover:block w-[300px] p-3 bg-white text-sm text-gray-700 rounded-md shadow-lg z-50 border border-gray-200">            <div className="space-y-1.5">
+          Password requirements:
+            <ul className="list-disc pl-5 mt-1">
+                <li>At least 8 characters long</li>
+                <li>At least one uppercase letter (A-Z)</li>
+                <li>At least one lowercase letter (a-z)</li>
+                <li>At least one number (0-9)</li>
+                <li>At least one special character (@#$%^&+=!)</li>
+            </ul>
+            </div>
+          </div>
+        </div>
+      );
+
+    
     return (
         <>
             <Head>
@@ -275,7 +320,7 @@ export default function SignUp() {
                                             name="name" 
                                             value={name}
                                             onChange={(e) => handleFieldChange('name', setName, e)} 
-                                            required 
+                                            
                                         />
                                         {errors.name && <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.name}</p>}
                                     </div>
@@ -291,7 +336,7 @@ export default function SignUp() {
                                             name="surname" 
                                             value={surname}
                                             onChange={(e) => handleFieldChange('surname', setSurname, e)} 
-                                            required 
+                                            
                                         />
                                         {errors.surname && <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.surname}</p>}
                                     </div>
@@ -302,12 +347,26 @@ export default function SignUp() {
                                             labelColor={bgColor}
                                             fieldBGColor={secColor}
                                             isDynamic={true}
-                                            label={<span>Nickname <RequiredStar /></span>} 
+                                            label={
+                                                <span> Nickname 
+                                                    <RequiredStar />
+                                                    <Tooltip>
+                                                        Nickname requirements:
+                                                        <ul>
+                                                            <li>3-20 characters long</li>
+                                                            <li>Can contain letters (a-z, A-Z)</li>
+                                                            <li>Can contain numbers (0-9)</li>
+                                                            <li>Can contain underscores (_)</li>
+                                                            <li>No special characters or spaces</li>
+                                                        </ul>
+                                                    </Tooltip>
+                                                </span>
+                                                } 
                                             id="nickname" 
                                             name="nickname" 
                                             value={nickname}
                                             onChange={(e) => handleFieldChange('nickname', setNickname, e)} 
-                                            required 
+                                            
                                         />
                                         {errors.nickname && <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.nickname}</p>}
                                     </div>
@@ -339,7 +398,11 @@ export default function SignUp() {
                                             labelColor={bgColor}
                                             fieldBGColor={secColor}
                                             isDynamic={true}
-                                            label={<span>Password <RequiredStar /></span>} 
+                                            label={
+                                            <span>Password <RequiredStar />
+                                            <PasswordTooltip />
+                                            </span>
+                                            } 
                                             id="password" 
                                             name="password" 
                                             type="password" 
@@ -359,18 +422,22 @@ export default function SignUp() {
                                             className="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500"
                                         />
                                         <label htmlFor="shareLocation" className="ml-2 block text-sm text-gray-900">
-                                            Share my current location
+                                        <span>Share my current location <RequiredStar /></span>
+                                            
                                         </label>
-                                    </div>
-                                    {locationError && (
-                                        <p className="text-red-500 text-xs mt-1 ml-[10%]">{locationError}</p>
-                                    )}
-                                    {location && (
-                                        <p className="text-green-500 text-xs mt-1 ml-[10%]">
-                                            Done!
-                                        </p>
-                                    )}
-                                </div>
+                                        </div>
+                                            {errors.location && (
+                                                <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.location}</p>
+                                            )}
+                                            {locationError && (
+                                                <p className="text-red-500 text-xs mt-1 ml-[10%]">{locationError}</p>
+                                            )}
+                                            {location && (
+                                                <p className="text-green-500 text-xs mt-1 ml-[10%]">
+                                                    Location acquired successfully!
+                                                </p>
+                                            )}
+                                        </div>
                             )}
 
                             {step === 2 && (
@@ -435,7 +502,7 @@ export default function SignUp() {
                                             required
                                         >
                                             <option value="">Choose Gender</option>
-                                            {["MALE", "FEMALE", "PEDIK"].map((type) => ( 
+                                            {["MALE", "FEMALE", "OTHER"].map((type) => ( 
                                                 <option key={type} value={type}>
                                                 {type}
                                                 </option>
@@ -447,28 +514,26 @@ export default function SignUp() {
                             )}
                         </div>
 
-                        <div className="flex justify-between mt-8">
+                        <div className="flex justify-between mt-10">
                             {step === 0 ? (
                                 <Button
+                                    type='Button'
                                     isDynamic={true}
                                     currentBG={bgColor}
                                     currentText={secColor}
-                                    className="ml-6 px-4 py-2 rounded"
+                                    className="ml-20 px-6 py-3 rounded"
                                     onClick={() => router.push("/loginPage")}
                                 >
                                     Sign In
                                 </Button>
                             ) : step > 0 ? (
                                 <Button
-                                    type="button"
-                                    isDynamic
-                                    dynamicStyle={{
-                                        backgroundColor: secColor,
-                                        color: bgColor,
-                                        transition: 'all 1s ease-in-out'
-                                    }}
-                                    className="ml-6 px-4 py-2 rounded"
-                                    onClick={() => changeStep(step - 1)}
+                                    type='Button'
+                                    isDynamic={true}
+                                    currentBG={bgColor}
+                                    currentText={secColor}
+                                        className="ml-20 px-6 py-3 rounded"
+                                        onClick={() => changeStep(step - 1)}
                                 >
                                     Previous
                                 </Button>
@@ -476,29 +541,23 @@ export default function SignUp() {
                             
                             {step < totalSteps - 1 ? (
                                 <Button
-                                    type="button"
-                                    isDynamic
-                                    dynamicStyle={{
-                                        backgroundColor: bgColor,
-                                        color: extColor,
-                                        transition: 'all 1s ease-in-out'
-                                    }}
-                                    className="ml-auto mr-6 px-4 py-2 rounded"
-                                    onClick={handleNext}
+                                    type='Button'
+                                    isDynamic={true}
+                                    currentBG={bgColor}
+                                    currentText={secColor}  
+                                        className="ml-auto mr-20 px-6 py-3 rounded"
+                                        onClick={handleNext}
                                 >
                                     Next
                                 </Button>
                             ) : (
                                 <Button
-                                    type="button"
-                                    isDynamic
-                                    dynamicStyle={{
-                                        backgroundColor: extColor,
-                                        color: bgColor,
-                                        transition: 'all 1s ease-in-out'
-                                    }}
-                                    className="mr-6 px-4 py-2 rounded"
-                                    onClick={handleFinish}
+                                    type='Button'
+                                    isDynamic={true}
+                                    currentBG={bgColor}
+                                    currentText={secColor}
+                                        className="mr-20 ml-auto px-6 py-3 rounded"
+                                        onClick={handleFinish}
                                 >
                                     Finish
                                 </Button>
