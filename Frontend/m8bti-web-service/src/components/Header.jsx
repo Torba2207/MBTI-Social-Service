@@ -8,7 +8,8 @@ import { HomeIcon } from "./SVGComponents/HomeIcon";
 
 export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
   const bgColor = MBTIColors({ colorDest: "Secondary", mbti });
-  const primColor = MBTIColors({ colorDest: "Primary", mbti })
+  const primColor = MBTIColors({ colorDest: "Primary", mbti });
+  
   return (
     <header 
       className="flex flex-col w-full border-b-2 border-gray-500"
@@ -19,17 +20,19 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
         <div className="flex items-center space-x-4">
           <Logo className="h-19 w-auto" />
           <div className="flex flex-col">
-            <span className="text-3xl font-semibold">{userName}</span>
+            <span className="hidden md:block text-3xl font-semibold truncate max-w-[70vw] md:max-w-none">
+              {userName}
+            </span>
           </div>
         </div>
         <DefaultAvatar className="h-10 w-auto" />
       </div>
 
       {/* icons */}
-      <div className="flex justify-center items-center h-16 pb-2">
-        <div className="flex space-x-100"> 
+      <div className="flex justify-center items-center h-16 pb-2 w-full">
+        <div className="flex justify-between w-[900%]"> 
           {/* Home Icon */}
-          <div className="flex flex-col items-center group">
+          <div className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}>
@@ -42,7 +45,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
           </div>
           
           {/* Search Icon */}
-          <div className="flex flex-col items-center group">
+          <div className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}>
@@ -55,7 +58,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
           </div>
           
           {/* Friends Icon */}
-          <div className="flex flex-col items-center group">
+          <div className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}>
@@ -68,7 +71,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
           </div>
           
           {/* Notification Icon */}
-          <div className="flex flex-col items-center group">
+          <div className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}
