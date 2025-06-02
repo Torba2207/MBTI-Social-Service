@@ -20,39 +20,51 @@ import org.springframework.security.web.session.HttpSessionEventPublisher;
 @RequiredArgsConstructor
 public class BeanConfig {
 
+    // ===== Utility Beans =====
+
     @Bean
     public PasswordEncoder passwordEncoder() {
+        // Provides BCrypt hashing for passwords
         return new BCryptPasswordEncoder();
     }
 
     @Bean
     public ObjectMapper objectMapper() {
+        // JSON serialization/deserialization support
         return new ObjectMapper();
     }
 
     @Bean
     public RestTemplate restTemplate() {
+        // HTTP client for external API calls
         return new RestTemplate();
     }
 
+    // ===== Security Context Beans =====
+
     @Bean
     public SecurityContextRepository securityContextRepository() {
+        // Stores security context in HTTP session
         return new HttpSessionSecurityContextRepository();
     }
 
     @Bean
     public SecurityContextHolderStrategy securityContextHolderStrategy() {
+        // Strategy for accessing the security context
         return SecurityContextHolder.getContextHolderStrategy();
     }
 
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        // Manages authentication processes
         return http.getSharedObject(AuthenticationManagerBuilder.class).build();
     }
 
+    // ===== Session Management =====
+
     @Bean
     public HttpSessionEventPublisher httpSessionEventPublisher() {
+        // Publishes session creation/destruction events
         return new HttpSessionEventPublisher();
     }
-
 }

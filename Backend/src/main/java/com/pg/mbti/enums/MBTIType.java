@@ -5,6 +5,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+/*
+ * Enumerates the 16 possible MBTI (Myers-Briggs Type Indicator) personality types.
+ * Each MBTI type has a corresponding string representation.
+ */
 public enum MBTIType {
     ENFJ("ENFJ"),
     ENFP("ENFP"),

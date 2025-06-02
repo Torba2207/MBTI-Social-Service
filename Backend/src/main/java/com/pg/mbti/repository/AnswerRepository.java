@@ -6,6 +6,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.UUID;
 
+/**
+ * Repository interface for managing {@link Answer} entities.
+ * Provides standard CRUD operations and custom queries for answers.
+ */
 @Repository
 public interface AnswerRepository extends JpaRepository<Answer, UUID> {
 }

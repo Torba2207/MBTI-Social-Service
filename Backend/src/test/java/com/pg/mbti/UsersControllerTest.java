@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 
 import java.sql.Date;
 import java.util.Arrays;
@@ -32,6 +33,9 @@ class UsersControllerTest {
 
     @Mock
     private UsersService usersService;
+
+    @Mock
+    private Authentication authentication;
 
     @InjectMocks
     private UsersController usersController;
@@ -122,45 +126,49 @@ class UsersControllerTest {
 
     @Test
     void searchUsersReturnsMatchingUsers() {
+        when(authentication.getName()).thenReturn("TestUser");
         UserSearchDto searchDto = new UserSearchDto("Jane", null, null, null, null, null, null, null);
-        when(usersService.searchUsers(searchDto)).thenReturn(Collections.singletonList(user2));
+        when(usersService.searchUsers(searchDto, "TestUser")).thenReturn(Collections.singletonList(user2));
 
-        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
+        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto, authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(1);
         assertThat(response.getBody().getFirst()).isEqualTo(user2);
-        verify(usersService).searchUsers(searchDto);
+        verify(usersService).searchUsers(searchDto, "TestUser");
     }
 
     @Test
     void searchUsersWithMultipleFilters() {
+        when(authentication.getName()).thenReturn("TestUser");
         UserSearchDto searchDto = new UserSearchDto(null, null, MBTIType.INTJ, Gender.MALE, null, "name", "asc", null);
-        when(usersService.searchUsers(searchDto)).thenReturn(Collections.singletonList(user1));
+        when(usersService.searchUsers(searchDto, "TestUser")).thenReturn(Collections.singletonList(user1));
 
-        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
+        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto, authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).hasSize(1);
         assertThat(response.getBody().getFirst()).isEqualTo(user1);
-        verify(usersService).searchUsers(searchDto);
+        verify(usersService).searchUsers(searchDto, "TestUser");
     }
 
     @Test
     void searchUsersReturnsEmptyListWhenNoMatches() {
+        when(authentication.getName()).thenReturn("TestUser");
         UserSearchDto searchDto = new UserSearchDto("NonExistent", null, null, null, null, null, null, null);
-        when(usersService.searchUsers(searchDto)).thenReturn(Collections.emptyList());
+        when(usersService.searchUsers(searchDto, "TestUser")).thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto);
+        ResponseEntity<List<User>> response = usersController.searchUsers(searchDto, authentication);
 
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isEmpty();
-        verify(usersService).searchUsers(searchDto);
+        verify(usersService).searchUsers(searchDto, "TestUser");
     }
 
     @Test
     void searchUsersSortsCorrectlyByCompatibility() {
         MBTIType referenceType = MBTIType.ENFJ;
+        when(authentication.getName()).thenReturn("TestUser");
 
         UserSearchDto ascSearchDto = new UserSearchDto(null, null, null, null, null,
                 "compatibility", "asc", referenceType);
@@ -170,16 +178,16 @@ class UsersControllerTest {
         List<User> ascSortedUsers = Arrays.asList(user3, user1, user2);
         List<User> descSortedUsers = Arrays.asList(user2, user1, user3);
 
-        when(usersService.searchUsers(ascSearchDto)).thenReturn(ascSortedUsers);
-        when(usersService.searchUsers(descSearchDto)).thenReturn(descSortedUsers);
+        when(usersService.searchUsers(ascSearchDto, "TestUser")).thenReturn(ascSortedUsers);
+        when(usersService.searchUsers(descSearchDto, "TestUser")).thenReturn(descSortedUsers);
 
-        ResponseEntity<List<User>> ascResponse = usersController.searchUsers(ascSearchDto);
+        ResponseEntity<List<User>> ascResponse = usersController.searchUsers(ascSearchDto, authentication);
         assertThat(ascResponse.getBody()).containsExactly(user3, user1, user2);
 
-        ResponseEntity<List<User>> descResponse = usersController.searchUsers(descSearchDto);
+        ResponseEntity<List<User>> descResponse = usersController.searchUsers(descSearchDto, authentication);
         assertThat(descResponse.getBody()).containsExactly(user2, user1, user3);
 
-        verify(usersService).searchUsers(ascSearchDto);
-        verify(usersService).searchUsers(descSearchDto);
+        verify(usersService).searchUsers(ascSearchDto, "TestUser");
+        verify(usersService).searchUsers(descSearchDto, "TestUser");
     }
 }
