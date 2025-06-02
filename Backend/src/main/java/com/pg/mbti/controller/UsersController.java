@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -57,7 +58,11 @@ public class UsersController {
     @Operation(summary = "Search users",
             description = "Search users by name, surname, MBTI type, gender, and tags with sorting options")
     @ApiResponse(responseCode = "200", description = "Search results returned successfully")
-    public ResponseEntity<List<User>> searchUsers(@RequestBody UserSearchDto searchDto) {
-        return ResponseEntity.ok(usersService.searchUsers(searchDto));
+    public ResponseEntity<List<User>> searchUsers(
+            @RequestBody UserSearchDto searchDto,
+            @Parameter(description = "Authentication information of the current user")
+            final Authentication authentication
+    ) {
+        return ResponseEntity.ok(usersService.searchUsers(searchDto, authentication.getName()));
     }
 }

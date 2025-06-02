@@ -61,7 +61,7 @@ public class UsersService {
         usersRepository.save(user);
     }
 
-    public List<User> searchUsers(UserSearchDto search) {
+    public List<User> searchUsers(UserSearchDto search, String authenticatedUsername) {
         MBTIType referenceType = search.referenceType();
         boolean sortByCompatibility = referenceType != null && "compatibility".equals(search.sortBy());
         boolean descending = "desc".equalsIgnoreCase(search.sortDirection());
@@ -73,7 +73,7 @@ public class UsersService {
 
         List<User> users = usersRepository.findUsersByFilters(
                 search.name(), search.surname(), search.mbtiType(),
-                search.gender(), search.tagIds(), sort);
+                search.gender(), search.tagIds(), authenticatedUsername, sort);
 
         if (sortByCompatibility) {
             Comparator<User> comparator = Comparator.comparing(
