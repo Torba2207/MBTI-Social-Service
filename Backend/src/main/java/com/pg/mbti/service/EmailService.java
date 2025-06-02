@@ -7,9 +7,14 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j; // Import SLF4J for logging
 
+/**
+ * Service class responsible for sending emails.
+ */
 @Service
 @RequiredArgsConstructor
+@Slf4j // Enable logging for this class
 public class EmailService {
 
     private final JavaMailSender emailSender;
@@ -17,7 +22,14 @@ public class EmailService {
     @Value("${spring.mail.email}")
     private String email;
 
+    /**
+     * Sends a simple email using the provided email context.
+     *
+     * @param emailContext The {@link EmailContextDto} containing recipient, subject, and message.
+     * @throws EmailSendingFailedException If the email sending process fails.
+     */
     public void sendMail(EmailContextDto emailContext) {
+        log.info("Attempting to send email to recipient: {}", emailContext.recipient()); // Log email sending attempt
         try {
             SimpleMailMessage message = new SimpleMailMessage();
             message.setFrom(email);
@@ -26,7 +38,9 @@ public class EmailService {
             message.setText(emailContext.message());
 
             emailSender.send(message);
+            log.info("Email successfully sent to recipient: {}", emailContext.recipient()); // Log successful email send
         } catch (Exception e) {
+            log.error("Failed to send email to {}: {}", emailContext.recipient(), e.getMessage()); // Log email sending failure
             throw new EmailSendingFailedException(String.format("Failed to send email to %s", emailContext.recipient()));
         }
     }
