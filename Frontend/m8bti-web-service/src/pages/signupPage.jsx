@@ -203,17 +203,17 @@ export default function SignUp() {
                 name,
                 surname,
                 nickname,
-                email,
                 password,
-                mbti: mbtiType,
+                email,
+                latitude: location.latitude,
+                longitude: location.longitude,
+                mbtiType: mbtiType,
                 birthday: formattedDate,
                 gender,
-                pronouns: "OTHER",
-                ...(location && {
-                    latitude: location.latitude,
-                    longitude: location.longitude
-                })
+                pronouns: "OTHER"
+
             };
+            console.log("User data to send:", userData);
         
             const response = await fetch('http://localhost:8080/api/auth/register', {
                 method: 'POST',
@@ -223,7 +223,7 @@ export default function SignUp() {
                 body: JSON.stringify(userData),
                 credentials: "include",
             });
-        
+            console.log("Response status:", response.status);
             const contentType = response.headers.get('content-type');
             if (!response.ok) {
                 const errorData = contentType?.includes('application/json') 

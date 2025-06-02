@@ -1,6 +1,7 @@
 import { useState, useEffect, use } from "react";
 import { Button } from "./Button";
 import axios from "axios";
+import SelectDropdown from "./SelectDropdown";
 
 export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, 
     userTags, setIsPopUpOpen, isPopUpOpen, onTagsUpdated, screenWidth, screenHeight,
@@ -156,6 +157,17 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                 >
                     <div className="grid-cols-2 grid min-h-[40%] max-h-[40%] pt-[2%]">
                         {/* Categories Dropdown */}
+                        <SelectDropdown
+                            dropdownName="Categories" 
+                            handleDropdownClick={handleCatDropdownClick} 
+                            dropdownState={catDropdownState} 
+                            primaryColor={primaryColor} 
+                            extraColor={extraColor} 
+                            options={tagCategories} 
+                            handleSetDropdownValue={handleSetCatDropdownValue} 
+                            dropdownValue={catDropdownValue}
+                        />
+                        {/*
                         <div className="mx-auto flex flex-col">
                             <button onClick={handleCatDropdownClick} className="border-2 rounded-md"
                                 style={{
@@ -181,7 +193,21 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                                 ))}
                             </div>
                         </div>
+                         */}
                         {/* Tags Dropdown */}
+                        <SelectDropdown
+                            dropdownName="Tags"
+                            handleDropdownClick={handleTagDropdownClick} 
+                            dropdownState={tagDropdownState} 
+                            primaryColor={primaryColor} 
+                            extraColor={extraColor} 
+                            options={tags.filter((tag) => 
+                                (tag.category === seletedCategory && !userTags.some(userTag => userTag.id === tag.id)))} 
+                            handleSetDropdownValue={handleSetTagDropdownValue} 
+                            dropdownValue={tagDropdownValue}
+                            variant="tag"
+                        />
+                        {/*
                         <div className="mx-auto flex flex-col">
                             <button onClick={handleTagDropdownClick} className="border-2 rounded-md"
                             style={{
@@ -207,6 +233,7 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                                 ))}
                             </div>
                         </div>
+                        */}
                     </div>
                     <div>
                         <div>

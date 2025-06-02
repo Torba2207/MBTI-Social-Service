@@ -7,3 +7,10 @@ export function getMBTIGroupIndex(mbti) {
   if (["ISTP", "ISFP", "ESTP", "ESFP"].includes(mbti)) return 3;
   return -1; // unknown or invalid type
 };
+
+
+export const MBTIMap = ["INTJ", "INTP", "ENTJ", "ENTP",
+    "INFJ", "INFP", "ENFJ", "ENFP",
+    "ISTJ", "ISFJ", "ESTJ", "ESFJ",
+    "ISTP", "ISFP", "ESTP", "ESFP"
+];
