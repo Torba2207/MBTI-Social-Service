@@ -7,11 +7,22 @@ import jakarta.validation.constraints.Size;
 
 import lombok.Builder;
 
+/**
+ * Represents a request to update a user's existing password.
+ * This record requires the old password for verification and the new password.
+ */
 @Builder
 public record UpdatePasswordDto(
+        /*
+         * The user's current password. It cannot be blank.
+         */
         @NotBlank(message = "Old password is required")
         String oldPassword,
 
+        /*
+         * The new password for the user's account. It cannot be blank, must be at least 8 characters long,
+         * and must contain at least one digit, one lowercase letter, one uppercase letter, and one special character.
+         */
         @NotBlank(message = "New password is required")
         @Size(min = 8, message = "Password must be at least 8 characters")
         @Pattern(

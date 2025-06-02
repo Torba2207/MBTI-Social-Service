@@ -5,6 +5,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+/*
+ * Enumerates the different roles a user can have within the application.
+ * Each role has a corresponding display name.
+ */
 public enum Role {
     ANONYMOUS("Anonymous"),
     VERIFIED("Verified"),

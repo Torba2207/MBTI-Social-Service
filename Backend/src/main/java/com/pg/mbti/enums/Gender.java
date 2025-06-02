@@ -5,6 +5,10 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
+/*
+ * Enumerates the possible gender options for a user.
+ * Each gender type has a corresponding display name.
+ */
 public enum  Gender {
     MALE("Male"),
     FEMALE("Female"),
