@@ -201,7 +201,8 @@ export default function TagPopUp({primaryColor,secondaryColor,extraColor,mbti,ni
                             dropdownState={tagDropdownState} 
                             primaryColor={primaryColor} 
                             extraColor={extraColor} 
-                            options={tags.filter(tag => tag.category === seletedCategory)} 
+                            options={tags.filter((tag) => 
+                                (tag.category === seletedCategory && !userTags.some(userTag => userTag.id === tag.id)))} 
                             handleSetDropdownValue={handleSetTagDropdownValue} 
                             dropdownValue={tagDropdownValue}
                             variant="tag"
