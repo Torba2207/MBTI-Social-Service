@@ -1,9 +1,10 @@
 import { TextField } from "./Fields";
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import SelectDropdown from "./SelectDropdown";
 import { MBTIMap } from "./MBTIMap";
+import UserDataBlock from "./UserDataBlock";
 
-export default function SearchMain({primaryColor, secondaryColor, extraColor, mbti, ...props}) {
+export default function SearchMain({primaryColor, secondaryColor, extraColor, mbti, mbtiType, ...props}) {
     /*
     const [selectedMBTI, setSelectedMBTI] = useState("");
     const [mbtiDropdownState, setMbtiDropdownState] = useState(false);
@@ -28,13 +29,50 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
         setGenderDropdownState(false);
     }
         */
-
+    const fetchUsers=async()=>{
+        try{
+            console.log("Current User Type:", mbtiType);
+            const response = await fetch("http://localhost:8080/api/users/search", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    sortBy: "compatibility",
+                    referenceType: mbtiType,                    
+                }),
+                credentials: "include"
+            })
+            if (!response.ok) {
+                throw new Error("Failed to fetch users:", response.status);
+            }
+            const data = await response.json();
+            console.log("Fetched users:", data);
+        }
+        catch (error) {
+            console.error(error);
+        }
+    }
+    
+    useEffect(() => {
+        //fetchUsers();
+        console.log(props.userData);
+    }, []);
+    
+    
     return (
         <div className="w-full h-full min-h-screen"
             style={{
                 backgroundColor: secondaryColor,
             }}
         >
+            Sugestions:
+            <div>
+            <UserDataBlock userData={props.userData} />
+            <UserDataBlock userData={props.userData} />
+            <UserDataBlock userData={props.userData} />
+            <UserDataBlock userData={props.userData} />
+            </div>
             {/*
             <div className="flex justify-around items-center">
                 <div className="flex h-full">
