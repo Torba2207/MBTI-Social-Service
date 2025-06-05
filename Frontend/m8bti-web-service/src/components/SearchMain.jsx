@@ -71,7 +71,7 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
             <span className="md:text-2xl md:ml-[1%]">Sugestions:</span>
             <div>
             {fetchedUsers.length > 0 && fetchedUsers.map((user, index) => (
-                <UserDataBlock userData={user}/>)) }
+                <UserDataBlock key={index} userData={user}/>)) }
             </div>
             {/*
             <div className="flex justify-around items-center">
