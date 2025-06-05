@@ -37,7 +37,8 @@ export default function SearchPage() {
                 <title>M8TI - Search</title>
             </Head>
             <Header mbti={groupIndex} userName={userData.name+" "+userData.surname}/>
-            <SearchMain primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} mbti={groupIndex} />
+            <SearchMain primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} 
+            mbti={groupIndex} mbtiType={userData.mbtiType} userData={userData} />
         </AuthRoute>
     )
 }

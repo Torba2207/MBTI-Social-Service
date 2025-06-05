@@ -5,6 +5,7 @@ import { Button } from "./Button";
 import { useState, useEffect, use } from "react";
 import axios from "axios";
 import TagPopUp from "./TagPopUp";
+import sendFriendRequest from "@/hooks/sendFriendRequest";
 export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,
     ...props}){
     const { width, height } = useScreenSize();
@@ -43,19 +44,26 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
     
     //console.log(width, height);
     return(
-        <div  className={`w-f h-f`}>
+        <div  className={`w-full h-full`}>
+            {currentUser!==nickname&&<div className="mt-[1%] ml-[10%]">
+                <Button 
+                onClick={() => sendFriendRequest(nickname)}
+                color={props.mbtiGroupIndex}>
+                    Send Friend Request
+                </Button>
+            </div>}
             <div 
-                className={`pl-[15%] pt-[5%] h-[80%]`}
+                className={`pl-[15%] pt-[4%] h-[80%]`}
                 >
                 <h1 
-                    className="text-2xl font-bold"
+                    className="md:text-2xl font-bold"
                     style={{
                         color:primaryColor,
                     }}
                 >
-                    About {currentUser===nickname?"You":nickname}
+                    About {currentUser===nickname?"You":props.name+" "+props.surname+"("+nickname+")"}
                 </h1>
-                <textarea 
+                <textarea readOnly={currentUser!==nickname}
                     name="about-section" 
                     id="about-section"
                     value={aboutText}
@@ -68,9 +76,11 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                             color:primaryColor,
                             background:extraColor,
                             borderColor:primaryColor,
-                            height:height*0.5
+                            height:height*0.5,
+                            resize: "none",
                         }
                     }
+                    
 
                     
                 />
