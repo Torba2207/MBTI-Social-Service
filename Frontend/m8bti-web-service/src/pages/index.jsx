@@ -12,7 +12,7 @@ export default function Home(){
             />
         </Head>
         <div className="h-screen w-full">
-        <Header mbti={2} />
+        {/*/<Header mbti={2} />*/}
         </div>
         </>
     )

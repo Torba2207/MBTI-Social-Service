@@ -70,7 +70,7 @@ export default function ProfilePage(){
                 style={{
                     backgroundColor: secondaryColor,
                 }}>
-            <Header mbti={groupIndex} userName={userPageData.name+" "+userPageData.surname}/>
+            <Header mbti={groupIndex} userName={userPageData.name+" "+userPageData.surname} currentUser={currentUser}/>
             <ProfileMain primaryColor={primaryColor} secondaryColor={secondaryColor}
                 extraColor={extraColor} mbti={groupIndex} nickname={nickname} currentUser={currentUser}
                 userAbout={userPageData.description} userTags={userPageData.tags} 
