@@ -48,12 +48,12 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                 className={`pl-[15%] pt-[5%] h-[80%]`}
                 >
                 <h1 
-                    className="text-2xl font-bold"
+                    className="md:text-2xl font-bold"
                     style={{
                         color:primaryColor,
                     }}
                 >
-                    About {currentUser===nickname?"You":nickname}
+                    About {currentUser===nickname?"You":props.name+" "+props.surname+"("+nickname+")"}
                 </h1>
                 <textarea readOnly={currentUser!==nickname}
                     name="about-section" 
