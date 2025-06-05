@@ -74,7 +74,7 @@ export default function ProfilePage(){
             <ProfileMain primaryColor={primaryColor} secondaryColor={secondaryColor}
                 extraColor={extraColor} mbti={groupIndex} nickname={nickname} currentUser={currentUser}
                 userAbout={userPageData.description} userTags={userPageData.tags} 
-                name={userPageData.name} surname={userPageData.surname}/>
+                name={userPageData.name} surname={userPageData.surname} mbtiGroupIndex={groupIndex}/>
                 <div className={currentUser!==nickname?"hidden":""}> 
                     <Button color={groupIndex} onClick={logout}> Log Out</Button>
                 </div>
