@@ -1,19 +1,36 @@
-import React from 'react';
-import { MBTIMap } from './MBTIMap';
+import React, { use, useEffect } from 'react';
+import { MBTIMap, getMBTIGroupIndex } from './MBTIMap';
 import { MBTIColors } from './MBTIColors';
+import useScreenSize from '@/hooks/useScreenSize';
+import { DefaultAvatar } from "./SVGComponents/DefaultAvatar";
+import { useRouter } from "next/router";
 
 
 
 export default function UserDataBlock({ userData }) {
+    const { width, height } = useScreenSize();
     const groupIndex = userData?.mbtiType
-        ? MBTIMap.indexOf(userData.mbtiType.toString())
+        ? getMBTIGroupIndex(userData.mbtiType.toString())
         : 0;
     const primaryColor = MBTIColors({ colorDest: "Primary", mbti: groupIndex });
     const secondaryColor = MBTIColors({ colorDest: "Secondary", mbti: groupIndex });
     const extraColor = MBTIColors({ colorDest: "Extra", mbti: groupIndex });
+    let router = useRouter();
+    useEffect(() => {
+        if (userData.profilePicture) {
+            console.log("User prof picture:", userData.profilePicture);
+        }
+    },[])
+    const redirectToProfile = () => {
+        router.push(`/profile/${userData.nickname}`);
+    }
+    useEffect(() => {
+        console.log("Screen size:", width, height);
+    }, [width, height]);
     return(
         
-            <div className="flex p-4 rounded-lg shadow-md w-2/3 mt-[2%] ml-[1%]"
+            <div onClick={redirectToProfile} 
+            className="flex p-4 rounded-lg shadow-md w-full md:w-2/3 min-w-[285px] mt-[2%] md:ml-[1%]"
                 style={{
                     backgroundColor: secondaryColor,
                     borderColor: primaryColor,
@@ -21,7 +38,10 @@ export default function UserDataBlock({ userData }) {
                     borderStyle: "solid",
                 }}>
                 <div className='w-full'>
-                    <img src={userData.profilePicture || "/icon.png"} alt="Profile" className="w-16 h-16 rounded-full mr-4" />
+                    {userData.profilePicture!=="default.png"&&userData.profilePicture!=="default.jpg"&&<img 
+                    src={userData.profilePicture || "/icon.png"} alt="Profile" className="w-16 h-16 rounded-full mr-4" />}
+                    {(userData.profilePicture==="default.png"||userData.profilePicture==="default.jpg")&&<DefaultAvatar 
+                    className="w-8 h-8" />}
                     <h2 className="text-2xl font-bold mb-2" style={{ color: primaryColor }}>
                         {userData.name} {userData.surname}
                     </h2>
@@ -32,7 +52,7 @@ export default function UserDataBlock({ userData }) {
                 <div className='w-full'>
                 { userData.tags && userData.tags.length > 0 && (
                     <div className="flex flex-wrap">
-                        {userData.tags.map((tag, index) => (
+                        {userData.tags.map((tag, index) => index<5&& (
                             <div key={index} className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]"
                                 style={{
                                     backgroundColor: extraColor,
