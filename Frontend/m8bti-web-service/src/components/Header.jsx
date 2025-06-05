@@ -5,10 +5,12 @@ import { SearchIcon } from "./SVGComponents/SearchIcon";
 import { FriendsIcon } from "./SVGComponents/FriendsIcon";
 import { NotificationBellIcon } from "./SVGComponents/NotificationBellIcon";
 import { HomeIcon } from "./SVGComponents/HomeIcon";
+import { useRouter } from "next/router";
 
-export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
+export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...props }) {
   const bgColor = MBTIColors({ colorDest: "Secondary", mbti });
   const primColor = MBTIColors({ colorDest: "Primary", mbti });
+  let router = useRouter();
   
   return (
     <header 
@@ -33,7 +35,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
         <div className="flex justify-between w-[900%]"> 
           {/* Home Icon */}
           <div className="flex flex-col items-center group w-[20%]">
-            <div className="relative p-2 rounded-full transition-all duration-200 
+            <div onClick={()=>window.location.href = `/profile/${props.currentUser}`} className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}>
               <HomeIcon className="h-6 w-6" />
@@ -46,7 +48,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10 }) {
           
           {/* Search Icon */}
           <div className="flex flex-col items-center group w-[20%]">
-            <div className="relative p-2 rounded-full transition-all duration-200 
+            <div onClick={()=>router.push("/searchPage")} className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}>
               <SearchIcon className="h-6 w-6" />
