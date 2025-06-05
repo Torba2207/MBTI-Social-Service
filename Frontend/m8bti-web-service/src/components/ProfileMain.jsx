@@ -55,7 +55,7 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                 >
                     About {currentUser===nickname?"You":nickname}
                 </h1>
-                <textarea 
+                <textarea readOnly={currentUser!==nickname}
                     name="about-section" 
                     id="about-section"
                     value={aboutText}
@@ -68,9 +68,11 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                             color:primaryColor,
                             background:extraColor,
                             borderColor:primaryColor,
-                            height:height*0.5
+                            height:height*0.5,
+                            resize: "none",
                         }
                     }
+                    
 
                     
                 />
