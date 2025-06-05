@@ -29,6 +29,7 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
         setGenderDropdownState(false);
     }
         */
+    const [fetchedUsers, setFetchedUsers] = useState([]);
     const fetchUsers=async()=>{
         try{
             console.log("Current User Type:", mbtiType);
@@ -47,6 +48,7 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
                 throw new Error("Failed to fetch users:", response.status);
             }
             const data = await response.json();
+            setFetchedUsers(data);
             console.log("Fetched users:", data);
         }
         catch (error) {
@@ -55,8 +57,8 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
     }
     
     useEffect(() => {
-        //fetchUsers();
-        console.log(props.userData);
+        fetchUsers();
+        //console.log(props.userData);
     }, []);
     
     
@@ -66,12 +68,10 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
                 backgroundColor: secondaryColor,
             }}
         >
-            Sugestions:
+            <span className="md:text-2xl md:ml-[1%]">Sugestions:</span>
             <div>
-            <UserDataBlock userData={props.userData} />
-            <UserDataBlock userData={props.userData} />
-            <UserDataBlock userData={props.userData} />
-            <UserDataBlock userData={props.userData} />
+            {fetchedUsers.length > 0 && fetchedUsers.map((user, index) => (
+                <UserDataBlock userData={user}/>)) }
             </div>
             {/*
             <div className="flex justify-around items-center">
