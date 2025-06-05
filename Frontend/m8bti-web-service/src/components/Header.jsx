@@ -73,7 +73,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           </div>
           
           {/* Notification Icon */}
-          <div className="flex flex-col items-center group w-[20%]">
+          <div onClick={()=>router.push("/notificationsPage")} className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-150 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor }}
