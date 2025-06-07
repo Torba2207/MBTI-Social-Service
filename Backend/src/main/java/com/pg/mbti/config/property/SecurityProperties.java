@@ -26,13 +26,18 @@ public final class SecurityProperties {
         public static final String MBTI_ENUMS = "/api/enums/mbti";
         public static final String ANSWERS = "/api/answers";
         public static final String QUESTIONS = "/api/questions";
-        public static final String MBTI_ALL = "/api/mbti/**";
+        public static final String MBTI_TEST_TRAIN = "/api/mbti/train";
+        public static final String MBTI_TEST_NEXT_STEP = "/api/mbti/step";
         public static final String API_DOCS = "/v3/api-docs";
+        public static final String SWAGGER_UI = "/swagger-ui/**";
+        public static final String SWAGGER_RESOURCES = "/swagger-resources/**";
+
         public static final String LOGOUT = "/api/auth/logout";
 
         public static final String[] PUBLIC_ENDPOINTS = {
                 REGISTER, LOGIN, CONFIRM_EMAIL, FORGOT_PASSWORD,
-                MBTI_ENUMS, ANSWERS, QUESTIONS, MBTI_ALL, API_DOCS
+                MBTI_ENUMS, ANSWERS, QUESTIONS, MBTI_TEST_TRAIN,
+                API_DOCS, SWAGGER_RESOURCES, SWAGGER_UI, MBTI_TEST_NEXT_STEP
         };
     }
 
