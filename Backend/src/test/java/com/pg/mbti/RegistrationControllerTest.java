@@ -21,7 +21,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
 import java.util.Objects;
@@ -38,9 +37,6 @@ class RegistrationControllerTest {
 
     @Mock
     private RegistrationMapper registrationMapper;
-
-    @Mock
-    private RedirectAttributes redirectAttributes;
 
     @InjectMocks
     private RegistrationController registrationController;
