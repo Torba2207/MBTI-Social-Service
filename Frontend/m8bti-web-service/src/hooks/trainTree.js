@@ -2,10 +2,11 @@ import axios from "axios";
 
 
 //Version with Axios
+/*
 const trainTree = async (depth) => {
     try {
         const response = await axios.post('http://localhost:8080/api/mbti/train',
-            null,
+            JSON.stringify({}),
             {
                 params: { depth: depth },
                 headers: {
@@ -39,9 +40,11 @@ const trainTree = async (depth) => {
     }
 
 }
+    */
 
-/*
+
 //Version with fetch API
+
 const trainTree = async(depth) => {
     try{
         const url = new URL('http://localhost:8080/api/mbti/train');
@@ -75,6 +78,6 @@ const trainTree = async(depth) => {
         throw error; // Re-throw to allow calling code to handle it
     }
 }
-    */
+    
 
 export default trainTree;
