@@ -15,8 +15,8 @@ const trainTree = async (depth) => {
                 withCredentials: true // Include credentials if your backend requires them
             }
         );
-        console.log("Training response:", response.data);
-        console.log("Training completed successfully with depth:", depth);
+        //console.log("Training response:", response.data);
+        //console.log("Training completed successfully with depth:", depth);
         console.log("Response status:", response.status);   
         return response.data;
     } catch (error) {
