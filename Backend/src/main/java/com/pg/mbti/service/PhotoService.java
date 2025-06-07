@@ -2,8 +2,10 @@ package com.pg.mbti.service;
 import com.pg.mbti.config.property.MinioProperties;
 import com.pg.mbti.exception.FileNotFoundException;
 import com.pg.mbti.exception.FileUploadException;
+import com.pg.mbti.util.MinioUtils;
 import io.minio.*;
 import io.minio.errors.ErrorResponseException;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,6 +32,12 @@ public class PhotoService {
 
     @Value("${image.default.path}")
     private String defaultImagePath;
+
+    @PostConstruct
+    public void init() {
+        MinioUtils.initializeBucket(minioClient, minioProperties.getBucket());
+        log.info("MinIO bucket '{}' initialized successfully.", minioProperties.getBucket());
+    }
 
     /**
      * Uploads a multipart file to the MinIO storage.
