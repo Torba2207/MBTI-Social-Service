@@ -9,13 +9,13 @@ import java.util.UUID;
  */
 public record FriendshipDto(
         /*
-         * The unique identifier of the user who initiated the friendship request.
+         * The unique username of the user who initiated the friendship request.
          */
-        UUID senderId,
+        String senderNickname,
         /*
-         * The unique identifier of the user who is the recipient of the friendship request.
+         * The unique username of the user who is the recipient of the friendship request.
          */
-        UUID receiverId,
+        String receiverNickname,
         /*
          * A boolean indicating whether the friendship request is still pending (true) or has been accepted (false).
          */

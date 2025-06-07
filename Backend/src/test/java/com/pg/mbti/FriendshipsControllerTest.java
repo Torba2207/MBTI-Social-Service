@@ -69,7 +69,7 @@ class FriendshipsControllerTest {
                 .pronouns(Pronouns.HE_HIM)
                 .role(Role.VERIFIED)
                 .build();
-        friendshipDto = new FriendshipDto(user1.getId(), user2.getId(), false, Date.valueOf("2000-01-01"));
+        friendshipDto = new FriendshipDto(user1.getNickname(), user2.getNickname(), false, Date.valueOf("2000-01-01"));
 
         lenient().when(authentication.getName()).thenReturn("user1");
     }

@@ -1,5 +1,6 @@
 package com.pg.mbti.service;
 
+import com.pg.mbti.repository.FriendshipsRepository;
 import com.pg.mbti.util.MbtiCompatibilityCalculator;
 import com.pg.mbti.dto.UserProfileDto;
 import com.pg.mbti.dto.UserSearchDto;
@@ -33,6 +34,7 @@ public class UsersService {
     private final UsersRepository usersRepository;
     private final TagsRepository tagsRepository;
     private final MbtiCompatibilityCalculator compatibilityCalculator;
+    private final FriendshipsRepository friendshipsRepository;
     private final PhotoService photoService;
     private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -108,7 +110,16 @@ public class UsersService {
      * @return A list of {@link User} entities matching the search criteria.
      */
     public List<User> searchUsers(UserSearchDto search, String authenticatedUsername) {
-        log.info("Searching users with criteria: {}", search); // Log user search criteria
+        log.info("Searching users with criteria: {}", search);
+
+        List<String> friendUserNicknames = friendshipsRepository.getFriendshipsByNickname(authenticatedUsername).stream()
+                .filter(friendship -> !friendship.isPending())
+                .map(friendship -> friendship.getSenderId().getNickname().equals(authenticatedUsername) ?
+                        friendship.getReceiverId().getNickname() :
+                        friendship.getSenderId().getNickname())
+                .toList();
+        log.debug("Found {} existing friends to exclude from search results", friendUserNicknames.size());
+
         MBTIType referenceType = search.referenceType();
         boolean sortByCompatibility = referenceType != null && "compatibility".equals(search.sortBy());
         boolean descending = "desc".equalsIgnoreCase(search.sortDirection());
@@ -116,21 +127,28 @@ public class UsersService {
         Sort sort = Sort.unsorted();
         if (!sortByCompatibility && StringUtils.isNotEmpty(search.sortBy())) {
             sort = Sort.by(descending ? Sort.Direction.DESC : Sort.Direction.ASC, search.sortBy());
-            log.debug("Applying standard sort by: {} direction: {}", search.sortBy(), search.sortDirection()); // Log standard sort
+            log.debug("Applying standard sort by: {} direction: {}", search.sortBy(), search.sortDirection());
         }
 
         List<User> users = usersRepository.findUsersByFilters(
                 search.name(), search.surname(), search.mbtiType(),
                 search.gender(), search.tagIds(), authenticatedUsername, sort);
-        log.debug("Found {} users matching initial filters.", users.size()); // Log initial filtered users
+        log.debug("Found {} users matching initial filters.", users.size());
+
+        // Filter out users who are already friends (friendship accepted)
+        users = users.stream()
+                .filter(user -> !friendUserNicknames.contains(user.getNickname()))
+                .toList();
+        log.debug("After filtering friends: {} users remaining", users.size());
 
         if (sortByCompatibility) {
-            log.debug("Sorting users by MBTI compatibility with reference type: {}", referenceType); // Log compatibility sort
+            log.debug("Sorting users by MBTI compatibility with reference type: {}", referenceType);
             Comparator<User> comparator = Comparator.comparing(
                     user -> compatibilityCalculator.calculateCompatibility(user.getMbtiType(), referenceType));
+            users = new ArrayList<>(users);
             users.sort(descending ? comparator.reversed() : comparator);
             log.debug("Users sorted by compatibility. First user's compatibility: {}",
-                    users.isEmpty() ? "N/A" : compatibilityCalculator.calculateCompatibility(users.getFirst().getMbtiType(), referenceType)); // Log first user's compatibility
+                    users.isEmpty() ? "N/A" : compatibilityCalculator.calculateCompatibility(users.getFirst().getMbtiType(), referenceType));
         }
 
         return users;
