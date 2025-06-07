@@ -21,8 +21,8 @@ public class FriendshipsMapper {
     public static FriendshipDto toFriendshipDto(final Friendship friendship) {
         log.debug("Mapping Friendship entity with ID {} to FriendshipDto.", friendship.getId()); // Log the mapping process
         return new FriendshipDto(
-                friendship.getSenderId().getId(), // Get the ID of the sender
-                friendship.getReceiverId().getId(), // Get the ID of the receiver
+                friendship.getSenderId().getNickname(), // Get the ID of the sender
+                friendship.getReceiverId().getNickname(), // Get the ID of the receiver
                 friendship.isPending(), // Get the pending status of the friendship
                 friendship.getStartDate() // Get the start date of the friendship
         );

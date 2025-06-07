@@ -52,6 +52,23 @@ public class FriendshipsController {
         return ResponseEntity.ok(friendshipService.getMyPendingFriendships(authentication.getName()));
     }
 
+    @GetMapping("/me/{friendNickname}")
+    @Operation(summary = "Get friendship by nickname",
+            description = "Retrieves a specific friendship by the nickname of the other user")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved friendship",
+                    content = @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = FriendshipDto.class))),
+            @ApiResponse(responseCode = "404", description = "Friendship not found")
+    })
+    public ResponseEntity<FriendshipDto> getFriendshipByNickname(
+            @Parameter(description = "Authentication information of the current user") final Authentication authentication,
+            @Parameter(description = "Nickname of the other user in the friendship") @PathVariable final String friendNickname
+    ) {
+        FriendshipDto friendship = friendshipService.getFriendshipByFriendNickname(authentication.getName(), friendNickname);
+        return ResponseEntity.ok(friendship);
+    }
+
     @GetMapping("/me/accepted")
     @Operation(summary = "Get accepted friendships",
             description = "Retrieves all accepted friendships for the authenticated user")
