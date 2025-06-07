@@ -18,12 +18,18 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+/**
+ * Configuration for application security.
+ * Manages authentication, authorization, CORS, sessions, and logout handling.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
+    // ===== Security Filter Chain =====
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -53,6 +59,8 @@ public class SecurityConfig {
                 .authenticationProvider(authenticationProvider)
                 .build();
     }
+
+    // ===== CORS Configuration =====
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
