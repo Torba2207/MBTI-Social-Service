@@ -114,4 +114,14 @@ public class FriendshipsService {
                 .ifPresent(friendshipRepository::delete);
         log.info("Friendship successfully deleted between {} and {}", currentNickname, newFriendNickname); // Log successful deletion
     }
+
+    public FriendshipDto getFriendshipByFriendNickname(String name, String friendNickname) {
+        log.debug("Fetching friendship details for user: {} with friend: {}", name, friendNickname); // Log fetching friendship details
+        Friendship friendship = friendshipRepository.findByFriends(name, friendNickname)
+                .orElseThrow(() -> {
+                    log.warn("Friendship not found between {} and {}", name, friendNickname); // Log friendship not found
+                    return new FriendshipNotFoundException("Friendship not found");
+                });
+        return FriendshipsMapper.toFriendshipDto(friendship);
+    }
 }
