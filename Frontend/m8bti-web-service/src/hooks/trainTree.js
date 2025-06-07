@@ -2,7 +2,7 @@ import axios from "axios";
 
 
 //Version with Axios
-/*
+
 const trainTree = async (depth) => {
     try {
         const response = await axios.post('http://localhost:8080/api/mbti/train',
@@ -40,11 +40,10 @@ const trainTree = async (depth) => {
     }
 
 }
-    */
 
 
 //Version with fetch API
-
+/*
 const trainTree = async(depth) => {
     try{
         const url = new URL('http://localhost:8080/api/mbti/train');
@@ -67,7 +66,7 @@ const trainTree = async(depth) => {
             }
             throw new Error(`Request failed with status ${response.status}: ${errorText}`);
         }
-        const data = await response.json(); // This will parse the JSON string, e.g., "Model successfully trained"
+        const data = await response.text(); // This will parse the JSON string, e.g., "Model successfully trained"
 
         console.log('Model training successful:', data);
         console.log('Response status:', response.status);
@@ -78,6 +77,6 @@ const trainTree = async(depth) => {
         throw error; // Re-throw to allow calling code to handle it
     }
 }
-    
+*/    
 
 export default trainTree;
