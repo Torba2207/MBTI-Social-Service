@@ -20,8 +20,10 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.sql.Date;
+import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
@@ -62,6 +64,10 @@ class RegistrationControllerTest {
                 "testuser",
                 "test@example.com"
         );
+
+        // Set client host and port values
+        ReflectionTestUtils.setField(registrationController, "clientHost", "localhost");
+        ReflectionTestUtils.setField(registrationController, "clientPort", "3000");
     }
 
     @Test
@@ -104,40 +110,43 @@ class RegistrationControllerTest {
     }
 
     @Test
-    void confirmEmailReturnsSuccessResponseWhenConfirmationSucceeds() {
+    void confirmEmailRedirectsToLoginWhenConfirmationSucceeds() {
         String token = "valid-token";
         doNothing().when(registrationService).confirmEmail(token);
 
-        ResponseEntity<String> response = registrationController.confirmEmail(token);
+        ResponseEntity<Void> response = registrationController.confirmEmail(token);
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-        assertThat(response.getBody()).isEqualTo("Email confirmed successfully");
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(Objects.requireNonNull(response.getHeaders().getLocation()).toString())
+                .isEqualTo("http://localhost:3000/loginPage?message=Email+confirmed+successfully");
         verify(registrationService).confirmEmail(token);
     }
 
     @Test
-    void confirmEmailThrowsExceptionWhenTokenIsInvalid() {
-        String token = "invalid-token";
-        doThrow(new InvalidTokenException("Invalid or expired token"))
-                .when(registrationService).confirmEmail(token);
-
-        assertThatThrownBy(() -> registrationController.confirmEmail(token))
-                .isInstanceOf(InvalidTokenException.class)
-                .hasMessage("Invalid or expired token");
-
-        verify(registrationService).confirmEmail(token);
-    }
-
-    @Test
-    void confirmEmailThrowsExceptionWhenUserNotFound() {
+    void confirmEmailRedirectsToLoginWithErrorWhenUserNotFound() {
         String token = "token-with-nonexistent-user";
         doThrow(new ResourceNotFoundException("User not found"))
                 .when(registrationService).confirmEmail(token);
 
-        assertThatThrownBy(() -> registrationController.confirmEmail(token))
-                .isInstanceOf(ResourceNotFoundException.class)
-                .hasMessage("User not found");
+        ResponseEntity<Void> response = registrationController.confirmEmail(token);
 
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(Objects.requireNonNull(response.getHeaders().getLocation()).toString())
+                .contains("http://localhost:3000/loginPage?error=User+not+found");
+        verify(registrationService).confirmEmail(token);
+    }
+
+    @Test
+    void confirmEmailRedirectsToLoginWithErrorWhenTokenIsInvalid() {
+        String token = "invalid-token";
+        doThrow(new InvalidTokenException("Invalid or expired token"))
+                .when(registrationService).confirmEmail(token);
+
+        ResponseEntity<Void> response = registrationController.confirmEmail(token);
+
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(Objects.requireNonNull(response.getHeaders().getLocation()).toString())
+                .contains("http://localhost:3000/loginPage?error=Invalid+or+expired+token");
         verify(registrationService).confirmEmail(token);
     }
 }
