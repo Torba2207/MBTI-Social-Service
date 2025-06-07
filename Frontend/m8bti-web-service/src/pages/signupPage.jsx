@@ -19,9 +19,11 @@ export default function SignUp() {
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
 
+    const [mbtiTestState, setMbtiTestState] = useState(false);
+
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
-
+    
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [nickname, setNickname] = useState("");
@@ -289,6 +291,15 @@ export default function SignUp() {
         </div>
       );
 
+
+    if (mbtiTestState) {
+        return (
+            <Head>
+                <title>M8TI - MBTI Test</title>
+            </Head>
+        );
+    }
+
     
     return (
         <>
@@ -441,7 +452,7 @@ export default function SignUp() {
                             )}
 
                             {step === 2 && (
-                                <div className="space-y-6">
+                                <div className="space-y-4">
                                     <div>
                                         <SelectField 
                                             className={clsx(tfClassName, errors.mbtiType && 'border-red-500')}
@@ -467,6 +478,17 @@ export default function SignUp() {
                                                 </option>
                                             ))}
                                         </SelectField>
+                                        <div className='w-full justify-center flex'>
+                                            <Button
+                                                isDynamic={true}
+                                                currentBG={bgColor}
+                                                currentText={secColor}
+                                                className="mt-[1%]"
+                                                onClick={() => (setMbtiTestState(true))}
+                                            >
+                                                MBTI TEST
+                                            </Button>
+                                        </div>
                                         {errors.mbtiType && <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.mbtiType}</p>}
                                     </div>
 
