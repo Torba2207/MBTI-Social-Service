@@ -8,6 +8,7 @@ import useColorCycle from '@/hooks/useColorCycle';
 import { MBTIColors } from '@/components/MBTIColors';
 import { useRouter } from "next/router";
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import MBTITest from '@/components/MBTITest';
 
 const tfClassName = "w-[80%] mx-auto";
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
@@ -18,8 +19,10 @@ export default function SignUp() {
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
-
-    const [mbtiTestState, setMbtiTestState] = useState(false);
+    // Initialize MBTI test state
+    //For test the test is set to true
+    //const [mbtiTestState, setMbtiTestState] = useState(false);
+    const [mbtiTestState, setMbtiTestState] = useState(true); // Set to true for testing purposes
 
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
@@ -294,9 +297,18 @@ export default function SignUp() {
 
     if (mbtiTestState) {
         return (
+            <>
             <Head>
                 <title>M8TI - MBTI Test</title>
             </Head>
+            <AuthLayout mainBGColor={secColor} className="pb-[5%]" style={{
+                borderColor: bgColor,
+                background: extColor,
+                transition: "border-color 1s ease-in-out, background-color 1s ease-in-out"
+            }}>
+                <MBTITest />
+            </AuthLayout>
+            </>
         );
     }
 
