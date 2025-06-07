@@ -24,6 +24,8 @@ export default function SignUp() {
     const [mbtiTestState, setMbtiTestState] = useState(false);
     //const [mbtiTestState, setMbtiTestState] = useState(true); // Set to true for testing purposes
 
+    const [mbtiTestState, setMbtiTestState] = useState(false);
+
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
     
