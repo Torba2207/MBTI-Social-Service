@@ -8,6 +8,7 @@ import useColorCycle from '@/hooks/useColorCycle';
 import { MBTIColors } from '@/components/MBTIColors';
 import { useRouter } from "next/router";
 import { QuestionMarkCircleIcon } from '@heroicons/react/24/outline';
+import MBTITest from '@/components/MBTITest';
 
 const tfClassName = "w-[80%] mx-auto";
 const bgColors=MBTIColors({colorDest:"Primary",mbti:5});
@@ -18,10 +19,14 @@ export default function SignUp() {
     const bgColor=useColorCycle(bgColors,3000);
     const secColor=useColorCycle(secondaryColors,3000);
     const extColor=useColorCycle(extraColors,3000);
+    // Initialize MBTI test state
+    //For test the test is set to true
+    //const [mbtiTestState, setMbtiTestState] = useState(false);
+    const [mbtiTestState, setMbtiTestState] = useState(true); // Set to true for testing purposes
 
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
-
+    
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [nickname, setNickname] = useState("");
@@ -289,6 +294,24 @@ export default function SignUp() {
         </div>
       );
 
+
+    if (mbtiTestState) {
+        return (
+            <>
+            <Head>
+                <title>M8TI - MBTI Test</title>
+            </Head>
+            <AuthLayout mainBGColor={secColor} className="pb-[5%]" style={{
+                borderColor: bgColor,
+                background: extColor,
+                transition: "border-color 1s ease-in-out, background-color 1s ease-in-out"
+            }}>
+                <MBTITest />
+            </AuthLayout>
+            </>
+        );
+    }
+
     
     return (
         <>
@@ -441,7 +464,7 @@ export default function SignUp() {
                             )}
 
                             {step === 2 && (
-                                <div className="space-y-6">
+                                <div className="space-y-4">
                                     <div>
                                         <SelectField 
                                             className={clsx(tfClassName, errors.mbtiType && 'border-red-500')}
@@ -467,6 +490,17 @@ export default function SignUp() {
                                                 </option>
                                             ))}
                                         </SelectField>
+                                        <div className='w-full justify-center flex'>
+                                            <Button
+                                                isDynamic={true}
+                                                currentBG={bgColor}
+                                                currentText={secColor}
+                                                className="mt-[1%]"
+                                                onClick={() => (setMbtiTestState(true))}
+                                            >
+                                                MBTI TEST
+                                            </Button>
+                                        </div>
                                         {errors.mbtiType && <p className="text-red-500 text-xs mt-1 ml-[10%]">{errors.mbtiType}</p>}
                                     </div>
 
