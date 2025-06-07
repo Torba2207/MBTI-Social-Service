@@ -1,5 +1,6 @@
 package com.pg.mbti.config;
 
+import com.pg.mbti.config.property.SecurityProperties;
 import com.pg.mbti.util.CustomLogoutSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,12 +17,7 @@ import org.springframework.security.web.header.writers.ClearSiteDataHeaderWriter
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import java.util.List;
 
-/**
- * Configuration for application security.
- * Manages authentication, authorization, CORS, sessions, and logout handling.
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
@@ -29,63 +25,42 @@ public class SecurityConfig {
     private final AuthenticationProvider authenticationProvider;
     private final CustomLogoutSuccessHandler customLogoutSuccessHandler;
 
-    // ===== Security Filter Chain =====
-
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // Configures the main security filter chain with:
-        // - CSRF disabled for API endpoints
-        // - CORS configuration for cross-origin requests
-        // - URL-based authorization rules
-        // - Session management with max sessions and fixation protection
-        // - Custom logout handling with cookie clearing
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/api/auth/register",
-                                "/api/auth/login",
-                                "/api/auth/confirm-email",
-                                "/api/auth/forgot-password",
-                                "/api/enums/mbti",
-                                "/api/answers",
-                                "/api/questions",
-                                "/v3/api-docs"
-                        ).permitAll()
+                        .requestMatchers(SecurityProperties.Endpoints.PUBLIC_ENDPOINTS).permitAll()
                         .anyRequest().authenticated()
                 )
                 .securityContext(context -> context
                         .securityContextRepository(new HttpSessionSecurityContextRepository())
                 )
                 .sessionManagement(session -> {
-                    session.maximumSessions(1).maxSessionsPreventsLogin(true);
+                    session.maximumSessions(SecurityProperties.Security.MAX_SESSIONS).maxSessionsPreventsLogin(true);
                     session.sessionFixation().newSession();
                     session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED);
                 })
                 .logout(logout -> logout
-                        .logoutUrl("/api/auth/logout")
+                        .logoutUrl(SecurityProperties.Endpoints.LOGOUT)
                         .addLogoutHandler(new HeaderWriterLogoutHandler(
-                                new ClearSiteDataHeaderWriter(ClearSiteDataHeaderWriter.Directive.COOKIES)
+                                new ClearSiteDataHeaderWriter(SecurityProperties.Security.COOKIE_DIRECTIVE)
                         ))
-                        .deleteCookies("MY_SESSION_COOKIE")
+                        .deleteCookies(SecurityProperties.Security.SESSION_COOKIE_NAME)
                         .logoutSuccessHandler(customLogoutSuccessHandler)
                 )
                 .authenticationProvider(authenticationProvider)
                 .build();
     }
 
-    // ===== CORS Configuration =====
-
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
-        // Configures Cross-Origin Resource Sharing (CORS) to allow frontend access
-        // from different origins while maintaining security
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOriginPatterns(List.of("*"));
-        configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        configuration.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        configuration.setAllowCredentials(true);
+        configuration.setAllowedOriginPatterns(SecurityProperties.Cors.ALLOWED_ORIGIN_PATTERNS);
+        configuration.setAllowedMethods(SecurityProperties.Cors.ALLOWED_METHODS);
+        configuration.setAllowedHeaders(SecurityProperties.Cors.ALLOWED_HEADERS);
+        configuration.setAllowCredentials(SecurityProperties.Cors.ALLOW_CREDENTIALS);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
