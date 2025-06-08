@@ -21,8 +21,8 @@ export default function SignUp() {
     const extColor=useColorCycle(extraColors,3000);
     // Initialize MBTI test state
     //For test the test is set to true
-    //const [mbtiTestState, setMbtiTestState] = useState(false);
-    const [mbtiTestState, setMbtiTestState] = useState(true); // Set to true for testing purposes
+    const [mbtiTestState, setMbtiTestState] = useState(false);
+    //const [mbtiTestState, setMbtiTestState] = useState(true); // Set to true for testing purposes
 
     const [step, setStep] = useState(0);
     const [animate, setAnimate] = useState(true);
@@ -301,12 +301,20 @@ export default function SignUp() {
             <Head>
                 <title>M8TI - MBTI Test</title>
             </Head>
-            <AuthLayout mainBGColor={secColor} className="pb-[5%]" style={{
+            <AuthLayout mainBGColor={secColor} style={{
                 borderColor: bgColor,
                 background: extColor,
                 transition: "border-color 1s ease-in-out, background-color 1s ease-in-out"
             }}>
-                <MBTITest />
+                <MBTITest 
+                primaryColor={bgColor} 
+                secondaryColor={secColor}
+                extraColor={extColor}
+                transitionDefinition={'all 1s ease-in-out'}
+                setMbtiTestState={setMbtiTestState}
+                setMbtiType={setMbtiType}
+
+                />
             </AuthLayout>
             </>
         );
