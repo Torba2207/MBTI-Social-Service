@@ -4,7 +4,8 @@ import { useState, useEffect, use } from "react";
 import getMbtiQuestion from "@/hooks/getMbtiQuestion";
 import { Button } from "@/components/Button";
 
-export default function MBTITest() {
+export default function MBTITest({primaryColor, secondaryColor, extraColor, transitionDefinition, setMbtiTestState,
+    setMbtiType,  ...props}) {
 
     const [answerArray, setAnswerArray] = useState([]);
     const [currentQuestion, setCurrentQuestion] = useState(0);
@@ -50,31 +51,70 @@ export default function MBTITest() {
                 });
         }
     }, [isTreeReady]);
+    useEffect(() => {
+        if (currentQuestion.mbti) {
+            
+            console.log("MBTI type determined:", currentQuestion.mbti);
+            setMbtiType(currentQuestion.mbti);
+            
+        }
+    }, [currentQuestion]);
     return (
         <>
 
-        {currentQuestion.questionId&&<div>
-            <span>
+        {currentQuestion.questionId&&<div className="py-[10%]">
+            <div className="text-center text-2xl font-bold mb-4 h-1/2"
+                style={{
+                    color: primaryColor,
+                    transition: transitionDefinition,
+                }}
+                    >
                 {currentQuestion.questionText || "Loading question..."}
-            </span>
-            <Button
-               onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:true})} 
-            >
-                Yes
-            </Button>
-            <Button
-                onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:true})}
-            
-            >
-                No
-            </Button>
+            </div>
+            <div className="flex justify-between mt-4 h-1/2">
+                <Button
+                    onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:true})}
+                    isDynamic={true}
+                    currentBG={primaryColor}
+                    currentText={secondaryColor}
+                    className="ml-[5%]"            
+                >
+                    Yes
+                </Button>
+                <Button
+                    onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:true})}
+                    isDynamic={true}
+                    currentBG={primaryColor}
+                    currentText={secondaryColor}
+                    className="mr-[5%]"
+                >
+                    No
+                </Button>
+            </div>
         </div>}
 
-        {currentQuestion.mbti&&<div>
-            <span>
-                Your MBTI type is: {currentQuestion.mbti}
-            </span>
-        </div>}
+        {currentQuestion.mbti&& <div className="h-full w-full">
+                <div className="text-center text-2xl font-bold my-auto py-[20%]"
+                    style={{
+                        color: primaryColor,
+                        transition: transitionDefinition,
+                    }}>
+                    Your MBTI type is: {currentQuestion.mbti}
+                </div>
+                
+                <div className="flex justify-center py-[10%]">
+                 <Button
+                    onClick={() => setMbtiTestState(false)}
+                    isDynamic={true}
+                    currentBG={primaryColor}
+                    currentText={secondaryColor}
+                >
+                    Back To Registration Process
+                </Button>
+                </div>
+            </div>
+            
+        }
 
         </>
     );
