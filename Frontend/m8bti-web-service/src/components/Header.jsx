@@ -22,9 +22,6 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
         <div className="flex items-center space-x-4">
           <Logo className="h-19 w-auto" />
           <div className="flex flex-col">
-            <span className="hidden md:block text-3xl font-semibold truncate max-w-[70vw] md:max-w-none">
-              {userName}
-            </span>
           </div>
         </div>
         <DefaultAvatar className="h-10 w-auto" fill={primColor}/>
