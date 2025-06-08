@@ -3,7 +3,6 @@ export function FriendsIcon(props) {
       <svg
         {...props}
         viewBox="0 -6 44 44"
-        fill="currentColor"
         xmlns="http://www.w3.org/2000/svg"
         preserveAspectRatio="xMidYMid"
       >

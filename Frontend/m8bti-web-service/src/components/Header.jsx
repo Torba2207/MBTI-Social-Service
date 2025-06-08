@@ -27,7 +27,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
             </span>
           </div>
         </div>
-        <DefaultAvatar className="h-10 w-auto" />
+        <DefaultAvatar className="h-10 w-auto" fill={primColor}/>
       </div>
 
       {/* icons */}
@@ -36,12 +36,13 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           {/* Home Icon */}
           <div className="flex flex-col items-center group w-[20%]">
             <div onClick={()=>window.location.href = `/loginPage`} className="relative p-2 rounded-full transition-all duration-200 
-                          group-hover:brightness-150 group-hover:bg-opacity-50"
-                          style={{ backgroundColor: bgColor }}>
-              <HomeIcon className="h-6 w-6" />
+                          group-hover:brightness-108 group-hover:bg-opacity-100"
+                          style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}>
+              <HomeIcon className="h-6 w-6" fill={primColor}/>
             </div>
-            <span className="text-xs text-purple-900 font-medium opacity-0 
-                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+            <span className="text-xs font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1"
+                           style={{ color: primColor }}>
               Home
             </span>
           </div>
@@ -49,12 +50,13 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           {/* Search Icon */}
           <div className="flex flex-col items-center group w-[20%]">
             <div onClick={()=>router.push("/searchPage")} className="relative p-2 rounded-full transition-all duration-200 
-                          group-hover:brightness-150 group-hover:bg-opacity-50"
-                          style={{ backgroundColor: bgColor }}>
-              <SearchIcon className="h-6 w-6" />
+                          group-hover:brightness-108 group-hover:bg-opacity-50"
+                          style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}>
+              <SearchIcon bgColor={primColor} className="h-6 w-6" fill={bgColor}/>
             </div>
-            <span className="text-xs text-purple-900 font-medium opacity-0 
-                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+            <span className="text-xs font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1"
+                           style={{ color: primColor }}>
               Search
             </span>
           </div>
@@ -62,12 +64,13 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           {/* Friends Icon */}
           <div className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
-                          group-hover:brightness-150 group-hover:bg-opacity-50"
-                          style={{ backgroundColor: bgColor }}>
-              <FriendsIcon className="h-6 w-6" />
+                          group-hover:brightness-108 group-hover:bg-opacity-50"
+                          style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}>
+              <FriendsIcon className="h-6 w-6" fill={primColor} />
             </div>
-            <span className="text-xs text-purple-900 font-medium opacity-0 
-                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+            <span className="text-xs font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1"
+                           style={{ color: primColor }}>
               Friends
             </span>
           </div>
@@ -75,20 +78,22 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           {/* Notification Icon */}
           <div onClick={()=>router.push("/notificationsPage")} className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
-                          group-hover:brightness-150 group-hover:bg-opacity-50"
-                          style={{ backgroundColor: bgColor }}
+                          group-hover:brightness-108 group-hover:bg-opacity-50"
+                          style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}
                   >
-              <NotificationBellIcon className="h-6 w-6" />
+              <NotificationBellIcon bgColor={primColor} className="h-6 w-6" fill={bgColor} />
               {newInvites > 0 && (
-                <span className="absolute bottom-0 right-0 bg-white text-purple-700 
+                <span className="absolute bottom-0 right-0 bg-white 
                                text-xs font-bold rounded-full h-5 w-5 flex items-center 
-                               justify-center shadow">
+                               justify-center shadow"
+                               style={{ color: primColor}}>
                   {newInvites > 9 ? "9+" : newInvites}
                 </span>
               )}
             </div>
-            <span className="text-xs text-purple-900 font-medium opacity-0 
-                           group-hover:opacity-100 transition-opacity duration-200 mt-1">
+            <span className="text-xs font-medium opacity-0 
+                           group-hover:opacity-100 transition-opacity duration-200 mt-1"
+                           style={{color: primColor}}>
               Notifications
             </span>
           </div>
