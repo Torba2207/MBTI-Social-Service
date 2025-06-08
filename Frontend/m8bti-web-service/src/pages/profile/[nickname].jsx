@@ -11,6 +11,7 @@ import { useRouter } from "next/router";
 import { ProfileMain } from "@/components/ProfileMain";
 import autoprefixer from "autoprefixer";
 
+
 export default function ProfilePage(){
     const router = useRouter();
     const { nickname } = router.query;
@@ -25,6 +26,8 @@ export default function ProfilePage(){
     const {userData}=useContext(AuthContext)
     const {logout}=useContext(AuthContext)
     const [userPageData, setUserPageData] =useState(userData)
+    
+    
 
     const fetchVisitedUserData=async()=>{
         try{
@@ -47,6 +50,7 @@ export default function ProfilePage(){
         if(nickname!==currentUser){
             
             fetchVisitedUserData();
+
         }
     
     },[])

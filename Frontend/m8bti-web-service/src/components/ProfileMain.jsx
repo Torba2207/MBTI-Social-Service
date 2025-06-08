@@ -6,13 +6,17 @@ import { useState, useEffect, use } from "react";
 import axios from "axios";
 import TagPopUp from "./TagPopUp";
 import sendFriendRequest from "@/hooks/sendFriendRequest";
-export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,
-    ...props}){
+import getFriendshipStatus from "@/hooks/getFriendshipStatus";
+import deleteFriendship from "@/hooks/deleteFriendship";
+import acceptFriendship from "@/hooks/acceptFriendship";
+export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,...props}){
     const { width, height } = useScreenSize();
     const [aboutText, setAboutText] = useState(userAbout || "");
     const [usersTags, setUsersTags] = useState(userTags || []);
     const [oldAboutText, setOldAboutText] = useState(aboutText || "");
     const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+    const [friendshipAction, setFriendshipAction] = useState(false);
+    const [friendshipStatus, setFriendshipStatus] = useState(null);
     //const [hoveredTag, setHoveredTag] = useState(null);
     
     //console.log(aboutText)
@@ -33,6 +37,20 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
             alert("Failed to update profile.");
         }
     };
+
+    const handleFriendshipRequest = async (friendshipRequest) => {
+        try {
+            await friendshipRequest(nickname); // Await the completion of the friend request
+            // If the request was successful, then immediately fetch the updated status
+            const status = await getFriendshipStatus(nickname);
+            setFriendshipStatus(status); // Update the UI based on the new status
+            console.log("Friend request sent and status updated:", status);
+        } catch (error) {
+            console.error("Failed to send friend request or update status:", error);
+            // You might want to revert UI changes or show an error message
+        }
+    };
+
     useEffect(() => {
         setAboutText(userAbout || "");
         console.log(userAbout, aboutText)
@@ -41,16 +59,59 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
         setUsersTags(userTags || []);
         console.log(userTags, usersTags)
     }, [userTags]);
+    useEffect(() => {
+        if( currentUser !== nickname) {
+        getFriendshipStatus(nickname)
+                        .then((status) => {
+                            console.log("Friendship status with", nickname, ":", status);
+                            setFriendshipStatus(status);
+                        })
+                        .catch((error) => {
+                            console.error("Error fetching friendship status:", error);
+                        });
+            }   
+    }, []);
     
     //console.log(width, height);
     return(
         <div  className={`w-full h-full`}>
             {currentUser!==nickname&&<div className="mt-[1%] ml-[10%]">
-                <Button 
-                onClick={() => sendFriendRequest(nickname)}
+                {friendshipStatus===null && <Button 
+                onClick={() => (handleFriendshipRequest(sendFriendRequest))}
                 color={props.mbtiGroupIndex}>
                     Send Friend Request
+                </Button>}
+                {friendshipStatus&&friendshipStatus.isPending&&friendshipStatus.senderNickname===currentUser&&
+                <Button
+                    onClick={() => (handleFriendshipRequest(deleteFriendship))}
+                    color={props.mbtiGroupIndex}
+                >
+                    Cancel Request
+                    </Button>}
+                {friendshipStatus&&friendshipStatus.isPending&&friendshipStatus.receiverNickname===currentUser&&
+                <div>
+                <Button
+                    onClick={() => handleFriendshipRequest(acceptFriendship)}
+                    color={props.mbtiGroupIndex}
+                >
+                    Accept Request
                 </Button>
+                <Button
+                    onClick={() => handleFriendshipRequest(deleteFriendship)}
+                    color={props.mbtiGroupIndex}
+                >
+                    Reject Request
+                </Button>
+                </div>}
+                {friendshipStatus&&!friendshipStatus.isPending&&
+                <Button
+                    onClick={() => handleFriendshipRequest(deleteFriendship)}
+                    color={props.mbtiGroupIndex}
+                >
+                    Unfriend
+                </Button>}
+
+                
             </div>}
             <div 
                 className={`pl-[15%] pt-[4%] h-[80%]`}
