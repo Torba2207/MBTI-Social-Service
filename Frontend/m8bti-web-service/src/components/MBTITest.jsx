@@ -82,7 +82,7 @@ export default function MBTITest({primaryColor, secondaryColor, extraColor, tran
                     Yes
                 </Button>
                 <Button
-                    onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:true})}
+                    onClick={() => handleAnswer({questionId:currentQuestion.questionId, isYes:false})}
                     isDynamic={true}
                     currentBG={primaryColor}
                     currentText={secondaryColor}
