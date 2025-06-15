@@ -1,8 +1,10 @@
-import React, { use, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { MBTIMap, getMBTIGroupIndex } from './MBTIMap';
 import { MBTIColors } from './MBTIColors';
 import useScreenSize from '@/hooks/useScreenSize';
 import { DefaultAvatar } from "./SVGComponents/DefaultAvatar";
+import { FacebookIcon } from "./SVGComponents/FacebookIcon"; 
+import { InstagramIcon } from './SVGComponents/InstagramIcon';
 import { useRouter } from "next/router";
 
 
@@ -16,6 +18,10 @@ export default function UserDataBlock({ userData }) {
     const secondaryColor = MBTIColors({ colorDest: "Secondary", mbti: groupIndex });
     const extraColor = MBTIColors({ colorDest: "Extra", mbti: groupIndex });
     let router = useRouter();
+
+    const instagramUrl = userData.links?.find(link => link.includes("instagram.com"));
+    const facebookUrl = userData.links?.find(link => link.includes("facebook.com"));
+
     useEffect(() => {
         if (userData.profilePicture) {
             console.log("User prof picture:", userData.profilePicture);
@@ -63,6 +69,21 @@ export default function UserDataBlock({ userData }) {
                                 <span>{tag.name}</span>
                             </div>
                         ))}
+                    </div>
+                )}
+                {/* Social Media Links */}
+                {(instagramUrl || facebookUrl) && (
+                    <div className="flex mt-4">
+                        {instagramUrl && (
+                            <a href={instagramUrl} target="_blank" rel="noopener noreferrer" className="mr-3">
+                                <InstagramIcon className="w-8 h-8" fill={primaryColor} />
+                            </a>
+                        )}
+                        {facebookUrl && (
+                            <a href={facebookUrl} target="_blank" rel="noopener noreferrer">
+                                <FacebookIcon className="w-8 h-8" fill={primaryColor} />
+                            </a>
+                        )}
                     </div>
                 )}
                 </div>
