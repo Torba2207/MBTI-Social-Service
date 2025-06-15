@@ -21,6 +21,7 @@ export default function NotificationsPage() {
         ? getMBTIGroupIndex(userData.mbtiType.toString())
         : 0;
     const primaryColor = MBTIColors({ colorDest: "Primary", mbti: groupIndex });
+    const bgColor = MBTIColors({ colorDest: "Secondary", mbti: groupIndex });
 
     const fetchRequestsWithUserData = async () => {
         try {
@@ -119,11 +120,12 @@ export default function NotificationsPage() {
                 userName={`${userData?.name || ''} ${userData?.surname || ''}`}
                 currentUser={currentUser}
             />
-            <div className="flex flex-col items-center justify-start min-h-screen bg-gray-100 py-10">
+            <div className="flex flex-col items-center justify-start min-h-screen py-10"style={{ backgroundColor: bgColor}}>
                 <h1 className="text-3xl font-bold mb-6" style={{ color: primaryColor }}>
                     Friend Requests
                 </h1>
                 <div className="w-full space-y-4 px-4">
+                    
                     {loading ? (
                         <p>Loading...</p>
                     ) : error ? (
@@ -132,14 +134,25 @@ export default function NotificationsPage() {
                         <p>No pending friend requests.</p>
                     ) : (
                         pendingRequests.map((req) => (
+                            
                             req.senderData && (
+                            
+
                                 <UserDataBlock key={req.senderNickname} userData={req.senderData}>
                                     <div className="flex gap-2">
-                                        <Button color={groupIndex} onClick={() => handleAccept(req.senderNickname)}>
+                                        <Button color={groupIndex} 
+                                        
+                                        onClick={(e) => {
+                                            e.stopPropagation();
+                                            handleAccept(req.senderNickname);
+                                        }}>
                                             Accept
                                         </Button>
-                                        <Button color={groupIndex} onClick={() => handleReject(req.senderNickname)}>
-                                            Reject
+                                        <Button color={groupIndex} onClick={(e) =>{
+                                            e.stopPropagation(); 
+                                            handleReject(req.senderNickname);
+                                            }}>
+                                                Reject
                                         </Button>
                                     </div>
                                 </UserDataBlock>

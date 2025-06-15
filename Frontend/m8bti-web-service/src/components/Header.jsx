@@ -1,3 +1,4 @@
+import { useState, useEffect, useContext } from "react";
 import { DefaultAvatar } from "./SVGComponents/DefaultAvatar";
 import { MBTIColors } from "./MBTIColors";
 import { Logo } from "./Logo";
@@ -7,11 +8,44 @@ import { NotificationBellIcon } from "./SVGComponents/NotificationBellIcon";
 import { HomeIcon } from "./SVGComponents/HomeIcon";
 import { useRouter } from "next/router";
 
-export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...props }) {
+export function Header({ mbti, userName = "Lionel Messi", ...props }) {
   const bgColor = MBTIColors({ colorDest: "Secondary", mbti });
   const primColor = MBTIColors({ colorDest: "Primary", mbti });
+  const [newInvites, setNewInvites] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   let router = useRouter();
-  
+
+  const fetchPendingRequests = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      
+      const response = await fetch("http://localhost:8080/api/friendships/me/pending", {
+        method: "GET",
+        credentials: "include"
+      });
+      
+      if (!response.ok) throw new Error("Failed to fetch friendship requests");
+      
+      const requests = await response.json();
+      setNewInvites(requests.length); 
+      
+    } catch (error) {
+      console.error("Error fetching requests:", error);
+      setError("Failed to load friend requests");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPendingRequests();
+   
+    const interval = setInterval(fetchPendingRequests, 3000);
+    return () => clearInterval(interval);
+  }, []);
+    
   return (
     <header 
       className="flex flex-col w-full border-b-2 border-gray-500"

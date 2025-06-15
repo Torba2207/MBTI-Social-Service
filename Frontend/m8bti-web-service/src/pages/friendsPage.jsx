@@ -18,6 +18,8 @@ export default function FriendsPage() {
         ? getMBTIGroupIndex(userData.mbtiType.toString())
         : 0;
     const primaryColor = MBTIColors({ colorDest: "Primary", mbti: groupIndex });
+    const secondaryColor=MBTIColors({colorDest:"Secondary",mbti:groupIndex});
+    const extraColor=MBTIColors({colorDest:"Extra",mbti:groupIndex});
 
     
     const fetchFriends = async () => {
@@ -107,7 +109,7 @@ export default function FriendsPage() {
                 currentUser={currentUser}
             />
             
-            <div className="flex flex-col items-center min-h-screen bg-gray-50 py-8 px-4">
+            <div className="flex flex-col items-center min-h-screen py-8 px-4" style={{ backgroundColor: secondaryColor}}>
                 <h1 className="text-3xl font-bold mb-8" style={{ color: primaryColor }}>
                     My Friends ({friends.length})
                 </h1>
