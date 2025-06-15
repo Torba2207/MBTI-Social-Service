@@ -78,6 +78,7 @@ export default function UserDataBlock({ userData, children }) {
                         ))}
                     </div>
                 )}
+                {/* Social Media Links */}
                 {(instagramUrl || facebookUrl) && (
                     <div className="flex mt-4">
                         {instagramUrl && (
