@@ -8,7 +8,6 @@ import { InstagramIcon } from './SVGComponents/InstagramIcon';
 import { useRouter } from "next/router";
 
 
-
 export default function UserDataBlock({ userData }) {
     const { width, height } = useScreenSize();
     const groupIndex = userData?.mbtiType
@@ -21,6 +20,8 @@ export default function UserDataBlock({ userData }) {
 
     const instagramUrl = userData.links?.find(link => link.includes("instagram.com"));
     const facebookUrl = userData.links?.find(link => link.includes("facebook.com"));
+
+    const profilePictureUrl = userData.profilePicture ? `http://localhost:8080/api/photo/${userData.profilePicture}` : "/icon.png";
 
     useEffect(() => {
         if (userData.profilePicture) {
@@ -44,10 +45,16 @@ export default function UserDataBlock({ userData }) {
                     borderStyle: "solid",
                 }}>
                 <div className='w-full'>
-                    {userData.profilePicture!=="default.png"&&userData.profilePicture!=="default.jpg"&&<img 
-                    src={userData.profilePicture || "/icon.png"} alt="Profile" className="w-16 h-16 rounded-full mr-4" />}
-                    {(userData.profilePicture==="default.png"||userData.profilePicture==="default.jpg")&&<DefaultAvatar 
-                    className="w-8 h-8" />}
+                    {userData.profilePicture !== "default.png" && userData.profilePicture !== "default.jpg" && (
+                        <img 
+                            src={profilePictureUrl} 
+                            alt="Profile" 
+                            className="w-16 h-16 rounded-full mr-4" 
+                        />
+                    )}
+                    {(userData.profilePicture === "default.png" || userData.profilePicture === "default.jpg") && (
+                        <DefaultAvatar className="w-8 h-8" />
+                    )}
                     <h2 className="text-2xl font-bold mb-2" style={{ color: primaryColor }}>
                         {userData.name} {userData.surname}
                     </h2>
@@ -58,7 +65,7 @@ export default function UserDataBlock({ userData }) {
                 <div className='w-full'>
                 { userData.tags && userData.tags.length > 0 && (
                     <div className="flex flex-wrap">
-                        {userData.tags.map((tag, index) => index<5&& (
+                        {userData.tags.map((tag, index) => index < 5 && (
                             <div key={index} className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]"
                                 style={{
                                     backgroundColor: extraColor,
@@ -71,7 +78,6 @@ export default function UserDataBlock({ userData }) {
                         ))}
                     </div>
                 )}
-                {/* Social Media Links */}
                 {(instagramUrl || facebookUrl) && (
                     <div className="flex mt-4">
                         {instagramUrl && (
