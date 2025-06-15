@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import SelectDropdown from "./SelectDropdown";
 import { MBTIMap } from "./MBTIMap";
 import UserDataBlock from "./UserDataBlock";
+import { Button } from "./Button";
 
 export default function SearchMain({primaryColor, secondaryColor, extraColor, mbti, mbtiType, ...props}) {
     /*
@@ -71,7 +72,16 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
             <span className="md:text-2xl md:ml-[1%]">Sugestions:</span>
             <div>
             {fetchedUsers.length > 0 && fetchedUsers.map((user, index) => (
-                <UserDataBlock key={index} userData={user}/>)) }
+                <UserDataBlock key={index} userData={user}>
+                    <div className="flex gap-2">
+                        <Button color={secondaryColor} >
+                            Add
+                        </Button>
+                        
+                    </div>
+                </UserDataBlock>
+                )) 
+                }
             </div>
             {/*
             <div className="flex justify-around items-center">

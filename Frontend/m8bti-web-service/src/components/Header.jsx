@@ -59,7 +59,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           </div>
           
           {/* Friends Icon */}
-          <div className="flex flex-col items-center group w-[20%]">
+          <div onClick={()=>router.push("/friendsPage")} className="flex flex-col items-center group w-[20%]">
             <div className="relative p-2 rounded-full transition-all duration-200 
                           group-hover:brightness-108 group-hover:bg-opacity-50"
                           style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}>
