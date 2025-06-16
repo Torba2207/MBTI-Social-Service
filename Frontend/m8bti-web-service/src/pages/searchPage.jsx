@@ -20,9 +20,9 @@ export default function SearchPage() {
     const groupIndex = userData?.mbtiType
         ? getMBTIGroupIndex(userData.mbtiType.toString())
         : 0;
-    const primaryColor=MBTIColors({colorDest:"Primary",mbti:groupIndex})
-    const secondaryColor=MBTIColors({colorDest:"Secondary",mbti:groupIndex})
-    const extraColor=MBTIColors({colorDest:"Extra",mbti:groupIndex})
+    const primaryColor=MBTIColors({colorDest:"Primary",mbti:groupIndex});
+    const secondaryColor=MBTIColors({colorDest:"Secondary",mbti:groupIndex});
+    const extraColor=MBTIColors({colorDest:"Extra",mbti:groupIndex});
 
     if(currentUser === null)
         return (

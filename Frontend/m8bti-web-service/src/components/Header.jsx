@@ -15,8 +15,41 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
   const fileInputRef = useRef(null);
   const bgColor = MBTIColors({ colorDest: "Secondary", mbti });
   const primColor = MBTIColors({ colorDest: "Primary", mbti });
+  const [newInvites, setNewInvites] = useState(0);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   let router = useRouter();
 
+  const fetchPendingRequests = async () => {
+    try {
+      setError(null);
+      setLoading(true);
+      
+      const response = await fetch("http://localhost:8080/api/friendships/me/pending", {
+        method: "GET",
+        credentials: "include"
+      });
+      
+      if (!response.ok) throw new Error("Failed to fetch friendship requests");
+      
+      const requests = await response.json();
+      setNewInvites(requests.length); 
+      
+    } catch (error) {
+      console.error("Error fetching requests:", error);
+      setError("Failed to load friend requests");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchPendingRequests();
+   
+    const interval = setInterval(fetchPendingRequests, 3000);
+    return () => clearInterval(interval);
+  }, []);
+    
   useEffect(() => {
     async function fetchAvatar() {
       try {
@@ -155,11 +188,10 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
           </div>
 
           {/* Friends Icon */}
-          <div className="flex flex-col items-center group w-[20%]">
-            <div
-              className="relative p-2 rounded-full transition-all duration-200 group-hover:brightness-108 group-hover:bg-opacity-50"
-              style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}
-            >
+           <div onClick={()=>router.push("/friendsPage")} className="flex flex-col items-center group w-[20%]">
+            <div className="relative p-2 rounded-full transition-all duration-200 
+                          group-hover:brightness-108 group-hover:bg-opacity-50"
+                          style={{ backgroundColor: bgColor, backgroundOpacity: 0 }}>
               <FriendsIcon className="h-6 w-6" fill={primColor} />
             </div>
             <span

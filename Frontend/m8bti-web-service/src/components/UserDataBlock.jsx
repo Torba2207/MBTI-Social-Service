@@ -8,7 +8,7 @@ import { InstagramIcon } from './SVGComponents/InstagramIcon';
 import { useRouter } from "next/router";
 
 
-export default function UserDataBlock({ userData }) {
+export default function UserDataBlock({ userData, children }) {
     const { width, height } = useScreenSize();
     const groupIndex = userData?.mbtiType
         ? getMBTIGroupIndex(userData.mbtiType.toString())
@@ -93,6 +93,11 @@ export default function UserDataBlock({ userData }) {
                     </div>
                 )}
                 </div>
+                {children && (
+                <div className="flex flex-col justify-center items-center ml-4">
+                    {children}
+                </div>
+            )}
             </div>
 
         
