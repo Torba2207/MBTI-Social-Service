@@ -9,29 +9,40 @@ import sendFriendRequest from "@/hooks/sendFriendRequest";
 import getFriendshipStatus from "@/hooks/getFriendshipStatus";
 import deleteFriendship from "@/hooks/deleteFriendship";
 import acceptFriendship from "@/hooks/acceptFriendship";
-export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nickname,currentUser, userAbout, userTags,...props}){
+
+export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, nickname, currentUser, userAbout, userTags, userLinks, ...props }) {
     const { width, height } = useScreenSize();
     const [aboutText, setAboutText] = useState(userAbout || "");
     const [usersTags, setUsersTags] = useState(userTags || []);
     const [oldAboutText, setOldAboutText] = useState(aboutText || "");
     const [isPopUpOpen, setIsPopUpOpen] = useState(false);
-    const [friendshipAction, setFriendshipAction] = useState(false);
     const [friendshipStatus, setFriendshipStatus] = useState(null);
-    //const [hoveredTag, setHoveredTag] = useState(null);
-    
-    //console.log(aboutText)
+    const [instagramUrl, setInstagramUrl] = useState("");
+    const [facebookUrl, setFacebookUrl] = useState("");
+
     const handleSave = async () => {
         try {
+            const updatedLinks = [];
+            if (instagramUrl) updatedLinks.push(instagramUrl);
+            if (facebookUrl) updatedLinks.push(facebookUrl);
+
+            if (userLinks) {
+                userLinks.forEach(link => {
+                    if (!link.includes("instagram.com") && !link.includes("facebook.com")) {
+                        updatedLinks.push(link);
+                    }
+                });
+            }
+
             const response = await axios.put("http://localhost:8080/api/user/me", {
-                description: aboutText
+                description: aboutText,
+                links: updatedLinks
             },
             {
                 withCredentials: true,
             });
             console.log("Profile updated:", response.data);
-            //alert("Profile successfully updated!");
             setOldAboutText(aboutText);
-            //console.log(userAbout, aboutText)
         } catch (error) {
             console.error("Error updating profile:", error);
             alert("Failed to update profile.");
@@ -40,91 +51,102 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
 
     const handleFriendshipRequest = async (friendshipRequest) => {
         try {
-            await friendshipRequest(nickname); // Await the completion of the friend request
-            // If the request was successful, then immediately fetch the updated status
+            await friendshipRequest(nickname);
             const status = await getFriendshipStatus(nickname);
-            setFriendshipStatus(status); // Update the UI based on the new status
+            setFriendshipStatus(status);
             console.log("Friend request sent and status updated:", status);
         } catch (error) {
             console.error("Failed to send friend request or update status:", error);
-            // You might want to revert UI changes or show an error message
         }
     };
 
     useEffect(() => {
         setAboutText(userAbout || "");
-        console.log(userAbout, aboutText)
     }, [userAbout]);
+
     useEffect(() => {
         setUsersTags(userTags || []);
-        console.log(userTags, usersTags)
     }, [userTags]);
-    useEffect(() => {
-        if( currentUser !== nickname) {
-        getFriendshipStatus(nickname)
-                        .then((status) => {
-                            console.log("Friendship status with", nickname, ":", status);
-                            setFriendshipStatus(status);
-                        })
-                        .catch((error) => {
-                            console.error("Error fetching friendship status:", error);
-                        });
-            }   
-    }, []);
-    
-    //console.log(width, height);
-    return(
-        <div  className={`w-full h-full`}>
-            {currentUser!==nickname&&<div className="mt-[1%] ml-[10%]">
-                {friendshipStatus===null && <Button 
-                onClick={() => (handleFriendshipRequest(sendFriendRequest))}
-                color={props.mbtiGroupIndex}>
-                    Send Friend Request
-                </Button>}
-                {friendshipStatus&&friendshipStatus.isPending&&friendshipStatus.senderNickname===currentUser&&
-                <Button
-                    onClick={() => (handleFriendshipRequest(deleteFriendship))}
-                    color={props.mbtiGroupIndex}
-                >
-                    Cancel Request
-                    </Button>}
-                {friendshipStatus&&friendshipStatus.isPending&&friendshipStatus.receiverNickname===currentUser&&
-                <div>
-                <Button
-                    onClick={() => handleFriendshipRequest(acceptFriendship)}
-                    color={props.mbtiGroupIndex}
-                >
-                    Accept Request
-                </Button>
-                <Button
-                    onClick={() => handleFriendshipRequest(deleteFriendship)}
-                    color={props.mbtiGroupIndex}
-                >
-                    Reject Request
-                </Button>
-                </div>}
-                {friendshipStatus&&!friendshipStatus.isPending&&
-                <Button
-                    onClick={() => handleFriendshipRequest(deleteFriendship)}
-                    color={props.mbtiGroupIndex}
-                >
-                    Unfriend
-                </Button>}
 
-                
-            </div>}
+    useEffect(() => {
+        if (userLinks) {
+            const instagramLink = userLinks.find(link => link.includes("instagram.com"));
+            const facebookLink = userLinks.find(link => link.includes("facebook.com"));
+            setInstagramUrl(instagramLink || "");
+            setFacebookUrl(facebookLink || "");
+        }
+    }, [userLinks]);
+
+    useEffect(() => {
+        if (currentUser !== nickname) {
+            getFriendshipStatus(nickname)
+                .then((status) => {
+                    console.log("Friendship status with", nickname, ":", status);
+                    setFriendshipStatus(status);
+                })
+                .catch((error) => {
+                    console.error("Error fetching friendship status:", error);
+                });
+        }   
+    }, [currentUser, nickname]);
+    
+    return(
+        <div className={`w-full h-full`}>
+            {currentUser !== nickname && (
+                <div className="mt-[1%] ml-[10%]">
+                    {friendshipStatus === null && (
+                        <Button 
+                            onClick={() => (handleFriendshipRequest(sendFriendRequest))}
+                            color={props.mbtiGroupIndex}>
+                            Send Friend Request
+                        </Button>
+                    )}
+                    {friendshipStatus && friendshipStatus.isPending && friendshipStatus.senderNickname === currentUser && (
+                        <Button
+                            onClick={() => (handleFriendshipRequest(deleteFriendship))}
+                            color={props.mbtiGroupIndex}
+                        >
+                            Cancel Request
+                        </Button>
+                    )}
+                    {friendshipStatus && friendshipStatus.isPending && friendshipStatus.receiverNickname === currentUser && (
+                        <div>
+                            <Button
+                                onClick={() => handleFriendshipRequest(acceptFriendship)}
+                                color={props.mbtiGroupIndex}
+                            >
+                                Accept Request
+                            </Button>
+                            <Button
+                                onClick={() => handleFriendshipRequest(deleteFriendship)}
+                                color={props.mbtiGroupIndex}
+                            >
+                                Reject Request
+                            </Button>
+                        </div>
+                    )}
+                    {friendshipStatus && !friendshipStatus.isPending && (
+                        <Button
+                            onClick={() => handleFriendshipRequest(deleteFriendship)}
+                            color={props.mbtiGroupIndex}
+                        >
+                            Unfriend
+                        </Button>
+                    )}
+                </div>
+            )}
             <div 
                 className={`pl-[15%] pt-[4%] h-[80%]`}
-                >
+            >
                 <h1 
                     className="md:text-2xl font-bold"
                     style={{
                         color:primaryColor,
                     }}
                 >
-                    About {currentUser===nickname?"You":props.name+" "+props.surname+"("+nickname+")"}
+                    About {currentUser === nickname ? "You" : props.name + " " + props.surname + "(" + nickname + ")"}
                 </h1>
-                <textarea readOnly={currentUser!==nickname}
+                <textarea readOnly={currentUser !== nickname}
                     name="about-section" 
                     id="about-section"
                     value={aboutText}
@@ -141,42 +163,61 @@ export function ProfileMain({primaryColor,secondaryColor,extraColor,mbti,nicknam
                             resize: "none",
                         }
                     }
-                    
-
-                    
                 />
-                <div className={currentUser!==nickname||aboutText===oldAboutText?"hidden":""}> 
+                {currentUser === nickname && (
+                    <div className="mt-4">
+                        <h2 className="md:text-xl font-bold" style={{ color: primaryColor }}>Social Media Links</h2>
+                        <TextField
+                            readOnly={currentUser !== nickname}
+                            label="Instagram URL"
+                            value={instagramUrl}
+                            onChange={(e) => setInstagramUrl(e.target.value)}
+                            className="mt-2 w-[70%]"
+
+                            labelColor={primaryColor}
+                            fieldBGColor={extraColor}
+                            inputBorderColor={primaryColor}
+                        />
+                        <TextField
+                            readOnly={currentUser !== nickname}
+                            label="Facebook URL"
+                            value={facebookUrl}
+                            onChange={(e) => setFacebookUrl(e.target.value)}
+                            className="mt-2 w-[70%]"
+
+                            labelColor={primaryColor}
+                            fieldBGColor={extraColor}
+                            inputBorderColor={primaryColor}
+                        />
+                    </div>
+                )}
+                <div className={currentUser !== nickname || aboutText === oldAboutText && instagramUrl === (userLinks?.find(link => link.includes("instagram.com")) || "") && facebookUrl === (userLinks?.find(link => link.includes("facebook.com")) || "") ? "hidden" : ""}> 
                     <Button color={mbti} onClick={handleSave}> Save</Button>
                 </div>
             </div>
             
-
             <div>
-                {usersTags!==null&&usersTags!==undefined&&usersTags.length>0&&(
+                {usersTags !== null && usersTags !== undefined && usersTags.length > 0 && (
                     <div className="w-[70%] flex flex-row flex-wrap items-center ml-[14%]">
                         {usersTags.map((tag, id) => (
                             <div 
-                            className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
-                            /*
-                            onMouseEnter={() => setHoveredTag(id)}
-                            onMouseLeave={() => setHoveredTag(null)}
-                            */
-                            style={{
-                                backgroundColor: extraColor,//hoveredTag === id&&currentUser===nickname ? primaryColor : extraColor,
-                                color: primaryColor,//hoveredTag === id&&currentUser===nickname ? extraColor : primaryColor,
-                                borderColor: primaryColor,
-                            }}>
+                                className="w-max-[10%] mx-[1%] mt-[1%] rounded-lg border-2 px-[1%] py-[0.2%]" key={id}
+                                style={{
+                                    backgroundColor: extraColor,
+                                    color: primaryColor,
+                                    borderColor: primaryColor,
+                                }}>
                                 {tag.name}
                             </div>
                         ))}
                     </div>
                 )}
-                <div className={currentUser!==nickname?"hidden":""+"flex flex-row items-center ml-[14.6%] mt-[1%]"}> 
+                <div className={currentUser !== nickname ? "hidden" : "" + "flex flex-row items-center ml-[14.6%] mt-[1%]"}> 
                     <Button color={mbti} onClick={() => setIsPopUpOpen(!isPopUpOpen)}> Edit Tags</Button>
                 </div>
             </div>
             
-            <div className={isPopUpOpen?"":"hidden"}>
+            <div className={isPopUpOpen ? "" : "hidden"}>
                 <TagPopUp primaryColor={primaryColor} secondaryColor={secondaryColor} extraColor={extraColor} 
                     mbti={mbti} nickname={nickname} currentUser={currentUser} userTags={usersTags}
                     setIsPopUpOpen={setIsPopUpOpen} isPopUpOpen={isPopUpOpen} screenHeight={height} screenWidth={width}

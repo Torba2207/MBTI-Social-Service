@@ -102,7 +102,7 @@ export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...pr
             <img
               src={avatarUrl}
               alt="User avatar"
-              className="h-10 w-10 rounded-full object-cover"
+              className="h-15 w-15 rounded-full object-cover"
             />
           ) : (
             <DefaultAvatar className="h-10 w-10 rounded-full" fill={primColor} />
