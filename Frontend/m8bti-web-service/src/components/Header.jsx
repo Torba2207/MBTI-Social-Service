@@ -10,7 +10,7 @@ import { useRouter } from "next/router";
 import axios from "axios";
 
 
-export function Header({ mbti, userName = "Lionel Messi", newInvites = 10, ...props }) {
+export function Header({ mbti, userName = "Lionel Messi", ...props }) {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const fileInputRef = useRef(null);
   const bgColor = MBTIColors({ colorDest: "Secondary", mbti });
