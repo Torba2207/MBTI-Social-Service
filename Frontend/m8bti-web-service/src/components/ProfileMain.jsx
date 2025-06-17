@@ -17,10 +17,28 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
     const [oldAboutText, setOldAboutText] = useState(aboutText || "");
     const [isPopUpOpen, setIsPopUpOpen] = useState(false);
     const [friendshipStatus, setFriendshipStatus] = useState(null);
-    const [instagramUrl, setInstagramUrl] = useState("");
-    const [facebookUrl, setFacebookUrl] = useState("");
+    const [instagramUrl, setInstagramUrl] = useState(userLinks[0] || "");
+    const [facebookUrl, setFacebookUrl] = useState(userLinks[1] || "");
+    const [oldInstagramUrl, setOldInstagramUrl] = useState(instagramUrl || "");
+    const [oldFacebookUrl, setOldFacebookUrl] = useState(facebookUrl || "");
 
     const handleSave = async () => {
+        try {
+            const response = await axios.put("http://localhost:8080/api/user/me", {
+                description: aboutText,
+            },
+            {
+                withCredentials: true,
+            });
+            console.log("Profile updated:", response.data);
+            setOldAboutText(aboutText);
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            alert("Failed to update profile.");
+        }
+    };
+
+    const handleSaveSocialMediaLinks = async () => {
         try {
             const updatedLinks = [];
             if (instagramUrl) updatedLinks.push(instagramUrl);
@@ -35,17 +53,17 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
             }
 
             const response = await axios.put("http://localhost:8080/api/user/me", {
-                description: aboutText,
                 links: updatedLinks
             },
             {
                 withCredentials: true,
             });
-            console.log("Profile updated:", response.data);
-            setOldAboutText(aboutText);
+            console.log("Social media links updated:", response.data);
+            setOldInstagramUrl(instagramUrl);
+            setOldFacebookUrl(facebookUrl);
         } catch (error) {
-            console.error("Error updating profile:", error);
-            alert("Failed to update profile.");
+            console.error("Error updating social media links:", error);
+            alert("Failed to update social media links.");
         }
     };
 
@@ -164,6 +182,9 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
                         }
                     }
                 />
+                <div className={currentUser !== nickname || aboutText === oldAboutText ? "hidden" : ""}> 
+                    <Button color={mbti} onClick={handleSave}>Save</Button>
+                </div>
                 {currentUser === nickname && (
                     <div className="mt-4">
                         <h2 className="md:text-xl font-bold" style={{ color: primaryColor }}>Social Media Links</h2>
@@ -173,7 +194,7 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
                             value={instagramUrl}
                             onChange={(e) => setInstagramUrl(e.target.value)}
                             className="mt-2 w-[70%]"
-
+                            placeholder="Share your Instagram"
                             labelColor={primaryColor}
                             fieldBGColor={extraColor}
                             inputBorderColor={primaryColor}
@@ -184,16 +205,19 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
                             value={facebookUrl}
                             onChange={(e) => setFacebookUrl(e.target.value)}
                             className="mt-2 w-[70%]"
-
+                            placeholder="Share your Facebook"
                             labelColor={primaryColor}
                             fieldBGColor={extraColor}
                             inputBorderColor={primaryColor}
                         />
+                        <div className={clsx(
+                            "mt-2",
+                            currentUser !== nickname || (instagramUrl === oldInstagramUrl && facebookUrl === oldFacebookUrl) ? "hidden" : ""
+                        )}>
+                            <Button color={mbti} onClick={handleSaveSocialMediaLinks}>Save Social Media Links</Button>
+                        </div>
                     </div>
                 )}
-                <div className={currentUser !== nickname || aboutText === oldAboutText && instagramUrl === (userLinks?.find(link => link.includes("instagram.com")) || "") && facebookUrl === (userLinks?.find(link => link.includes("facebook.com")) || "") ? "hidden" : ""}> 
-                    <Button color={mbti} onClick={handleSave}> Save</Button>
-                </div>
             </div>
             
             <div>
