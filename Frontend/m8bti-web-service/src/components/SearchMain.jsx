@@ -73,12 +73,7 @@ export default function SearchMain({primaryColor, secondaryColor, extraColor, mb
             <div>
             {fetchedUsers.length > 0 && fetchedUsers.map((user, index) => (
                 <UserDataBlock key={index} userData={user}>
-                    <div className="flex gap-2">
-                        <Button color={secondaryColor} >
-                            Add
-                        </Button>
-                        
-                    </div>
+                    
                 </UserDataBlock>
                 )) 
                 }

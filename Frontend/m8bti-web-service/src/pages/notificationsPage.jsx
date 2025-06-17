@@ -133,14 +133,19 @@ export default function NotificationsPage() {
                     ) : pendingRequests.length === 0 ? (
                         <p>No pending friend requests.</p>
                     ) : (
-                        pendingRequests.map((req) => (
+                        pendingRequests.map((req) => {
+                            const senderMBTI = req.senderData.mbtiType?.toString() || '';
+                            const senderGroupIndex = getMBTIGroupIndex(senderMBTI);
                             
-                            req.senderData && (
+
+                            
+                            
+                            return (
                             
 
                                 <UserDataBlock key={req.senderNickname} userData={req.senderData}>
                                     <div className="flex gap-2">
-                                        <Button color={groupIndex} 
+                                        <Button color={senderGroupIndex} 
                                         
                                         onClick={(e) => {
                                             e.stopPropagation();
@@ -148,7 +153,7 @@ export default function NotificationsPage() {
                                         }}>
                                             Accept
                                         </Button>
-                                        <Button color={groupIndex} onClick={(e) =>{
+                                        <Button color={senderGroupIndex} onClick={(e) =>{
                                             e.stopPropagation(); 
                                             handleReject(req.senderNickname);
                                             }}>
@@ -156,8 +161,8 @@ export default function NotificationsPage() {
                                         </Button>
                                     </div>
                                 </UserDataBlock>
-                            )
-                        ))
+                            );
+})
                     )}
                 </div>
             </div>

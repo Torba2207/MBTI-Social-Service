@@ -40,7 +40,7 @@ export default function FriendsPage() {
                 try {
                     
                     const friendNickname = 
-                        friendship.senderNickname === currentUser.nickname 
+                        friendship.senderNickname === currentUser 
                             ? friendship.receiverNickname 
                             : friendship.senderNickname;
                     
