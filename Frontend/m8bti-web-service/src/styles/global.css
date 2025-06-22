@@ -1,0 +1,20 @@
+@font-face {
+    font-family: "Museo";
+    src: url("/fonts/MuseoModerno-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
+  }
+  
+  @font-face {
+    font-family: "Museo";
+    src: url("/fonts/MuseoModerno-Bold.ttf") format("truetype");
+    font-weight: bold;
+    font-style: normal;
+  }
+
+
+  body{
+    font-family: "Museo";
+  }
+
+@import "tailwindcss";
