@@ -185,7 +185,6 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
                 <div className={currentUser !== nickname || aboutText === oldAboutText ? "hidden" : ""}> 
                     <Button color={mbti} onClick={handleSave}>Save</Button>
                 </div>
-                {currentUser === nickname && (
                     <div className="mt-4">
                         <h2 className="md:text-xl font-bold" style={{ color: primaryColor }}>Social Media Links</h2>
                         <TextField
@@ -217,7 +216,6 @@ export function ProfileMain({ primaryColor, secondaryColor, extraColor, mbti, ni
                             <Button color={mbti} onClick={handleSaveSocialMediaLinks}>Save Social Media Links</Button>
                         </div>
                     </div>
-                )}
             </div>
             
             <div>
